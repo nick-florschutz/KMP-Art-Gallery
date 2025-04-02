@@ -10,15 +10,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import de.jensklingenberg.ktorfit.Ktorfit
+import io.github.aakira.napier.Napier
 import kmpartgallery.composeapp.generated.resources.Res
 import kmpartgallery.composeapp.generated.resources.compose_multiplatform
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.getKoin
+import org.koin.mp.KoinPlatform
 
 @Composable
 fun TestScreen(screenName: String) {
+    val coroutineScope = rememberCoroutineScope()
+
     var showContent by remember { mutableStateOf(false) }
 
     Column(
@@ -27,7 +36,17 @@ fun TestScreen(screenName: String) {
     ) {
         Text(text = "You are on the $screenName screen")
 
-        Button(onClick = { showContent = !showContent }) {
+        Button(
+            onClick = {
+                showContent = !showContent
+
+                coroutineScope.launch(Dispatchers.Default) {
+                    val result = RequestBuilder.getAllObjectIds()
+                    Napier.i(tag = "TestScreen", message = "result: $result")
+                }
+
+            }
+        ) {
             Text("Click me!")
         }
         AnimatedVisibility(showContent) {

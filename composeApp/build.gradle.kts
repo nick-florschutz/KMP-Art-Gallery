@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.ktorfit)
 }
 
 kotlin {
@@ -76,6 +78,10 @@ kotlin {
             // Moko Permissions - https://github.com/icerockdev/moko-permissions
             api(libs.permissions.compose) // permissions api + compose extensions
             implementation(libs.permissions.test)
+
+            // Ktorfit -https://github.com/Foso/Ktorfit
+            implementation(libs.ktorfit)
+            implementation(libs.ktorfit.callconverter)
 
         }
 
