@@ -14,15 +14,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import de.jensklingenberg.ktorfit.Ktorfit
 import io.github.aakira.napier.Napier
+import kmp.fbk.kmpartgallery.networking.MetArtMuseumApiRequests
 import kmpartgallery.composeapp.generated.resources.Res
 import kmpartgallery.composeapp.generated.resources.compose_multiplatform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.getKoin
-import org.koin.mp.KoinPlatform
 
 @Composable
 fun TestScreen(screenName: String) {
@@ -41,7 +39,7 @@ fun TestScreen(screenName: String) {
                 showContent = !showContent
 
                 coroutineScope.launch(Dispatchers.Default) {
-                    val result = RequestBuilder.getAllObjectIds()
+                    val result = MetArtMuseumApiRequests.getAllObjectIds()
                     Napier.i(tag = "TestScreen", message = "result: $result")
                 }
 
