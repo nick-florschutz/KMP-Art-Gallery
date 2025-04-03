@@ -3,8 +3,8 @@ package kmp.fbk.kmpartgallery.networking
 import de.jensklingenberg.ktorfit.Callback
 import io.github.aakira.napier.Napier
 import io.ktor.client.statement.HttpResponse
-import kmp.fbk.kmpartgallery.createMetArtApi
 import kmp.fbk.kmpartgallery.networking.response_data_models.ArtObjectCountAndIds
+import kmp.fbk.kmpartgallery.networking.response_data_models.ArtPieceResponse
 import kotlinx.serialization.json.Json
 
 class MetArtMuseumApiRequests(
@@ -12,14 +12,20 @@ class MetArtMuseumApiRequests(
 ) {
     suspend fun getAllObjectIds(): ArtObjectCountAndIds {
         return Json.decodeFromString<ArtObjectCountAndIds>(
-            metArtApi.getAllObjectIds()
+            metArtApi.getAllArtPiecesIds()
+        )
+    }
+
+    suspend fun getArtPieceById(objectID: Int): ArtPieceResponse {
+        return Json.decodeFromString<ArtPieceResponse>(
+            metArtApi.getArtPieceById(objectID)
         )
     }
 
     // Example using Callback functionality.
     // TODO: Use something like this for fetching and storing data
     suspend fun fetchAllObjectIdsCall() {
-        metArtApi.getAllObjectIdsCall().onExecute(
+        metArtApi.getAllArtPiecesIdsCall().onExecute(
             callBack = object: Callback<String> {
                 override fun onError(exception: Throwable) {
                     exception.printStackTrace()

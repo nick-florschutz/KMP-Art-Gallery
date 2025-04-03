@@ -25,6 +25,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TestScreen(screenName: String) {
     val coroutineScope = rememberCoroutineScope()
+    val apiRequests = remember { MetArtMuseumApiRequests() }
 
     var showContent by remember { mutableStateOf(false) }
 
@@ -39,7 +40,7 @@ fun TestScreen(screenName: String) {
                 showContent = !showContent
 
                 coroutineScope.launch(Dispatchers.Default) {
-                    val result = MetArtMuseumApiRequests.getAllObjectIds()
+                    val result = apiRequests.getArtPieceById(45734)
                     Napier.i(tag = "TestScreen", message = "result: $result")
                 }
 
