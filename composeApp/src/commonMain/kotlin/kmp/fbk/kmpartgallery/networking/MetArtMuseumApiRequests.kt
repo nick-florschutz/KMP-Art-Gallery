@@ -5,6 +5,8 @@ import io.github.aakira.napier.Napier
 import io.ktor.client.statement.HttpResponse
 import kmp.fbk.kmpartgallery.networking.response_data_models.ArtObjectCountAndIds
 import kmp.fbk.kmpartgallery.networking.response_data_models.ArtPieceResponse
+import kmp.fbk.kmpartgallery.networking.response_data_models.DepartmentResponse
+import kmp.fbk.kmpartgallery.networking.response_data_models.DepartmentsResponse
 import kotlinx.serialization.json.Json
 
 class MetArtMuseumApiRequests(
@@ -20,6 +22,12 @@ class MetArtMuseumApiRequests(
         return Json.decodeFromString<ArtPieceResponse>(
             metArtApi.getArtPieceById(objectID)
         )
+    }
+
+    suspend fun getAllDepartments(): List<DepartmentResponse> {
+        return Json.decodeFromString<DepartmentsResponse>(
+            metArtApi.getAllDepartments()
+        ).departments
     }
 
     // Example using Callback functionality.

@@ -40,7 +40,8 @@ fun TestScreen(screenName: String) {
                 showContent = !showContent
 
                 coroutineScope.launch(Dispatchers.Default) {
-                    val result = apiRequests.getArtPieceById(45734)
+//                    val result = apiRequests.getArtPieceById(45734)
+                    val result = apiRequests.getAllDepartments()
                     Napier.i(tag = "TestScreen", message = "result: $result")
                 }
 
