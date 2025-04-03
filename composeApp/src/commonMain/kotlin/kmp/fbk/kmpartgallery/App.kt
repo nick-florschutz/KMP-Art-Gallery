@@ -1,6 +1,6 @@
 package kmp.fbk.kmpartgallery
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import kmp.fbk.kmpartgallery.di.createKoinConfiguration
 import kmp.fbk.kmpartgallery.navigation.NavigationHost

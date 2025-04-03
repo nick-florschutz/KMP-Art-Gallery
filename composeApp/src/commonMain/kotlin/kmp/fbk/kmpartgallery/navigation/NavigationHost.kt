@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import kmp.fbk.kmpartgallery.TestScreen
+import kmp.fbk.kmpartgallery.features.listscreen.ListScreen
 
 @Composable
 fun NavigationHost() {
@@ -17,7 +18,7 @@ fun NavigationHost() {
     ) {
         composable<NavigationDestination.Home> {
             val args = it.toRoute<NavigationDestination.Home>()
-            TestScreen(args.screenLabel)
+            ListScreen()
         }
     }
 }
