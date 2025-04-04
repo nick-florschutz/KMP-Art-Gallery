@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -10,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -32,6 +32,10 @@ kotlin {
     }
     
     sourceSets {
+
+//        iosMain {
+//            kotlin.srcDir("build/generated/ksp/metadata")
+//        }
         
         androidMain.dependencies {
             implementation(compose.preview)
@@ -83,11 +87,15 @@ kotlin {
             implementation(libs.ktorfit)
             implementation(libs.ktorfit.callconverter)
 
+            // Room Database
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
+
+
         }
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-            implementation(libs.kotlin.test.junit)
             implementation(libs.turbine)
             implementation(libs.koin.test)
             implementation(libs.kotlinx.coroutines.test)
@@ -122,7 +130,25 @@ android {
     }
 }
 
-dependencies {
-    debugImplementation(compose.uiTooling)
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
+dependencies {
+    debugImplementation(compose.uiTooling)
+//    add("kspCommonMainMetadata", libs.room.compiler)
+//    add("kspAndroid", libs.room.compiler)
+//    ksp(libs.room.compiler)
+
+    add("kspAndroid", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
+    add("kspIosX64", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+}
+
+
+//tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
+//    if (name != "kspCommonMainKotlinMetadata") {
+//        dependsOn("kspCommonMainKotlinMetadata")
+//    }
+//}

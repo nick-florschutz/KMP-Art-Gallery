@@ -31,6 +31,8 @@ napier = "2.7.1"
 koin = "4.1.0-Beta5"
 ktorfit = "2.5.0"
 ksp = "2.1.10-1.0.29"
+roomDb = "2.7.0-rc03"
+sqlite = "2.5.0-SNAPSHOT"
 
 
 [libraries]
@@ -64,6 +66,10 @@ koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 ktorfit = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
 ktorfit-callconverter = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-call", version.ref = "ktorfit" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomDb" }
+room-runtime-android = { module = "androidx.room:room-runtime-android", version.ref = "roomDb" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomDb" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -74,3 +80,4 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
+room = { id = "androidx.room", version.ref = "roomDb" }
