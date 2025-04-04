@@ -3,6 +3,7 @@ package kmp.fbk.kmpartgallery.features.listscreen
 import kmp.fbk.kmpartgallery.local_storage.dao.DepartmentDao
 import kmp.fbk.kmpartgallery.local_storage.domain_models.Department
 import kmp.fbk.kmpartgallery.local_storage.mappers.toDepartmentEntity
+import kmp.fbk.kmpartgallery.local_storage.mappers.toDepartmentsList
 import kmp.fbk.kmpartgallery.networking.MetArtMuseumApiRequests
 import org.koin.mp.KoinPlatform
 
@@ -16,7 +17,7 @@ class ListScreenRepository(
 
     suspend fun getAllDepartments() = metArtMuseumApiRequests.getAllDepartments()
 
-    suspend fun getAllDepartmentsFromDb() = departmentDao.getAllDepartments()
+    suspend fun getAllDepartmentsFromDb() = departmentDao.getAllDepartments().toDepartmentsList()
 
     suspend fun insertDepartmentIntoDb(department: Department) {
         val departmentEntity = department.toDepartmentEntity()

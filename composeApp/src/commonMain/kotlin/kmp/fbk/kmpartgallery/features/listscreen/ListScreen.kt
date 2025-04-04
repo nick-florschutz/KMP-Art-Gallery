@@ -60,10 +60,10 @@ fun ListScreen() {
             items(departments) { department ->
                 Column(
                     modifier = Modifier.clickable {
-                        viewModel.insertDepartmentIntoDb(department.toDepartment())
+//                        viewModel.insertDepartmentIntoDb(department.toDepartment())
                     }
                 ) {
-                    Text(text = department.displayName)
+                    Text(text = department.displayName ?: "--")
                     Text(text = "Department ID: ${department.departmentId}")
                 }
                 Spacer(modifier = Modifier.height(8.dp))

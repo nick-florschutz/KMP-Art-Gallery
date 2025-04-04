@@ -36,7 +36,7 @@ kotlin {
 //        iosMain {
 //            kotlin.srcDir("build/generated/ksp/metadata")
 //        }
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -136,19 +136,9 @@ room {
 
 dependencies {
     debugImplementation(compose.uiTooling)
-//    add("kspCommonMainMetadata", libs.room.compiler)
-//    add("kspAndroid", libs.room.compiler)
-//    ksp(libs.room.compiler)
 
     add("kspAndroid", libs.room.compiler)
     add("kspIosSimulatorArm64", libs.room.compiler)
     add("kspIosX64", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)
 }
-
-
-//tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
-//    if (name != "kspCommonMainKotlinMetadata") {
-//        dependsOn("kspCommonMainKotlinMetadata")
-//    }
-//}

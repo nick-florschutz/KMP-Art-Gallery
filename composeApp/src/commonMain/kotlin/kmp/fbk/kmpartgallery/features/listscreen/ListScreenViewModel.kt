@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kmp.fbk.kmpartgallery.local_storage.dao.DepartmentDao
 import kmp.fbk.kmpartgallery.local_storage.domain_models.Department
+import kmp.fbk.kmpartgallery.local_storage.mappers.toDepartmentsList
 import kmp.fbk.kmpartgallery.networking.response_data_models.DepartmentResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
