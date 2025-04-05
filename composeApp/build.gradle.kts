@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -10,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -32,7 +32,11 @@ kotlin {
     }
     
     sourceSets {
-        
+
+//        iosMain {
+//            kotlin.srcDir("build/generated/ksp/metadata")
+//        }
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -40,7 +44,7 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
+            implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -83,11 +87,15 @@ kotlin {
             implementation(libs.ktorfit)
             implementation(libs.ktorfit.callconverter)
 
+            // Room Database
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
+
+
         }
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-            implementation(libs.kotlin.test.junit)
             implementation(libs.turbine)
             implementation(libs.koin.test)
             implementation(libs.kotlinx.coroutines.test)
@@ -122,7 +130,15 @@ android {
     }
 }
 
-dependencies {
-    debugImplementation(compose.uiTooling)
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
+dependencies {
+    debugImplementation(compose.uiTooling)
+
+    add("kspAndroid", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
+    add("kspIosX64", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+}

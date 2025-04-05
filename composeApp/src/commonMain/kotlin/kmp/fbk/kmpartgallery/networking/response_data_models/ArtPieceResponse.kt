@@ -3,6 +3,10 @@ package kmp.fbk.kmpartgallery.networking.response_data_models
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * A record for an object, containing all open access data about that object, including its image
+ * (if the image is available under Open Access).
+ */
 @Serializable
 data class ArtPieceResponse(
     val objectID: Int,

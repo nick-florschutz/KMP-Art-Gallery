@@ -15,4 +15,8 @@ interface MetArtApi {
     suspend fun getArtPieceById(
         @Path("objectID") objectID: Int
     ): String
+
+    @GET("public/collection/v1/departments")
+    suspend fun getAllDepartments(): String
+
 }
