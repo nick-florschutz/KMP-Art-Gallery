@@ -16,7 +16,7 @@ fun AppSnackBarBannerBarHost(
     AppSnackBarBannerHostInternal(
         hostState = snackBarHostState,
         snackbar = { data ->
-            SnackBarBanner(
+            SnackBarBanner1(
                 snackBarData = data,
                 onDismiss = {
                     AppSnackBarBannerHostState.currentSnackbarData?.dismiss()
