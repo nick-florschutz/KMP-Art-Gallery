@@ -15,6 +15,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kmp.fbk.kmpartgallery.local_storage.dao.DepartmentDao
 import kmp.fbk.kmpartgallery.local_storage.mappers.toDepartment
+import kmp.fbk.kmpartgallery.snackbar.BannerInformation
+import kmp.fbk.kmpartgallery.snackbar.FbkSnackBarHostState
+import kotlinx.coroutines.launch
 import org.koin.compose.getKoin
 import org.koin.mp.KoinPlatform
 
@@ -34,6 +38,8 @@ fun ListScreen() {
             listScreenRepository = listScreenRepository,
         )
     }
+
+    val coroutineScope = rememberCoroutineScope()
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val departments by viewModel.departmentsList.collectAsStateWithLifecycle()
@@ -61,6 +67,15 @@ fun ListScreen() {
                 Column(
                     modifier = Modifier.clickable {
 //                        viewModel.insertDepartmentIntoDb(department.toDepartment())
+
+                        coroutineScope.launch {
+                            FbkSnackBarHostState.showSnackBar(
+                                BannerInformation.Information(
+                                    message = department.displayName
+                                )
+                            )
+                        }
+
                     }
                 ) {
                     Text(text = department.displayName ?: "--")
