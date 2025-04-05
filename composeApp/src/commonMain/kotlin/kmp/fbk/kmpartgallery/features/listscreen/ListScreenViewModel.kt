@@ -43,12 +43,12 @@ class ListScreenViewModel(
 
     private suspend fun getFiveArtPieces() {
         val artPieceResponseList = mutableListOf<ArtPieceResponse>()
-        (231..237).forEach {
-            artPieceResponseList.add(listScreenRepository.getArtPieceById(it))
+        (475..500).forEach {
+            val artPiece = listScreenRepository.getArtPieceById(it)
+            artPieceResponseList.add(artPiece)
+            Napier.i(tag = "ListScreenViewModel", message = "artPiece: $artPiece")
         }
-        _artPieceResponseList.emit(artPieceResponseList).also {
-            Napier.i(tag = "ArtPieces", message = "ArtPieces Images: ${artPieceResponseList}")
-        }
+        _artPieceResponseList.emit(artPieceResponseList)
         _state.emit(ViewModelState.Success(Unit))
     }
 

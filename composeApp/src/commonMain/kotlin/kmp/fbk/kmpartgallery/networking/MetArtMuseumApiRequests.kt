@@ -13,20 +13,25 @@ import kotlinx.serialization.json.Json.Default.decodeFromString
 class MetArtMuseumApiRequests(
     private val metArtApi: MetArtApi = NetworkRequestBuilder.requestBuilder.createMetArtApi(),
 ) {
+    private val json = Json {
+        prettyPrint = true
+        ignoreUnknownKeys = true
+    }
+
     suspend fun getAllObjectIds(): ArtObjectCountAndIds {
-        return Json.decodeFromString<ArtObjectCountAndIds>(
+        return json.decodeFromString<ArtObjectCountAndIds>(
             metArtApi.getAllArtPiecesIds()
         )
     }
 
     suspend fun getArtPieceById(objectID: Int): ArtPieceResponse {
-        return Json.decodeFromString<ArtPieceResponse>(
+        return json.decodeFromString<ArtPieceResponse>(
             metArtApi.getArtPieceById(objectID)
         )
     }
 
     suspend fun getAllDepartments(): List<DepartmentResponse> {
-        return Json.decodeFromString<DepartmentsResponse>(
+        return json.decodeFromString<DepartmentsResponse>(
             metArtApi.getAllDepartments()
         ).departments
     }
@@ -44,7 +49,7 @@ class MetArtMuseumApiRequests(
                 override fun onResponse(call: String, response: HttpResponse) {
                     Napier.i(tag = "RequestBuilder.getAllObjectIdsCall()", message = "response: $response")
                     Napier.i(tag = "RequestBuilder.getAllObjectIdsCall()") {
-                        val data = Json.decodeFromString<ArtObjectCountAndIds>(call)
+                        val data = json.decodeFromString<ArtObjectCountAndIds>(call)
                         "data: $data"
                     }
                 }
