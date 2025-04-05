@@ -1,10 +1,10 @@
-package reusable_ui_components.snackbar
+package kmp.fbk.kmpartgallery.snackbar
 
 import androidx.compose.runtime.Stable
 
 @Stable
-interface IFbkSnackBarData {
-    val visuals: IFbkSnackBarVisuals
+interface ISnackBarBannerData {
+    val visuals: ISnackBarBannerVisuals
 
     /**
      * Function to be called when Snackbar action has been performed to notify the listeners.

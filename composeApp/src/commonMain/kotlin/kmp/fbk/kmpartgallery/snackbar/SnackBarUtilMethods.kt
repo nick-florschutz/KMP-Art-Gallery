@@ -25,6 +25,7 @@ import androidx.compose.ui.util.fastFilterNotNull
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
 import androidx.compose.ui.util.fastMapTo
+import kmp.fbk.kmpartgallery.snackbar.ISnackBarBannerData
 
 internal fun SnackbarDuration.toMillis(
     hasAction: Boolean,
@@ -48,11 +49,11 @@ internal fun SnackbarDuration.toMillis(
 
 @Composable
 internal fun FadeInFadeOutWithScale(
-    current: IFbkSnackBarData?,
+    current: ISnackBarBannerData?,
     modifier: Modifier = Modifier,
-    content: @Composable (IFbkSnackBarData) -> Unit
+    content: @Composable (ISnackBarBannerData) -> Unit
 ) {
-    val state = remember { FadeInFadeOutState<IFbkSnackBarData?>() }
+    val state = remember { FadeInFadeOutState<ISnackBarBannerData?>() }
     if (current != state.current) {
         state.current = current
         val keys = state.items.fastMap { it.key }.toMutableList()

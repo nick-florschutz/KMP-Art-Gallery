@@ -1,3 +1,5 @@
+@file:JvmName("SnackBarBannerKt")
+
 package kmp.fbk.kmpartgallery.snackbar
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,17 +8,17 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import reusable_ui_components.snackbar.IFbkSnackBarData
+import kotlin.jvm.JvmName
 
 @Composable
-internal fun FbkSnackBar2(
-    snackBarData: IFbkSnackBarData,
+internal fun SnackBarBanner(
+    snackBarData: ISnackBarBannerData,
     onDismiss: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
-    if (snackBarData.visuals is FbkSnackBarHostState.FbkSnackBarVisualsImpl3) {
-        FbkBanner(
-            bannerInfo = (snackBarData.visuals as FbkSnackBarHostState.FbkSnackBarVisualsImpl3).bannerInformation,
+    if (snackBarData.visuals is AppSnackBarBannerHostState.SnackBarBannerVisualsImpl3) {
+        SnackBarBanner(
+            bannerInfo = (snackBarData.visuals as AppSnackBarBannerHostState.SnackBarBannerVisualsImpl3).bannerInformation,
             hasDismissAction = snackBarData.visuals.withDismissAction,
             onDismiss = onDismiss,
             modifier = modifier

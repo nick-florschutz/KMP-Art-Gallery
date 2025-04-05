@@ -6,21 +6,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalAccessibilityManager
 import kotlinx.coroutines.delay
 import reusable_ui_components.snackbar.FadeInFadeOutWithScale
-import reusable_ui_components.snackbar.IFbkSnackBarData
 import reusable_ui_components.snackbar.toMillis
 
 @Composable
-fun FbkSnackBarHost(
-    snackBarHostState: FbkSnackBarHostState,
+fun AppSnackBarBannerBarHost(
+    snackBarHostState: AppSnackBarBannerHostState,
     modifier: Modifier = Modifier,
 ) {
-    FbkSnackBarHostInternal(
+    AppSnackBarBannerHostInternal(
         hostState = snackBarHostState,
         snackbar = { data ->
-            FbkSnackBar2(
+            SnackBarBanner(
                 snackBarData = data,
                 onDismiss = {
-                    FbkSnackBarHostState.currentSnackbarData?.dismiss()
+                    AppSnackBarBannerHostState.currentSnackbarData?.dismiss()
                 },
             )
         },
@@ -29,17 +28,17 @@ fun FbkSnackBarHost(
 }
 
 @Composable
-private fun FbkSnackBarHostInternal(
-    hostState: FbkSnackBarHostState,
+private fun AppSnackBarBannerHostInternal(
+    hostState: AppSnackBarBannerHostState,
     modifier: Modifier = Modifier,
-    snackbar: @Composable (IFbkSnackBarData) -> Unit,
+    snackbar: @Composable (ISnackBarBannerData) -> Unit,
 ) {
-    val currentSnackbarData = FbkSnackBarHostState.currentSnackbarData
+    val currentSnackbarData = AppSnackBarBannerHostState.currentSnackbarData
     val accessibilityManager = LocalAccessibilityManager.current
     LaunchedEffect(currentSnackbarData) {
         if (currentSnackbarData != null) {
             val duration = currentSnackbarData.visuals.duration.toMillis(
-                FbkSnackBarHostState.currentSnackbarData?.visuals?.withDismissAction == true,
+                AppSnackBarBannerHostState.currentSnackbarData?.visuals?.withDismissAction == true,
                 accessibilityManager
             )
             delay(duration)
@@ -47,7 +46,7 @@ private fun FbkSnackBarHostInternal(
         }
     }
     FadeInFadeOutWithScale(
-        current = FbkSnackBarHostState.currentSnackbarData,
+        current = AppSnackBarBannerHostState.currentSnackbarData,
         modifier = modifier,
         content = snackbar
     )

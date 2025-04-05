@@ -17,8 +17,6 @@ import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import reusable_ui_components.snackbar.IFbkSnackBarData
-import reusable_ui_components.snackbar.IFbkSnackBarVisuals
 import kotlin.coroutines.resume
 
 /**
@@ -28,7 +26,7 @@ import kotlin.coroutines.resume
  * With this implementation that is possible.
  */
 @Stable
-object FbkSnackBarHostState {
+object AppSnackBarBannerHostState {
 
     /**
      * Only one [Snackbar] can be shown at a time. Since a suspending Mutex is a fair queue, this
@@ -39,7 +37,7 @@ object FbkSnackBarHostState {
     /**
      * The current [SnackbarData] being shown by the [SnackbarHost], or `null` if none.
      */
-    var currentSnackbarData by mutableStateOf<IFbkSnackBarData?>(null)
+    var currentSnackbarData by mutableStateOf<ISnackBarBannerData?>(null)
         private set
 
 
@@ -49,7 +47,7 @@ object FbkSnackBarHostState {
         withDismissAction: Boolean = false,
         duration: SnackbarDuration = SnackbarDuration.Short,
     ): SnackbarResult =
-        showSnackBar(FbkSnackBarVisualsImpl3(bannerInformation, messageFontSize, withDismissAction, duration))
+        showSnackBar(SnackBarBannerVisualsImpl3(bannerInformation, messageFontSize, withDismissAction, duration))
 
     /**
      * Shows or queues to be shown a [Snackbar] at the bottom of the [Scaffold] to which this state
@@ -69,27 +67,27 @@ object FbkSnackBarHostState {
      * @return [SnackbarResult.ActionPerformed] if option action has been clicked or
      * [SnackbarResult.Dismissed] if snackbar has been dismissed via timeout or by the user
      */
-    private suspend fun showSnackBar(visuals: IFbkSnackBarVisuals): SnackbarResult = mutex.withLock {
+    private suspend fun showSnackBar(visuals: ISnackBarBannerVisuals): SnackbarResult = mutex.withLock {
         try {
             return suspendCancellableCoroutine { continuation ->
-                currentSnackbarData = FbkSnackBarDataImpl(visuals, continuation)
+                currentSnackbarData = SnackBarBannerDataImpl(visuals, continuation)
             }
         } finally {
             currentSnackbarData = null
         }
     }
 
-    data class FbkSnackBarVisualsImpl3(
+    data class SnackBarBannerVisualsImpl3(
         val bannerInformation: BannerInformation,
         override val messageFontSize: TextUnit = TextUnit.Unspecified,
         override val withDismissAction: Boolean,
         override val duration: SnackbarDuration,
-    ) : IFbkSnackBarVisuals
+    ) : ISnackBarBannerVisuals
 
-    private data class FbkSnackBarDataImpl(
-        override val visuals: IFbkSnackBarVisuals,
+    private data class SnackBarBannerDataImpl(
+        override val visuals: ISnackBarBannerVisuals,
         private val continuation: CancellableContinuation<SnackbarResult>
-    ) : IFbkSnackBarData {
+    ) : ISnackBarBannerData {
 
         override fun performAction() {
             if (continuation.isActive) continuation.resume(SnackbarResult.ActionPerformed)

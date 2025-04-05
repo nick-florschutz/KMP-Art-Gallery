@@ -21,12 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kmp.fbk.kmpartgallery.local_storage.dao.DepartmentDao
-import kmp.fbk.kmpartgallery.local_storage.mappers.toDepartment
 import kmp.fbk.kmpartgallery.snackbar.BannerInformation
-import kmp.fbk.kmpartgallery.snackbar.FbkSnackBarHostState
+import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerHostState
 import kotlinx.coroutines.launch
-import org.koin.compose.getKoin
 import org.koin.mp.KoinPlatform
 
 @Composable
@@ -69,7 +66,7 @@ fun ListScreen() {
 //                        viewModel.insertDepartmentIntoDb(department.toDepartment())
 
                         coroutineScope.launch {
-                            FbkSnackBarHostState.showSnackBar(
+                            AppSnackBarBannerHostState.showSnackBar(
                                 BannerInformation.Information(
                                     message = department.displayName
                                 )

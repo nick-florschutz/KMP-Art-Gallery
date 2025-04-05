@@ -22,12 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kmp.fbk.kmpartgallery.errorBannerBackgroundColor
 import kmp.fbk.kmpartgallery.extraSmallPadding
 import kmp.fbk.kmpartgallery.hyperlinkBlue
 import kmp.fbk.kmpartgallery.informationBannerColor
 import kmp.fbk.kmpartgallery.lightBlue
+import kmp.fbk.kmpartgallery.mediumFontSize
+import kmp.fbk.kmpartgallery.smallMediumFontSize
 import kmp.fbk.kmpartgallery.smallPadding
 import kmp.fbk.kmpartgallery.successBannerColor
 import kmpartgallery.composeapp.generated.resources.Res
@@ -35,7 +36,7 @@ import kmpartgallery.composeapp.generated.resources.dismiss
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun FbkBanner(
+fun SnackBarBanner(
     bannerInfo: BannerInformation,
     hasDismissAction: Boolean = false,
     onDismiss: () -> Unit = {},
@@ -71,7 +72,7 @@ fun FbkBanner(
         Text(
             text = bannerInfo.messageInternal,
             color = textAndIconColorTheme,
-            fontSize = 16.sp,
+            fontSize = mediumFontSize,
             maxLines = 1,
         )
 
@@ -82,7 +83,7 @@ fun FbkBanner(
             ) {
                 Text(
                     text = stringResource(Res.string.dismiss),
-                    fontSize = 14.sp,
+                    fontSize = smallMediumFontSize,
                     color = if (isSystemInDarkTheme()) hyperlinkBlue else lightBlue,
                     modifier = Modifier
                         .padding(smallPadding)
