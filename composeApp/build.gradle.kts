@@ -40,6 +40,10 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            // COIL
+            implementation(libs.core.ktx)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -91,6 +95,13 @@ kotlin {
             // Room Database
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
+
+            // COIL
+            // Coil
+            implementation(libs.coil.compose)
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil.mp)
+            implementation(libs.coil.network)
 
 
         }

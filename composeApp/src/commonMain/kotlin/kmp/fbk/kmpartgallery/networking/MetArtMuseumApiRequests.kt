@@ -8,6 +8,7 @@ import kmp.fbk.kmpartgallery.networking.response_data_models.ArtPieceResponse
 import kmp.fbk.kmpartgallery.networking.response_data_models.DepartmentResponse
 import kmp.fbk.kmpartgallery.networking.response_data_models.DepartmentsResponse
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.Json.Default.decodeFromString
 
 class MetArtMuseumApiRequests(
     private val metArtApi: MetArtApi = NetworkRequestBuilder.requestBuilder.createMetArtApi(),

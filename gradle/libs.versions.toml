@@ -33,6 +33,9 @@ ktorfit = "2.5.0"
 ksp = "2.1.10-1.0.29"
 roomDb = "2.7.0-rc03"
 sqlite = "2.5.0-SNAPSHOT"
+coreKtx = "1.6.1"
+coil3 = "3.1.0"
+coilNetwork = "3.1.0"
 
 
 [libraries]
@@ -43,7 +46,6 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
-androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
@@ -67,9 +69,14 @@ koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 ktorfit = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
 ktorfit-callconverter = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-call", version.ref = "ktorfit" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomDb" }
-room-runtime-android = { module = "androidx.room:room-runtime-android", version.ref = "roomDb" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomDb" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
+coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilNetwork" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
