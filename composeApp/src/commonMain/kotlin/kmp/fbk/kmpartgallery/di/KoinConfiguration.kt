@@ -9,8 +9,6 @@ import org.koin.core.module.Module
 import org.koin.dsl.KoinConfiguration
 import org.koin.dsl.module
 
-//expect val getRoomDatabaseModule: Module
-
 val daoModule = module {
     single<DepartmentDao> { get<ArtGalleryDatabase>().departmentDao() }
 }
@@ -22,11 +20,3 @@ fun appModules(): List<Module> = listOf(
         factory { ListScreenRepository(get(), get()) }
     }
 )
-
-//expect val platformModules: List<Module>
-//
-//fun createKoinConfiguration(): KoinConfiguration {
-//    return KoinConfiguration {
-//        appModules() + platformModules
-//    }
-//}

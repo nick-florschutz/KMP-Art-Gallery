@@ -8,8 +8,3 @@ import org.koin.dsl.module
 val getRoomDatabaseModule = module {
     single { getRoomDatabase(artGalleryDatabaseBuilder()) }
 }
-
-//actual val platformModules: List<Module>
-//    get() = listOf(
-//        getRoomDatabaseModule,
-//    )

@@ -8,11 +8,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-//    KoinMultiplatformApplication(
-//        config = createKoinConfiguration(),
-//    ) {
-        MaterialTheme {
-           NavigationHost()
-        }
-//    }
+    MaterialTheme {
+       NavigationHost()
+    }
 }

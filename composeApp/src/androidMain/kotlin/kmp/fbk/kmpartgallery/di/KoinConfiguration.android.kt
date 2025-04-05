@@ -10,8 +10,3 @@ import org.koin.dsl.module
 fun getRoomDatabaseModule(context: Context) = module {
     single { getRoomDatabase(artGalleryDatabaseBuilder(context)) }
 }
-
-//actual val platformModules: List<Module>
-//    get() = listOf(
-//        getRoomDatabaseModule,
-//    )
