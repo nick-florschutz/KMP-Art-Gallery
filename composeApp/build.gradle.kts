@@ -88,15 +88,17 @@ kotlin {
             api(libs.permissions.compose) // permissions api + compose extensions
             implementation(libs.permissions.test)
 
-            // Ktorfit -https://github.com/Foso/Ktorfit
+            // Ktorfit - https://github.com/Foso/Ktorfit
             implementation(libs.ktorfit)
             implementation(libs.ktorfit.callconverter)
+            // Ktor Content Negotiation & Serialization
+            implementation(libs.ktor.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
 
             // Room Database
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
 
-            // COIL
             // Coil
             implementation(libs.coil.compose)
             implementation(libs.coil.compose.core)
