@@ -88,12 +88,14 @@ fun ListScreen() {
             }
         }
 
-            LazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxSize()
-                    .statusBarsPadding()
-            ) {
+        ArtPieceStaggeredGrid(artPieces = artPieces)
+
+//            LazyColumn(
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                verticalArrangement = Arrangement.spacedBy(8.dp),
+//                modifier = Modifier.fillMaxSize()
+//                    .statusBarsPadding()
+//            ) {
 //            items(departments) { department ->
 //                Column(
 //                    modifier = Modifier.clickable {
@@ -118,60 +120,60 @@ fun ListScreen() {
 //                }
 //            }
 
-                items(artPieces) { artPiece ->
-
-                    Box() {
-                        if (artPiece.primaryImage.isNullOrEmpty()) {
-                            Text("No Image Available...", Modifier.align(Alignment.Center))
-                        } else {
-                            AsyncImage(
-                                model = ImageRequest.Builder(platformContext)
-                                    .data(artPiece.primaryImage)
-                                    .build(),
-                                contentDescription = null,
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight()
-                                    .heightIn(min = 300.dp)
-                                    .padding(smallPadding)
-                                    .clickable {
-                                        coroutineScope.launch {
-                                            AppSnackBarBannerHostState.showSnackBar(
-                                                BannerInformation.Information(
-                                                    message = artPiece.title ?: "--"
-                                                )
-                                            )
-                                        }
-                                    }
-                            )
-                        }
-
-                       Box(
-                           modifier = Modifier
-                               .align(Alignment.BottomStart)
-                               .padding(mediumPadding)
-                       ) {
-
-                           Column(
-                               modifier = Modifier
-                                   .background(Color.Black.copy(alpha = 0.3f))
-                                   .padding(smallPadding)
-                           ) {
-                               Text(
-                                   text = artPiece.title ?: "--",
-                                   color = MaterialTheme.colorScheme.inverseOnSurface
-                               )
-                               Text(
-                                   text = artPiece.artistDisplayName ?: "Unknown",
-                                   color = MaterialTheme.colorScheme.inverseOnSurface
-                               )
-                           }
-                       }
-                    }
-
-                }
-            }
+//                items(artPieces) { artPiece ->
+//
+//                    Box() {
+//                        if (artPiece.primaryImage.isNullOrEmpty()) {
+//                            Text("No Image Available...", Modifier.align(Alignment.Center))
+//                        } else {
+//                            AsyncImage(
+//                                model = ImageRequest.Builder(platformContext)
+//                                    .data(artPiece.primaryImage)
+//                                    .build(),
+//                                contentDescription = null,
+//                                contentScale = ContentScale.FillWidth,
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .wrapContentHeight()
+//                                    .heightIn(min = 300.dp)
+//                                    .padding(smallPadding)
+//                                    .clickable {
+//                                        coroutineScope.launch {
+//                                            AppSnackBarBannerHostState.showSnackBar(
+//                                                BannerInformation.Information(
+//                                                    message = artPiece.title ?: "--"
+//                                                )
+//                                            )
+//                                        }
+//                                    }
+//                            )
+//                        }
+//
+//                       Box(
+//                           modifier = Modifier
+//                               .align(Alignment.BottomStart)
+//                               .padding(mediumPadding)
+//                       ) {
+//
+//                           Column(
+//                               modifier = Modifier
+//                                   .background(Color.Black.copy(alpha = 0.3f))
+//                                   .padding(smallPadding)
+//                           ) {
+//                               Text(
+//                                   text = artPiece.title ?: "--",
+//                                   color = MaterialTheme.colorScheme.inverseOnSurface
+//                               )
+//                               Text(
+//                                   text = artPiece.artistDisplayName ?: "Unknown",
+//                                   color = MaterialTheme.colorScheme.inverseOnSurface
+//                               )
+//                           }
+//                       }
+//                    }
+//
+//                }
+//            }
     }
 
 }
