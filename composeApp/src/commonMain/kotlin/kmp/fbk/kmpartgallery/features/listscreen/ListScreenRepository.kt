@@ -30,7 +30,6 @@ class ListScreenRepository(
         departmentDao.insert(departmentEntity)
     }
 
-
     suspend fun fetchAllObjectIdsCall() {
         metArtApi.getAllArtPiecesIdsCall().onExecute(
             callBack = object: Callback<ArtObjectCountAndIds> {
@@ -48,6 +47,5 @@ class ListScreenRepository(
             },
         )
     }
-
 
 }
