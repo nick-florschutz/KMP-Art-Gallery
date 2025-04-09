@@ -4,7 +4,6 @@ import kmp.fbk.kmpartgallery.features.listscreen.ListScreenRepository
 import kmp.fbk.kmpartgallery.features.listscreen.ListScreenViewModel
 import kmp.fbk.kmpartgallery.local_storage.ArtGalleryDatabase
 import kmp.fbk.kmpartgallery.local_storage.dao.DepartmentDao
-import kmp.fbk.kmpartgallery.networking.MetArtMuseumApiRequests
 import org.koin.core.module.Module
 import org.koin.dsl.KoinConfiguration
 import org.koin.dsl.module
@@ -16,7 +15,6 @@ val daoModule = module {
 fun appModules(): List<Module> = listOf(
     daoModule,
     module {
-        single { MetArtMuseumApiRequests() }
-        factory { ListScreenRepository(get(), get()) }
+        factory { ListScreenRepository(departmentDao = get()) }
     }
 )

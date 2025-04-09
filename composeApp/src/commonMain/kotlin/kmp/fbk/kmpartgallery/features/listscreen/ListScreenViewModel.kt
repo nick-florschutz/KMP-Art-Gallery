@@ -2,9 +2,11 @@ package kmp.fbk.kmpartgallery.features.listscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.aakira.napier.Napier
 import kmp.fbk.kmpartgallery.local_storage.dao.DepartmentDao
 import kmp.fbk.kmpartgallery.local_storage.domain_models.Department
 import kmp.fbk.kmpartgallery.local_storage.mappers.toDepartmentsList
+import kmp.fbk.kmpartgallery.networking.response_data_models.ArtPieceResponse
 import kmp.fbk.kmpartgallery.networking.response_data_models.DepartmentResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,10 +24,14 @@ class ListScreenViewModel(
     private val _departmentsList = MutableStateFlow<List<DepartmentResponse>>(emptyList())
     val departmentsList = _departmentsList.asStateFlow()
 
+    private val _artPieceResponseList = MutableStateFlow<List<ArtPieceResponse>>(emptyList())
+    val artPieceResponseList = _artPieceResponseList.asStateFlow()
+
     init {
         viewModelScope.launch {
-            getAllDepartments()
-            _state.emit(ViewModelState.Success(Unit))
+//            getAllDepartments()
+//            _state.emit(ViewModelState.Success(Unit))
+            getFiveArtPieces()
         }
     }
 
@@ -33,6 +39,17 @@ class ListScreenViewModel(
         viewModelScope.launch {
             listScreenRepository.insertDepartmentIntoDb(department)
         }
+    }
+
+    private suspend fun getFiveArtPieces() {
+        val artPieceResponseList = mutableListOf<ArtPieceResponse>()
+        (475..500).forEach {
+            val artPiece = listScreenRepository.getArtPieceById(it)
+            artPieceResponseList.add(artPiece)
+            Napier.i(tag = "ListScreenViewModel", message = "artPiece: $artPiece")
+        }
+        _artPieceResponseList.emit(artPieceResponseList)
+        _state.emit(ViewModelState.Success(Unit))
     }
 
     private suspend fun getAllDepartments() {

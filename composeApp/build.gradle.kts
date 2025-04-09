@@ -40,11 +40,16 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            // COIL
+            implementation(libs.core.ktx)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -83,13 +88,22 @@ kotlin {
             api(libs.permissions.compose) // permissions api + compose extensions
             implementation(libs.permissions.test)
 
-            // Ktorfit -https://github.com/Foso/Ktorfit
+            // Ktorfit - https://github.com/Foso/Ktorfit
             implementation(libs.ktorfit)
             implementation(libs.ktorfit.callconverter)
+            // Ktor Content Negotiation & Serialization
+            implementation(libs.ktor.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
 
             // Room Database
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
+
+            // Coil
+            implementation(libs.coil.compose)
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil.mp)
+            implementation(libs.coil.network)
 
 
         }
