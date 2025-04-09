@@ -48,6 +48,7 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import kmp.fbk.kmpartgallery.mediumPadding
+import kmp.fbk.kmpartgallery.networking.download.DepartmentsDownloadMachine
 import kmp.fbk.kmpartgallery.networking.response_data_models.ArtPieceResponse
 import kmp.fbk.kmpartgallery.smallPadding
 import kmp.fbk.kmpartgallery.snackbar.BannerInformation
@@ -59,9 +60,11 @@ import org.koin.mp.KoinPlatform
 fun ListScreen() {
 
     val listScreenRepository = KoinPlatform.getKoin().get<ListScreenRepository>()
+    val departmentsDownloadMachine = KoinPlatform.getKoin().get<DepartmentsDownloadMachine>()
     val viewModel = viewModel {
         ListScreenViewModel(
             listScreenRepository = listScreenRepository,
+            departmentsDownloadMachine = departmentsDownloadMachine,
         )
     }
 

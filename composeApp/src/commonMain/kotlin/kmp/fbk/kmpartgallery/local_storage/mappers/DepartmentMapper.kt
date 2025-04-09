@@ -28,12 +28,24 @@ fun DepartmentResponse.toDepartment(): Department {
     )
 }
 
+fun DepartmentResponse.toDepartmentEntity(): DepartmentEntity {
+    return DepartmentEntity(
+        localId = null,
+        departmentId = departmentId,
+        displayName = displayName,
+    )
+}
+
 fun List<DepartmentEntity>.toDepartmentsList(): List<Department> {
     return map { it.toDepartment() }
 }
 
 fun List<DepartmentResponse>.toDepartmentList(): List<Department> {
     return map { it.toDepartment() }
+}
+
+fun List<DepartmentResponse>.toDepartmentEntityList(): List<DepartmentEntity> {
+    return map { it.toDepartmentEntity() }
 }
 
 fun List<Department>.toDepartmentEntitiesList(): List<DepartmentEntity> {
