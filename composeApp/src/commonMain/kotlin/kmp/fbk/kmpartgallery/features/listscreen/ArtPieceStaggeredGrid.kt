@@ -20,6 +20,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +40,8 @@ import kmp.fbk.kmpartgallery.smallPadding
 import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerHostState
 import kmp.fbk.kmpartgallery.snackbar.BannerInformation
 import kotlinx.coroutines.launch
+import kotlin.math.min
+import kotlin.random.Random
 
 @Composable
 fun ArtPieceStaggeredGrid(
@@ -52,9 +57,19 @@ fun ArtPieceStaggeredGrid(
         contentPadding = PaddingValues(horizontal = mediumPadding),
         content = {
             items(artPieces) { artPiece ->
+                val height by remember {
+                    mutableStateOf(
+                        if ((artPiece.objectID?:0) % 2 == 0) {
+                            250.dp
+                        } else {
+                            300.dp
+                        }
+                    )
+                }
+
                 Column(
                     modifier = Modifier
-                        .height(250.dp)
+                        .height(height)
                         .width(150.dp)
                         .clip(
                             RoundedCornerShape(smallMediumPadding)
@@ -69,17 +84,20 @@ fun ArtPieceStaggeredGrid(
                             }
                         }
                 ) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(platformContext)
-                            .data(artPiece.primaryImage)
-                            .build(),
-                        contentDescription = null,
-                        contentScale = ContentScale.FillBounds,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(0.7f)
+                    val image = artPiece.primaryImage ?: artPiece.primaryImageSmall ?: artPiece.additionalImages?.firstOrNull()
+                    if (image != null) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(platformContext)
+                                .data(image)
+                                .build(),
+                            contentDescription = null,
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(0.7f)
 
-                    )
+                        )
+                    }
 
                     Column(
                         modifier = Modifier
