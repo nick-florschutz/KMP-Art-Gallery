@@ -8,10 +8,10 @@ import androidx.room.PrimaryKey
     tableName = DepartmentEntity.TABLE_NAME
 )
 data class DepartmentEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = Column.LOCAL_ID) val localId: Long? = null,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = Column.LOCAL_ID) override val localId: Long? = null,
     @ColumnInfo(name = Column.DEPARTMENT_ID) val departmentId: Int? = null,
     @ColumnInfo(name = Column.DISPLAY_NAME) val displayName: String? = null,
-) {
+): IEntity {
     companion object {
         const val TABLE_NAME = "department_entity"
 

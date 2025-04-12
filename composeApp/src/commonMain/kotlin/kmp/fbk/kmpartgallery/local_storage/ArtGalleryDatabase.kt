@@ -7,6 +7,7 @@ import androidx.room.RoomDatabaseConstructor
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kmp.fbk.kmpartgallery.local_storage.dao.DepartmentDao
 import kmp.fbk.kmpartgallery.local_storage.entities.DepartmentEntity
+import kmp.fbk.kmpartgallery.local_storage.entities.DetailedMeasurementsEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
