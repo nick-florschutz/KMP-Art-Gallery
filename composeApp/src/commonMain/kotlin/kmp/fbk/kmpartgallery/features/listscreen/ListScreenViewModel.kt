@@ -34,7 +34,7 @@ class ListScreenViewModel(
         viewModelScope.launch {
 
 
-//            artPieceDownloadMachine.downloadArtPieces()
+            artPieceDownloadMachine.downloadArtPieces()
 
             launch {
                 listScreenRepository.getAllArtPiecesFromDbFlow().collectLatest {

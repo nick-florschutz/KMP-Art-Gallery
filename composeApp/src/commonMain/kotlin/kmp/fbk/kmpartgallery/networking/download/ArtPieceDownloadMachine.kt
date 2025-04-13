@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -28,27 +29,58 @@ class ArtPieceDownloadMachine(
     @OptIn(ExperimentalTime::class)
     fun downloadArtPieces() {
         coroutineScope.launch {
-            var currentIndex = 0
             val now = Clock.System.now()
             val startTime = now.toEpochMilliseconds()
 
             val storedArtPieceObjectIds = artPieceDao.getAllArtPieceObjectIds()
 
-            Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
-                "Downloading Art Pieces Starting"
+            val totalObjectsAndIds = getTotalObjectsAndIds()
+            val totalObjects = totalObjectsAndIds.first
+
+            val randomSubsetNumber = Random.nextInt(0, totalObjects ?: return@launch)
+            val objectIds = if (randomSubsetNumber + NUM_ITEMS_TO_FETCH < totalObjects) {
+                totalObjectsAndIds.second.subList(
+                    fromIndex = randomSubsetNumber,
+                    toIndex = randomSubsetNumber + NUM_ITEMS_TO_FETCH,
+                )
+            } else {
+                totalObjectsAndIds.second.subList(
+                    fromIndex = randomSubsetNumber,
+                    toIndex = randomSubsetNumber - NUM_ITEMS_TO_FETCH,
+                )
+            }.filterNot { objectId ->
+                storedArtPieceObjectIds.contains(objectId)
             }
 
-            while (currentIndex < NUM_ITEMS_TO_FETCH) {
-                    // Chunk the requests into groups of 50 per second
-                    (currentIndex..(currentIndex + NUM_REQUESTS_PER_SECOND_LIMIT)).forEach { index ->
-                        val artPiece = metArtApi.getArtPieceById(index)
-                            .toArtPiece()
+            var currentIndex = 0
 
+            Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
+                "Downloading Art Pieces Starting. Items found: $totalObjects. Items to download: ${objectIds.size}"
+            }
+
+            if (totalObjects == storedArtPieceObjectIds.size || storedArtPieceObjectIds.containsAll(objectIds)) {
+                Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
+                    "All Art Pieces Already Downloaded. Bailing Early"
+                }
+                return@launch
+            }
+
+            // Chunk the requests into groups of 50 per second
+            objectIds.chunked(50).forEach { chunk ->
+                chunk.forEach { objectId ->
+                    if (objectId != null) {
+                        val artPiece = metArtApi.getArtPieceById(objectId)
+                            .toArtPiece()
                         // Prevent inserting bad data into the database
                         if (artPiece.objectID != null && !storedArtPieceObjectIds.contains(artPiece.objectID)) {
                             artPieceDao.insert(artPiece.toArtPieceEntity())
                         }
                     }
+                }
+                Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
+                    "Progress Update: $currentIndex / ${objectIds.size} downloaded. Time Elapsed: ${(Clock.System.now().toEpochMilliseconds() - startTime).milliseconds}"
+                }
+
                 // Force delay to limit requests per second
                 delay(1000)
                 currentIndex += NUM_REQUESTS_PER_SECOND_LIMIT
@@ -58,5 +90,13 @@ class ArtPieceDownloadMachine(
                 "Downloading Art Pieces Ending: ${(Clock.System.now().toEpochMilliseconds() - startTime).milliseconds} Elapsed"
             }
         }
+    }
+
+    /**
+     * Gets the total number of objects and their ids
+     */
+    private suspend fun getTotalObjectsAndIds(): Pair<Int?, List<Int?>> {
+        val totalObjects = metArtApi.getAllArtPiecesIds()
+        return totalObjects.total to totalObjects.objectIDs
     }
 }
