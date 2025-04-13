@@ -3,6 +3,7 @@ package kmp.fbk.kmpartgallery.features.listscreen
 import de.jensklingenberg.ktorfit.Callback
 import io.github.aakira.napier.Napier
 import io.ktor.client.statement.HttpResponse
+import kmp.fbk.kmpartgallery.local_storage.dao.ArtPieceDao
 import kmp.fbk.kmpartgallery.local_storage.dao.DepartmentDao
 import kmp.fbk.kmpartgallery.local_storage.domain_models.Department
 import kmp.fbk.kmpartgallery.local_storage.mappers.toDepartmentEntity
@@ -16,6 +17,7 @@ import org.koin.mp.KoinPlatform
 class ListScreenRepository(
     private val metArtApi: MetArtApi = NetworkRequestBuilder.requestBuilder.createMetArtApi(),
     private val departmentDao: DepartmentDao,
+    private val artPieceDao: ArtPieceDao,
 ) {
     suspend fun getAllObjectIds() = metArtApi.getAllArtPiecesIds()
 
@@ -29,6 +31,10 @@ class ListScreenRepository(
         val departmentEntity = department.toDepartmentEntity()
         departmentDao.insert(departmentEntity)
     }
+
+    suspend fun getAllArtPiecesFromDb() = artPieceDao.getAllArtPieces()
+
+    fun getAllArtPiecesFromDbFlow() = artPieceDao.getAllArtPiecesFlow()
 
     suspend fun fetchAllObjectIdsCall() {
         metArtApi.getAllArtPiecesIdsCall().onExecute(

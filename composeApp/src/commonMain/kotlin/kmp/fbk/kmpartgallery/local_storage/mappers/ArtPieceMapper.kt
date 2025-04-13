@@ -72,10 +72,31 @@ fun ArtPieceResponse.toArtPiece(): ArtPiece {
 }
 
 fun ArtPiece.toArtPieceEntity(): ArtPieceEntity {
-    val additionalImagesString = Json.encodeToString(additionalImages)
-    val constituentResponsesString = Json.encodeToString(constituentResponses)
-    val measurementsString = Json.encodeToString(measurements)
-    val tagsString = Json.encodeToString(tags)
+    val json = Json { prettyPrint = true;isLenient = true;ignoreUnknownKeys = true; }
+    val additionalImagesString = try {
+        json.encodeToString(additionalImages)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+    val constituentResponsesString = try {
+        json.encodeToString(constituentResponses)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+    val measurementsString = try {
+        json.encodeToString(measurements)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+    val tagsString = try {
+        json.encodeToString(tags)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
 
     return ArtPieceEntity(
         localId,
@@ -140,10 +161,31 @@ fun ArtPiece.toArtPieceEntity(): ArtPieceEntity {
 }
 
 fun ArtPieceEntity.toArtPiece(): ArtPiece {
-    val additionalImages = Json.decodeFromString<List<String>>(this.additionalImages.orEmpty())
-    val constituentResponses = Json.decodeFromString<List<Constituent>>(this.constituentResponses.orEmpty())
-    val measurements = Json.decodeFromString<List<DetailedMeasurements>>(this.measurements.orEmpty())
-    val tags = Json.decodeFromString<List<ArtPieceTag>>(this.tags.orEmpty())
+    val json = Json { prettyPrint = true;isLenient = true;ignoreUnknownKeys = true; }
+    val additionalImages = try {
+        json.decodeFromString<List<String>>(this.additionalImages.orEmpty())
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+    val constituentResponses = try {
+        json.decodeFromString<List<Constituent>>(this.constituentResponses.orEmpty())
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+    val measurements = try {
+        json.decodeFromString<List<DetailedMeasurements>>(this.measurements.orEmpty())
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+    val tags = try {
+        json.decodeFromString<List<ArtPieceTag>>(this.tags.orEmpty())
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
 
     return ArtPiece(
         localId = localId,
@@ -205,4 +247,8 @@ fun ArtPieceEntity.toArtPiece(): ArtPiece {
         isTimelineWork = isTimelineWork,
         galleryNumber = galleryNumber,
     )
+}
+
+fun List<ArtPieceEntity>.toArtPieceList(): List<ArtPiece> {
+    return this.map { it.toArtPiece() }
 }

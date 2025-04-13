@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.LocalPlatformContext
+import kmp.fbk.kmpartgallery.networking.download.ArtPieceDownloadMachine
 import kmp.fbk.kmpartgallery.networking.download.DepartmentsDownloadMachine
 import org.koin.mp.KoinPlatform
 
@@ -20,10 +21,12 @@ fun ListScreen() {
 
     val listScreenRepository = KoinPlatform.getKoin().get<ListScreenRepository>()
     val departmentsDownloadMachine = KoinPlatform.getKoin().get<DepartmentsDownloadMachine>()
+    val artPieceDownloadMachine = KoinPlatform.getKoin().get<ArtPieceDownloadMachine>()
     val viewModel = viewModel {
         ListScreenViewModel(
             listScreenRepository = listScreenRepository,
             departmentsDownloadMachine = departmentsDownloadMachine,
+            artPieceDownloadMachine = artPieceDownloadMachine,
         )
     }
 
