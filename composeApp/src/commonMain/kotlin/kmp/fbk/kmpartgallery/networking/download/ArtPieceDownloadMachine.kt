@@ -87,7 +87,7 @@ class ArtPieceDownloadMachine(
             }
 
             Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
-                "Downloading Art Pieces Ending: ${(Clock.System.now().toEpochMilliseconds() - startTime).milliseconds} Elapsed"
+                "Downloaded ${objectIds.size} Art Pieces Successfully. Time Elapsed: ${(Clock.System.now().toEpochMilliseconds() - startTime).milliseconds}"
             }
         }
     }
