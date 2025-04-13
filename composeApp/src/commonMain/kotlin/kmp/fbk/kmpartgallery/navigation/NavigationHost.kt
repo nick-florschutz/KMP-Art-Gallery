@@ -9,7 +9,7 @@ import androidx.navigation.toRoute
 import kmp.fbk.kmpartgallery.features.listscreen.ListScreen
 
 @Composable
-fun NavigationHost(modifier: Modifier) {
+fun NavigationHost(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
     NavHost(
