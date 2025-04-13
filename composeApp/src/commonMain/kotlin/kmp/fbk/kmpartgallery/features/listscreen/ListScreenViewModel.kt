@@ -58,17 +58,6 @@ class ListScreenViewModel(
         }
     }
 
-//    private suspend fun getFiveArtPieces() {
-//        val artPieceResponseList = mutableListOf<ArtPieceResponse>()
-//        (475..500).forEach {
-//            val artPiece = listScreenRepository.getArtPieceById(it)
-//            artPieceResponseList.add(artPiece)
-//            Napier.i(tag = "ListScreenViewModel", message = "artPiece: $artPiece")
-//        }
-//        _artPieceResponseList.emit(artPieceResponseList)
-//        _state.emit(ViewModelState.Success(Unit))
-//    }
-
     private suspend fun getAllDepartments() {
         _departmentsList.emit(listScreenRepository.getAllDepartments())
     }
