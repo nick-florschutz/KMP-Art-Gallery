@@ -1,4 +1,4 @@
-package kmp.fbk.kmpartgallery.local_storage.entities
+package kmp.fbk.kmpartgallery.local_storage.database.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -2,9 +2,7 @@ package kmp.fbk.kmpartgallery.di
 
 import android.content.Context
 import kmp.fbk.kmpartgallery.local_storage.artGalleryDatabaseBuilder
-import kmp.fbk.kmpartgallery.local_storage.getRoomDatabase
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.module.Module
+import kmp.fbk.kmpartgallery.local_storage.database.getRoomDatabase
 import org.koin.dsl.module
 
 fun getRoomDatabaseModule(context: Context) = module {

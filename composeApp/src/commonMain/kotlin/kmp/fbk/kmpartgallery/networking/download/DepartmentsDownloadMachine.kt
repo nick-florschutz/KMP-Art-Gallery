@@ -1,8 +1,8 @@
 package kmp.fbk.kmpartgallery.networking.download
 
 import io.github.aakira.napier.Napier
-import kmp.fbk.kmpartgallery.local_storage.dao.DepartmentDao
-import kmp.fbk.kmpartgallery.local_storage.mappers.toDepartmentEntityList
+import kmp.fbk.kmpartgallery.local_storage.database.dao.DepartmentDao
+import kmp.fbk.kmpartgallery.local_storage.database.mappers.toDepartmentEntityList
 import kmp.fbk.kmpartgallery.networking.MetArtApi
 import kmp.fbk.kmpartgallery.networking.NetworkRequestBuilder
 import kmp.fbk.kmpartgallery.networking.createMetArtApi

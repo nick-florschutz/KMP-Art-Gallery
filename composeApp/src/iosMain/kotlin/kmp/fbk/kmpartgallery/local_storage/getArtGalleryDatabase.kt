@@ -2,6 +2,7 @@ package kmp.fbk.kmpartgallery.local_storage
 
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import kmp.fbk.kmpartgallery.local_storage.database.ArtGalleryDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager

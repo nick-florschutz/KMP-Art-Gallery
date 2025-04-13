@@ -1,4 +1,4 @@
-package kmp.fbk.kmpartgallery.local_storage.domain_models
+package kmp.fbk.kmpartgallery.domain_models
 
 import kotlinx.serialization.Serializable
 

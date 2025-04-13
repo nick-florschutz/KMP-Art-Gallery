@@ -3,11 +3,11 @@ package kmp.fbk.kmpartgallery.features.listscreen
 import de.jensklingenberg.ktorfit.Callback
 import io.github.aakira.napier.Napier
 import io.ktor.client.statement.HttpResponse
-import kmp.fbk.kmpartgallery.local_storage.dao.ArtPieceDao
-import kmp.fbk.kmpartgallery.local_storage.dao.DepartmentDao
-import kmp.fbk.kmpartgallery.local_storage.domain_models.Department
-import kmp.fbk.kmpartgallery.local_storage.mappers.toDepartmentEntity
-import kmp.fbk.kmpartgallery.local_storage.mappers.toDepartmentsList
+import kmp.fbk.kmpartgallery.local_storage.database.dao.ArtPieceDao
+import kmp.fbk.kmpartgallery.local_storage.database.dao.DepartmentDao
+import kmp.fbk.kmpartgallery.domain_models.Department
+import kmp.fbk.kmpartgallery.local_storage.database.mappers.toDepartmentEntity
+import kmp.fbk.kmpartgallery.local_storage.database.mappers.toDepartmentsList
 import kmp.fbk.kmpartgallery.networking.MetArtApi
 import kmp.fbk.kmpartgallery.networking.NetworkRequestBuilder
 import kmp.fbk.kmpartgallery.networking.createMetArtApi

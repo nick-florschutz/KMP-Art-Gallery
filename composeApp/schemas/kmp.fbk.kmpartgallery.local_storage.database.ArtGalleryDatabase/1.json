@@ -1,0 +1,342 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "e17b885c098b92ac18b85f7a71245b0c",
+    "entities": [
+      {
+        "tableName": "department_entity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`local_id` INTEGER PRIMARY KEY AUTOINCREMENT, `department_id` INTEGER, `display_name` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "localId",
+            "columnName": "local_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "departmentId",
+            "columnName": "department_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "displayName",
+            "columnName": "display_name",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "local_id"
+          ]
+        }
+      },
+      {
+        "tableName": "art_piece_entity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`local_id` INTEGER PRIMARY KEY AUTOINCREMENT, `object_id` INTEGER, `is_highlight` INTEGER, `accession_number` TEXT, `accession_year` TEXT, `is_public_domain` INTEGER, `primary_image` TEXT, `primary_image_small` TEXT, `additional_images` TEXT, `department` TEXT, `constituents` TEXT, `object_name` TEXT, `title` TEXT, `culture` TEXT, `period` TEXT, `dynasty` TEXT, `reign` TEXT, `portfolio` TEXT, `artist_role` TEXT, `artist_prefix` TEXT, `artist_display_name` TEXT, `artist_display_bio` TEXT, `artist_suffix` TEXT, `artist_alpha_sort` TEXT, `artist_nationality` TEXT, `artist_begin_date` TEXT, `artist_end_date` TEXT, `artist_gender` TEXT, `artist_wikidata_url` TEXT, `artist_ulan_url` TEXT, `object_date` TEXT, `object_begin_date` INTEGER, `object_end_date` INTEGER, `medium` TEXT, `dimensions` TEXT, `measurements` TEXT, `credit_line` TEXT, `geography_type` TEXT, `city` TEXT, `state` TEXT, `county` TEXT, `country` TEXT, `region` TEXT, `subregion` TEXT, `locale` TEXT, `locus` TEXT, `excavation` TEXT, `river` TEXT, `classification` TEXT, `rights_and_reproduction` TEXT, `link_resource` TEXT, `metadata_date` TEXT, `repository` TEXT, `object_url` TEXT, `tags` TEXT, `object_wikidata_url` TEXT, `is_timeline_work` INTEGER, `gallery_number` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "localId",
+            "columnName": "local_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "objectID",
+            "columnName": "object_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "isHighlight",
+            "columnName": "is_highlight",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "accessionNumber",
+            "columnName": "accession_number",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "accessionYear",
+            "columnName": "accession_year",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "isPublicDomain",
+            "columnName": "is_public_domain",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "primaryImage",
+            "columnName": "primary_image",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "primaryImageSmall",
+            "columnName": "primary_image_small",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "additionalImages",
+            "columnName": "additional_images",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "department",
+            "columnName": "department",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "constituentResponses",
+            "columnName": "constituents",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "objectName",
+            "columnName": "object_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "culture",
+            "columnName": "culture",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "period",
+            "columnName": "period",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dynasty",
+            "columnName": "dynasty",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "reign",
+            "columnName": "reign",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "portfolio",
+            "columnName": "portfolio",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistRole",
+            "columnName": "artist_role",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistPrefix",
+            "columnName": "artist_prefix",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistDisplayName",
+            "columnName": "artist_display_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistDisplayBio",
+            "columnName": "artist_display_bio",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistSuffix",
+            "columnName": "artist_suffix",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistAlphaSort",
+            "columnName": "artist_alpha_sort",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistNationality",
+            "columnName": "artist_nationality",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistBeginDate",
+            "columnName": "artist_begin_date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistEndDate",
+            "columnName": "artist_end_date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistGender",
+            "columnName": "artist_gender",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistWikidataURL",
+            "columnName": "artist_wikidata_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistULANURL",
+            "columnName": "artist_ulan_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "objectDate",
+            "columnName": "object_date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "objectBeginDate",
+            "columnName": "object_begin_date",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "objectEndDate",
+            "columnName": "object_end_date",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "medium",
+            "columnName": "medium",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dimensions",
+            "columnName": "dimensions",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "measurements",
+            "columnName": "measurements",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "creditLine",
+            "columnName": "credit_line",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "geographyType",
+            "columnName": "geography_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "county",
+            "columnName": "county",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "region",
+            "columnName": "region",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "subregion",
+            "columnName": "subregion",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "locale",
+            "columnName": "locale",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "locus",
+            "columnName": "locus",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "excavation",
+            "columnName": "excavation",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "river",
+            "columnName": "river",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "classification",
+            "columnName": "classification",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rightsAndReproduction",
+            "columnName": "rights_and_reproduction",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "linkResource",
+            "columnName": "link_resource",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "metadataDate",
+            "columnName": "metadata_date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "repository",
+            "columnName": "repository",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "objectURL",
+            "columnName": "object_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "tags",
+            "columnName": "tags",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "objectWikidataURL",
+            "columnName": "object_wikidata_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "isTimelineWork",
+            "columnName": "is_timeline_work",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "galleryNumber",
+            "columnName": "gallery_number",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "local_id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e17b885c098b92ac18b85f7a71245b0c')"
+    ]
+  }
+}

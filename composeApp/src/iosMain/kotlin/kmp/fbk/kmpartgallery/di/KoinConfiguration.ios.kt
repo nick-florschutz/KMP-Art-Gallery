@@ -1,8 +1,7 @@
 package kmp.fbk.kmpartgallery.di
 
 import kmp.fbk.kmpartgallery.local_storage.artGalleryDatabaseBuilder
-import kmp.fbk.kmpartgallery.local_storage.getRoomDatabase
-import org.koin.core.module.Module
+import kmp.fbk.kmpartgallery.local_storage.database.getRoomDatabase
 import org.koin.dsl.module
 
 val getRoomDatabaseModule = module {

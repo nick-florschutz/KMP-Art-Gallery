@@ -1,15 +1,17 @@
 package kmp.fbk.kmpartgallery.networking.download
 
 import io.github.aakira.napier.Napier
-import kmp.fbk.kmpartgallery.local_storage.dao.ArtPieceDao
-import kmp.fbk.kmpartgallery.local_storage.mappers.toArtPiece
-import kmp.fbk.kmpartgallery.local_storage.mappers.toArtPieceEntity
+import kmp.fbk.kmpartgallery.local_storage.database.dao.ArtPieceDao
+import kmp.fbk.kmpartgallery.local_storage.database.mappers.toArtPiece
+import kmp.fbk.kmpartgallery.local_storage.database.mappers.toArtPieceEntity
+import kmp.fbk.kmpartgallery.local_storage.preferences.DataStoreRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 import kotlin.time.Clock
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
@@ -19,11 +21,15 @@ import kotlin.time.toDuration
 class ArtPieceDownloadMachine(
     override val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val artPieceDao: ArtPieceDao,
+    private val dataStoreRepository: DataStoreRepository,
 ): DownloadMachine() {
 
     companion object {
         private const val NUM_REQUESTS_PER_SECOND_LIMIT = 50
         private const val NUM_ITEMS_TO_FETCH = 500
+
+        private const val LAST_DOWNLOAD_TIME_DATASTORE_KEY = "last_download_time_datastore_key"
+        private val DOWNLOAD_TIME_INTERVAL = 1.days
     }
 
     @OptIn(ExperimentalTime::class)
@@ -31,6 +37,20 @@ class ArtPieceDownloadMachine(
         coroutineScope.launch {
             val now = Clock.System.now()
             val startTime = now.toEpochMilliseconds()
+
+            val lastDownloadTimestamp = dataStoreRepository.readLongValue(LAST_DOWNLOAD_TIME_DATASTORE_KEY) ?: 0L
+            Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
+                "Last Download Timestamp: $lastDownloadTimestamp"
+            }
+
+            if (startTime.minus(lastDownloadTimestamp) < DOWNLOAD_TIME_INTERVAL.inWholeMilliseconds) {
+                Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
+                    "Not downloading art pieces. Time remaining until next download: ${
+                        (lastDownloadTimestamp - (startTime.minus(DOWNLOAD_TIME_INTERVAL.inWholeMilliseconds))).milliseconds
+                    }"
+                }
+                return@launch
+            }
 
             val storedArtPieceObjectIds = artPieceDao.getAllArtPieceObjectIds()
 
@@ -52,6 +72,7 @@ class ArtPieceDownloadMachine(
                 storedArtPieceObjectIds.contains(objectId)
             }
 
+            // Keeps track of how many items we have downloaded so far
             var currentIndex = 0
 
             Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
@@ -88,6 +109,14 @@ class ArtPieceDownloadMachine(
 
             Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
                 "Downloaded ${objectIds.size} Art Pieces Successfully. Time Elapsed: ${(Clock.System.now().toEpochMilliseconds() - startTime).milliseconds}"
+            }
+
+            // Save the last download time to datastore
+            val lastDownloadTime = Clock.System.now().toEpochMilliseconds()
+            dataStoreRepository.saveLongValue(LAST_DOWNLOAD_TIME_DATASTORE_KEY, lastDownloadTime).also {
+                Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
+                    "Saved last download time to datastore: $lastDownloadTime"
+                }
             }
         }
     }

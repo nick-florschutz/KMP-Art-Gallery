@@ -1,10 +1,10 @@
-package kmp.fbk.kmpartgallery.local_storage.entities
+package kmp.fbk.kmpartgallery.local_storage.database.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kmp.fbk.kmpartgallery.local_storage.domain_models.ArtPieceTag
+import kmp.fbk.kmpartgallery.domain_models.ArtPieceTag
 
 @Entity(
     tableName = ArtPieceEntity.TABLE_NAME,

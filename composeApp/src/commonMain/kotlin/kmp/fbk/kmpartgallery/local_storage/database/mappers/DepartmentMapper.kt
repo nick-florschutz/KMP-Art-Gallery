@@ -1,7 +1,7 @@
-package kmp.fbk.kmpartgallery.local_storage.mappers
+package kmp.fbk.kmpartgallery.local_storage.database.mappers
 
-import kmp.fbk.kmpartgallery.local_storage.domain_models.Department
-import kmp.fbk.kmpartgallery.local_storage.entities.DepartmentEntity
+import kmp.fbk.kmpartgallery.domain_models.Department
+import kmp.fbk.kmpartgallery.local_storage.database.entities.DepartmentEntity
 import kmp.fbk.kmpartgallery.networking.response_data_models.DepartmentResponse
 
 fun DepartmentEntity.toDepartment(): Department {

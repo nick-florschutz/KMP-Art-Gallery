@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
-import kmp.fbk.kmpartgallery.local_storage.domain_models.ArtPiece
+import kmp.fbk.kmpartgallery.domain_models.ArtPiece
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.smallMediumPadding
 import kmp.fbk.kmpartgallery.smallPadding

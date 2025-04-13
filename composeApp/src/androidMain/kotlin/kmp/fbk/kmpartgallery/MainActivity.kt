@@ -11,7 +11,9 @@ import io.github.aakira.napier.Napier
 import kmp.fbk.kmpartgallery.app_theme.AppTheme
 import kmp.fbk.kmpartgallery.di.appModules
 import kmp.fbk.kmpartgallery.di.getRoomDatabaseModule
+import kmp.fbk.kmpartgallery.local_storage.preferences.createDataStore
 import org.koin.core.context.startKoin
+import org.koin.dsl.module
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +21,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val androidModules = listOf(
-            getRoomDatabaseModule(this)
+            getRoomDatabaseModule(this@MainActivity),
+            module {
+                single { createDataStore(this@MainActivity) }
+            }
         )
 
         startKoin {

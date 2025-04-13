@@ -3,6 +3,7 @@ package kmp.fbk.kmpartgallery.local_storage
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import kmp.fbk.kmpartgallery.local_storage.database.ArtGalleryDatabase
 
 fun artGalleryDatabaseBuilder(ctx: Context): RoomDatabase.Builder<ArtGalleryDatabase> {
     val appContext = ctx.applicationContext

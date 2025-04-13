@@ -3,9 +3,9 @@ package kmp.fbk.kmpartgallery.features.listscreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.aakira.napier.Napier
-import kmp.fbk.kmpartgallery.local_storage.domain_models.ArtPiece
-import kmp.fbk.kmpartgallery.local_storage.domain_models.Department
-import kmp.fbk.kmpartgallery.local_storage.mappers.toArtPieceList
+import kmp.fbk.kmpartgallery.domain_models.ArtPiece
+import kmp.fbk.kmpartgallery.domain_models.Department
+import kmp.fbk.kmpartgallery.local_storage.database.mappers.toArtPieceList
 import kmp.fbk.kmpartgallery.networking.download.ArtPieceDownloadMachine
 import kmp.fbk.kmpartgallery.networking.download.DepartmentsDownloadMachine
 import kmp.fbk.kmpartgallery.networking.response_data_models.ArtPieceResponse
@@ -33,8 +33,7 @@ class ListScreenViewModel(
     init {
         viewModelScope.launch {
 
-
-//            artPieceDownloadMachine.downloadArtPieces()
+            artPieceDownloadMachine.downloadArtPieces()
 
             launch {
                 listScreenRepository.getAllArtPiecesFromDbFlow().collectLatest {
