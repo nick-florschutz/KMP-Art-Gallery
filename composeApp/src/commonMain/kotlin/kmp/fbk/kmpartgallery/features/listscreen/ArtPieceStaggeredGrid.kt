@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Downloading
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -107,6 +108,8 @@ fun ArtPieceStaggeredGrid(
                                 .build(),
                             contentDescription = null,
                             placeholder = rememberVectorPainter(Icons.Default.FileDownload),
+                            fallback = rememberVectorPainter(Icons.Default.Error),
+                            error = rememberVectorPainter(Icons.Default.Error),
                             contentScale = ContentScale.FillBounds,
                             modifier = Modifier
                                 .fillMaxWidth()
