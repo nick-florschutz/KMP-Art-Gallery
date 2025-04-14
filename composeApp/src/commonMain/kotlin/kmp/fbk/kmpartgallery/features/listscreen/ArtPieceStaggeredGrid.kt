@@ -61,8 +61,8 @@ import kotlin.random.Random
 @Composable
 fun ArtPieceStaggeredGrid(
     artPieces: List<ArtPiece>,
+    mainScreenScrollState: ScrollState,
     modifier: Modifier = Modifier,
-    mainScreenScrollState: ScrollState
 ) {
 
     val screenHeight = getScreenHeight()
