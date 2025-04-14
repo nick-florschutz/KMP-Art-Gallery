@@ -3,4 +3,6 @@
     <string name="app_name">Art Gallery</string>
 
     <string name="dismiss">Dismiss</string>
+    <string name="search">Search</string>
+
 </resources>

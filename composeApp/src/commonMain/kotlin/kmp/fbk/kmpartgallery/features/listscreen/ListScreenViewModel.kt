@@ -20,7 +20,7 @@ class ListScreenViewModel(
     private val listScreenRepository: ListScreenRepository,
     private val departmentsDownloadMachine: DepartmentsDownloadMachine,
     private val artPieceDownloadMachine: ArtPieceDownloadMachine,
-): ViewModel() {
+): ViewModel(), ISearchViewModel {
 
     private val _state = MutableStateFlow<ViewModelState>(ViewModelState.Loading)
     val state = _state.asStateFlow()
@@ -34,6 +34,9 @@ class ListScreenViewModel(
     private val _artPieceResponseList = MutableStateFlow<List<ArtPiece>>(emptyList())
     val artPieceResponseList = _artPieceResponseList.asStateFlow()
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
+
     init {
         artPieceDownloadMachine.downloadArtPieces()
         collectOnArtPieces()
@@ -41,6 +44,10 @@ class ListScreenViewModel(
         collectOnLoadingState()
         downloadDepartments()
         collectOnDepartments()
+    }
+
+    override fun onSearchTextChange(query: String, additionalArgs: String?) {
+        _searchQuery.tryEmit(query)
     }
 
     private fun collectOnArtPieces() {
