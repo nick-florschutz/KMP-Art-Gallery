@@ -9,14 +9,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import kotlin.random.Random
-import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.DurationUnit
-import kotlin.time.ExperimentalTime
-import kotlin.time.toDuration
 
 class ArtPieceDownloadMachine(
     override val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
@@ -32,7 +28,6 @@ class ArtPieceDownloadMachine(
         private val DOWNLOAD_TIME_INTERVAL = 1.days
     }
 
-    @OptIn(ExperimentalTime::class)
     fun downloadArtPieces() {
         coroutineScope.launch {
             val now = Clock.System.now()

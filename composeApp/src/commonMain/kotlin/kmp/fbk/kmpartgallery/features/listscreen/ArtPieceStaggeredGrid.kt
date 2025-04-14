@@ -1,5 +1,6 @@
 package kmp.fbk.kmpartgallery.features.listscreen
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,16 +12,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,8 +35,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,24 +48,38 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import kmp.fbk.kmpartgallery.domain_models.ArtPiece
+import kmp.fbk.kmpartgallery.getScreenHeight
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.smallMediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
 import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerHostState
 import kmp.fbk.kmpartgallery.snackbar.BannerInformation
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonNull.content
+import kotlin.random.Random
 
 @Composable
 fun ArtPieceStaggeredGrid(
     artPieces: List<ArtPiece>,
     modifier: Modifier = Modifier,
+    mainScreenScrollState: ScrollState
 ) {
+
+    val screenHeight = getScreenHeight()
+
     val coroutineScope = rememberCoroutineScope()
     val platformContext = LocalPlatformContext.current
+
+    val isScrollEnabled by remember {
+        derivedStateOf {
+            mainScreenScrollState.value > screenHeight.value.times(1.25f)
+        }
+    }
 
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(152.dp),
         verticalItemSpacing = smallPadding,
+        userScrollEnabled = isScrollEnabled,
         horizontalArrangement = Arrangement.spacedBy(smallPadding),
         contentPadding = PaddingValues(horizontal = mediumPadding),
         content = {
@@ -143,6 +166,8 @@ fun ArtPieceStaggeredGrid(
                 }
             }
         },
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxWidth()
+            .height(screenHeight)
     )
 }
