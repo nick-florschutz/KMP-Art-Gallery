@@ -12,11 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
@@ -27,7 +29,10 @@ import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DockedSearchBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -35,21 +40,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import kmp.fbk.kmpartgallery.extraSmallPadding
+import kmp.fbk.kmpartgallery.largePadding
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.networking.download.ArtPieceDownloadMachine
 import kmp.fbk.kmpartgallery.networking.download.DepartmentsDownloadMachine
@@ -60,8 +70,9 @@ import kmpartgallery.composeapp.generated.resources.the_metropolitan_museum_of_a
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListScreen() {
+fun ListScreen(navController: NavController) {
     val listScreenRepository = KoinPlatform.getKoin().get<ListScreenRepository>()
     val departmentsDownloadMachine = KoinPlatform.getKoin().get<DepartmentsDownloadMachine>()
     val artPieceDownloadMachine = KoinPlatform.getKoin().get<ArtPieceDownloadMachine>()
@@ -88,26 +99,67 @@ fun ListScreen() {
         topBar = {
             Box(
                 modifier = Modifier.fillMaxWidth()
+                    .wrapContentHeight()
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
                         .padding(mediumPadding)
                 ) {
 
                     Icon(
                         painter = painterResource(Res.drawable.the_metropolitan_museum_of_art_logo),
                         contentDescription = null,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(24.dp)
                     )
 
-                    // TODO: Add Search bar here
+                  Row(
+//                      horizontalArrangement = Arrangement.spacedBy(smallPadding),
+                      verticalAlignment = Alignment.CenterVertically,
+                      modifier = Modifier
+                  ) {
+                      DockedSearchBar(
+                          inputField = {
+                              SearchBarDefaults.InputField(
+                                  query = "",
+                                  onQueryChange = {},
+                                  onSearch = {},
+                                  placeholder = {
+                                      Text(text = "Search Artworks...")
+                                  },
+                                  expanded = false,
+                                  onExpandedChange = {},
+                                  leadingIcon = {
+                                      Icon(
+                                          imageVector = Icons.Default.Search,
+                                          contentDescription = null,
+                                      )
+                                  }
+                              )
+                          },
+                          shape = RoundedCornerShape(4.dp),
+                          expanded = false,
+                          onExpandedChange = {},
+                          modifier = Modifier
+                              .weight(0.9f)
+                              .scale(0.7f)
+//                              .alignBy {
+//                                  it.measuredWidth
+//                              }
+                      ) {
 
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = null,
-                    )
+                      }
+
+                      Icon(
+                          imageVector = Icons.Default.Menu,
+                          contentDescription = null,
+                          modifier = Modifier.size(24.dp)
+                              .weight(0.1f)
+                      )
+                  }
                 }
             }
         },
@@ -121,6 +173,7 @@ fun ListScreen() {
                     selected = true, // TODO: Replace with actual selected state
                     onClick = {
                         // TODO
+
                     },
                     icon = {
                         Icon(imageVector = Icons.Default.Home, contentDescription = null)
