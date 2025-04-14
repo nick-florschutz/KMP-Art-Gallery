@@ -22,4 +22,12 @@ interface ArtPieceDao {
     @Query("SELECT * FROM ${ArtPieceEntity.TABLE_NAME}")
     fun getAllArtPiecesFlow(): Flow<List<ArtPieceEntity>>
 
+    @Query("""
+        SELECT ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} FROM ${ArtPieceEntity.TABLE_NAME}
+         WHERE ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} IS NOT NULL AND 
+         ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != "" AND
+         ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != '' ORDER BY RANDOM() LIMIT 5
+    """)
+    suspend fun getFiveArtPiecePrimaryImages(): List<String>
+
 }

@@ -76,25 +76,21 @@ fun ArtPiece.toArtPieceEntity(): ArtPieceEntity {
     val additionalImagesString = try {
         json.encodeToString(additionalImages)
     } catch (e: Exception) {
-        e.printStackTrace()
         null
     }
     val constituentResponsesString = try {
         json.encodeToString(constituentResponses)
     } catch (e: Exception) {
-        e.printStackTrace()
         null
     }
     val measurementsString = try {
         json.encodeToString(measurements)
     } catch (e: Exception) {
-        e.printStackTrace()
         null
     }
     val tagsString = try {
         json.encodeToString(tags)
     } catch (e: Exception) {
-        e.printStackTrace()
         null
     }
 
@@ -165,25 +161,21 @@ fun ArtPieceEntity.toArtPiece(): ArtPiece {
     val additionalImages = try {
         json.decodeFromString<List<String>>(this.additionalImages.orEmpty())
     } catch (e: Exception) {
-        e.printStackTrace()
         null
     }
     val constituentResponses = try {
         json.decodeFromString<List<Constituent>>(this.constituentResponses.orEmpty())
     } catch (e: Exception) {
-        e.printStackTrace()
         null
     }
     val measurements = try {
         json.decodeFromString<List<DetailedMeasurements>>(this.measurements.orEmpty())
     } catch (e: Exception) {
-        e.printStackTrace()
         null
     }
     val tags = try {
         json.decodeFromString<List<ArtPieceTag>>(this.tags.orEmpty())
     } catch (e: Exception) {
-        e.printStackTrace()
         null
     }
 

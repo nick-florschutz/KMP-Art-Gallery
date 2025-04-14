@@ -22,7 +22,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.CollectionsBookmark
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Explore
+import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
@@ -44,12 +46,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
 import kmp.fbk.kmpartgallery.extraSmallPadding
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.networking.download.ArtPieceDownloadMachine
@@ -63,7 +70,6 @@ import org.koin.mp.KoinPlatform
 
 @Composable
 fun ListScreen() {
-
     val listScreenRepository = KoinPlatform.getKoin().get<ListScreenRepository>()
     val departmentsDownloadMachine = KoinPlatform.getKoin().get<DepartmentsDownloadMachine>()
     val artPieceDownloadMachine = KoinPlatform.getKoin().get<ArtPieceDownloadMachine>()
@@ -75,36 +81,16 @@ fun ListScreen() {
         )
     }
 
-
-    val pagerState = rememberPagerState() {
-        3
-    }
-
-    var headerSize by remember { mutableStateOf(365) }
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(
-                available: Offset,
-                source: NestedScrollSource
-            ): Offset {
-                val delta = available.y.toInt()
-
-                val newHeaderSize = headerSize + delta
-                val previousImageSize = headerSize
-                headerSize = newHeaderSize.coerceIn(0, 365)
-                val consumed = headerSize - previousImageSize
-
-                return Offset(0f, consumed.toFloat())
-            }
-        }
-    }
-    val scrollState = rememberScrollState()
-
-
     val uiState by viewModel.state.collectAsStateWithLifecycle()
-    val departments by viewModel.departmentsList.collectAsStateWithLifecycle()
+    val featuredImages by viewModel.featuredImagesList.collectAsStateWithLifecycle()
     val artPieces by viewModel.artPieceResponseList.collectAsStateWithLifecycle()
 
+    val pagerState = rememberPagerState {
+        featuredImages.size
+    }
+
+    val scrollState = rememberScrollState()
+    val platformContext = LocalPlatformContext.current
 
     Scaffold(
         topBar = {
@@ -233,58 +219,60 @@ fun ListScreen() {
                 .verticalScroll(scrollState)
         ) {
 
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(300.dp)
-                ) {
-                    HorizontalPager(
-                        state = pagerState,
-                        pageContent = { page ->
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(Color.Cyan)
-                            ) {
-                                Text(text = "Page: $page")
-                            }
-                        }
-                    )
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(extraSmallPadding),
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = smallPadding)
-                    ) {
-                        repeat(pagerState.pageCount) {
-                            Icon(
-                                imageVector = Icons.Default.Circle,
-                                tint = if (pagerState.currentPage == it) Color.White else Color.LightGray,
-                                contentDescription = null,
-                                modifier = Modifier.size(12.dp)
-                            )
-                        }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+            ) {
+                HorizontalPager(
+                    state = pagerState,
+                    pageContent = { page ->
+                        AsyncImage(
+                            model = ImageRequest.Builder(platformContext)
+                                .data(featuredImages[page])
+                                .build(),
+                            contentDescription = null,
+                            placeholder = rememberVectorPainter(Icons.Default.FileDownload),
+                            fallback = rememberVectorPainter(Icons.Default.Error),
+                            error = rememberVectorPainter(Icons.Default.Error),
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
                     }
-                }
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = mediumPadding),
-                    horizontalArrangement = Arrangement.spacedBy(smallPadding),
-                    verticalAlignment = Alignment.CenterVertically,
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(extraSmallPadding),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = smallPadding)
                 ) {
-                    items(7) { item ->
-                        FilterChip(
-                            selected = false,
-                            onClick = { /*TODO*/ },
-                            label = {
-                                Text(text = "Chip $item")
-                            }
+                    repeat(pagerState.pageCount) {
+                        Icon(
+                            imageVector = Icons.Default.Circle,
+                            tint = if (pagerState.currentPage == it) Color.White else Color.LightGray,
+                            contentDescription = null,
+                            modifier = Modifier.size(12.dp)
                         )
                     }
                 }
-
+            }
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = mediumPadding),
+                horizontalArrangement = Arrangement.spacedBy(smallPadding),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                items(7) { item ->
+                    FilterChip(
+                        selected = false,
+                        onClick = { /*TODO*/ },
+                        label = {
+                            Text(text = "Chip $item")
+                        }
+                    )
+                }
+            }
 
             ArtPieceStaggeredGrid(artPieces = artPieces, mainScreenScrollState = scrollState)
 
