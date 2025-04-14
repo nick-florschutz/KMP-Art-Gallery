@@ -4,21 +4,20 @@ import kmp.fbk.kmpartgallery.networking.JsonIgnoreUnknownKeys
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
 @SerialName("Measurements")
-data class DetailedMeasurements(
+data class DetailedMeasurementsResponse(
     val elementName: String? = null,
     val elementDescription: String? = null,
-    val elementMeasurements: ElementMeasurements? = null,
+    val elementMeasurementsResponse: ElementMeasurementsResponse? = null,
 )
 
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
 @JsonIgnoreUnknownKeys
 @SerialName("elementMeasurements")
-data class ElementMeasurements(
+data class ElementMeasurementsResponse(
     @SerialName("Depth") val depth: Double? = null,
     @SerialName("Height") val height: Double? = null,
     @SerialName("Length") val length: Double? = null,

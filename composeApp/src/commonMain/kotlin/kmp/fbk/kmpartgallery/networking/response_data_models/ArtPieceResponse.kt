@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
  * @param primaryImage The URL for the primary image of this object. (JPEG Format)
  * @param primaryImageSmall URL to the lower-res primary image of an object. (JPEG format)
  * @param additionalImages A list of additional images for this object. (JPEG Format)
- * @param constituents A list of constituents for this object.
+ * @param constituentResponses A list of constituents for this object.
  * @param department The department this object belongs to.
  * @param objectName Describes the physical type of the object (Dress", "Painting", "Photograph", or "Vase")
  * @param title Title, identifying phrase, or name given to a work of art.
@@ -78,7 +78,7 @@ data class ArtPieceResponse(
     val primaryImage: String? = null,
     val primaryImageSmall: String? = null,
     val additionalImages: List<String>? = null,
-    val constituents: List<Constituent>? = null,
+    val constituentResponses: List<ConstituentResponse>? = null,
     val department: String? = null,
     val objectName: String? = null,
     val title: String? = null,
@@ -104,7 +104,7 @@ data class ArtPieceResponse(
     val objectEndDate: Int? = null,
     val medium: String? = null,
     val dimensions: String? = null,
-    val measurements: List<DetailedMeasurements>? = null,
+    val measurements: List<DetailedMeasurementsResponse>? = null,
     val creditLine: String? = null,
     val geographyType: String? = null,
     val city: String? = null,

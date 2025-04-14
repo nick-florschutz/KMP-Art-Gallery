@@ -22,4 +22,7 @@ interface MetArtApi {
     @GET("public/collection/v1/departments")
     suspend fun getAllDepartments(): DepartmentsResponse
 
+    @GET("public/collection/v1/departments")
+    fun getAllDepartmentsCall(): Call<DepartmentsResponse>
+
 }

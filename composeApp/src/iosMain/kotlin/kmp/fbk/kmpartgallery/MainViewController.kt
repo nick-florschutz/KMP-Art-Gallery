@@ -6,6 +6,7 @@ import io.github.aakira.napier.Napier
 import kmp.fbk.kmpartgallery.app_theme.AppTheme
 import kmp.fbk.kmpartgallery.di.appModules
 import kmp.fbk.kmpartgallery.di.getRoomDatabaseModule
+import kmp.fbk.kmpartgallery.local_storage.preferences.createDataStore
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import platform.UIKit.UIScreen
@@ -29,7 +30,10 @@ fun debugBuild() {
 
 fun initKoin() {
     val iosModule = listOf(
-        getRoomDatabaseModule
+        getRoomDatabaseModule,
+        module {
+            single { createDataStore() }
+        }
     )
 
     startKoin {

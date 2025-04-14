@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Constituent(
+data class ConstituentResponse(
     val constituentID: Int,
     val role: String,
     val name: String,
