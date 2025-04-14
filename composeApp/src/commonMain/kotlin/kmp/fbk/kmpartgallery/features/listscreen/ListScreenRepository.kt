@@ -42,7 +42,7 @@ class ListScreenRepository(
 
     suspend fun getFiveArtPiecePrimaryImages() = artPieceDao.getFiveArtPiecePrimaryImages()
 
-    suspend fun getFiveArtPiecePrimaryImagesFlow() = artPieceDao.getFiveArtPiecePrimaryImagesFlow()
+    fun getFiveArtPiecePrimaryImagesFlow() = artPieceDao.getFiveArtPiecePrimaryImagesFlow()
 
     suspend fun fetchAllObjectIdsCall() {
         metArtApi.getAllArtPiecesIdsCall().onExecute(

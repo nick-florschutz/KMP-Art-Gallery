@@ -64,7 +64,11 @@ class ListScreenViewModel(
     private fun getFeaturedImages() {
         viewModelScope.launch(Dispatchers.Default) {
             listScreenRepository.getFiveArtPiecePrimaryImagesFlow().collectLatest { featuredImages ->
-                _featuredImagesList.emit(featuredImages)
+                if (featuredImages.isNotEmpty()) {
+                    _featuredImagesList.emit(featuredImages)
+                } else {
+                    _featuredImagesList.emit(listScreenRepository.getFiveArtPiecePrimaryImages())
+                }
             }
         }
     }

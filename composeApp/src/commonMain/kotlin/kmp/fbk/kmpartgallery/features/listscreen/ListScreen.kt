@@ -227,7 +227,7 @@ fun ListScreen(navController: NavController) {
                         Icon(imageVector = Icons.Default.Person, contentDescription = null)
                     },
                     label = {
-                        Text(text = "Profile")
+                        Text(text = "Artists")
                     },
                 )
 
