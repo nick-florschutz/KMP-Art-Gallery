@@ -83,14 +83,15 @@ fun ListScreen(navController: NavController) {
     }
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
-    val featuredImages by viewModel.featuredImagesList.collectAsStateWithLifecycle()
+    val featuredImagesListState by viewModel.featuredImagesListState.collectAsStateWithLifecycle()
+//    val featuredImages by viewModel.featuredImagesList.collectAsStateWithLifecycle()
     val departments by viewModel.departmentsList.collectAsStateWithLifecycle()
     val artPieces by viewModel.artPieceResponseList.collectAsStateWithLifecycle()
 
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
 
     val pagerState = rememberPagerState {
-        featuredImages.size
+        ((featuredImagesListState as? FeaturedImagesListState.Success)?.featuredImages?.size ?: 0)
     }
 
     val scrollState = rememberScrollState()
@@ -245,46 +246,71 @@ fun ListScreen(navController: NavController) {
                 .padding(paddingValues)
                 .verticalScroll(scrollState)
         ) {
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
-            ) {
-                HorizontalPager(
-                    state = pagerState,
-                    pageContent = { page ->
-                        AsyncImage(
-                            model = ImageRequest.Builder(platformContext)
-                                .data(featuredImages[page])
-                                .build(),
-                            contentDescription = null,
-                            placeholder = rememberVectorPainter(Icons.Default.FileDownload),
-                            fallback = rememberVectorPainter(Icons.Default.Error),
-                            error = rememberVectorPainter(Icons.Default.Error),
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier
-                                .fillMaxSize()
-                        )
+            when (featuredImagesListState) {
+                FeaturedImagesListState.Loading -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(250.dp)
+                    ) {
+                        CircularProgressIndicator()
                     }
-                )
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(extraSmallPadding),
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = smallPadding)
-                ) {
-                    repeat(pagerState.pageCount) {
-                        Icon(
-                            imageVector = Icons.Default.Circle,
-                            tint = if (pagerState.currentPage == it) Color.White else Color.LightGray,
-                            contentDescription = null,
-                            modifier = Modifier.size(12.dp)
+                }
+                is FeaturedImagesListState.Error -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(250.dp)
+                    ) {
+                        Text(text = "No Featured Images Available.")
+                    }
+                }
+                is FeaturedImagesListState.Success -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp)
+                    ) {
+                        HorizontalPager(
+                            state = pagerState,
+                            pageContent = { page ->
+                                AsyncImage(
+                                    model = ImageRequest.Builder(platformContext)
+                                        .data((featuredImagesListState as FeaturedImagesListState.Success).featuredImages[page])
+                                        .build(),
+                                    contentDescription = null,
+                                    placeholder = rememberVectorPainter(Icons.Default.FileDownload),
+                                    fallback = rememberVectorPainter(Icons.Default.Error),
+                                    error = rememberVectorPainter(Icons.Default.Error),
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                )
+                            }
                         )
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(extraSmallPadding),
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = smallPadding)
+                        ) {
+                            repeat(pagerState.pageCount) {
+                                Icon(
+                                    imageVector = Icons.Default.Circle,
+                                    tint = if (pagerState.currentPage == it) Color.White else Color.LightGray,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(12.dp)
+                                )
+                            }
+                        }
                     }
                 }
             }
+
+
             LazyRow(
                 contentPadding = PaddingValues(horizontal = mediumPadding),
                 horizontalArrangement = Arrangement.spacedBy(smallPadding),
