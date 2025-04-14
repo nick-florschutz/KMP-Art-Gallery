@@ -12,6 +12,7 @@ import kmp.fbk.kmpartgallery.networking.MetArtApi
 import kmp.fbk.kmpartgallery.networking.NetworkRequestBuilder
 import kmp.fbk.kmpartgallery.networking.createMetArtApi
 import kmp.fbk.kmpartgallery.networking.response_data_models.ArtObjectCountAndIds
+import kotlinx.coroutines.flow.map
 import org.koin.mp.KoinPlatform
 
 class ListScreenRepository(
@@ -27,6 +28,9 @@ class ListScreenRepository(
 
     suspend fun getAllDepartmentsFromDb() = departmentDao.getAllDepartments().toDepartmentsList()
 
+    fun getAllDepartmentsFromDbFlow() = departmentDao.getAllDepartmentsFlow()
+        .map { it.toDepartmentsList() }
+
     suspend fun insertDepartmentIntoDb(department: Department) {
         val departmentEntity = department.toDepartmentEntity()
         departmentDao.insert(departmentEntity)
@@ -37,6 +41,8 @@ class ListScreenRepository(
     fun getAllArtPiecesFromDbFlow() = artPieceDao.getAllArtPiecesFlow()
 
     suspend fun getFiveArtPiecePrimaryImages() = artPieceDao.getFiveArtPiecePrimaryImages()
+
+    suspend fun getFiveArtPiecePrimaryImagesFlow() = artPieceDao.getFiveArtPiecePrimaryImagesFlow()
 
     suspend fun fetchAllObjectIdsCall() {
         metArtApi.getAllArtPiecesIdsCall().onExecute(

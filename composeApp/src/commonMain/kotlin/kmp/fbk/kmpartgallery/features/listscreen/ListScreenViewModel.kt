@@ -28,6 +28,9 @@ class ListScreenViewModel(
     private val _featuredImagesList = MutableStateFlow<List<String>>(emptyList())
     val featuredImagesList = _featuredImagesList.asStateFlow()
 
+    private val _departmentsList = MutableStateFlow<List<Department>>(emptyList())
+    val departmentsList = _departmentsList.asStateFlow()
+
     private val _artPieceResponseList = MutableStateFlow<List<ArtPiece>>(emptyList())
     val artPieceResponseList = _artPieceResponseList.asStateFlow()
 
@@ -36,6 +39,8 @@ class ListScreenViewModel(
         collectOnArtPieces()
         getFeaturedImages()
         collectOnLoadingState()
+        downloadDepartments()
+        collectOnDepartments()
     }
 
     private fun collectOnArtPieces() {
@@ -58,7 +63,21 @@ class ListScreenViewModel(
 
     private fun getFeaturedImages() {
         viewModelScope.launch(Dispatchers.Default) {
-            _featuredImagesList.emit(listScreenRepository.getFiveArtPiecePrimaryImages())
+            listScreenRepository.getFiveArtPiecePrimaryImagesFlow().collectLatest { featuredImages ->
+                _featuredImagesList.emit(featuredImages)
+            }
+        }
+    }
+
+    private fun downloadDepartments() {
+        departmentsDownloadMachine.downloadDepartments()
+    }
+
+    private fun collectOnDepartments() {
+        viewModelScope.launch(Dispatchers.Default) {
+            listScreenRepository.getAllDepartmentsFromDbFlow().collectLatest {
+                _departmentsList.emit(it)
+            }
         }
     }
 

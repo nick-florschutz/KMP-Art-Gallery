@@ -24,7 +24,7 @@ class ArtPieceDownloadMachine(
         private const val NUM_REQUESTS_PER_SECOND_LIMIT = 50
         private const val NUM_ITEMS_TO_FETCH = 500
 
-        private const val LAST_DOWNLOAD_TIME_DATASTORE_KEY = "last_download_time_datastore_key"
+        private const val LAST_DOWNLOAD_TIME_DATASTORE_KEY = "art_piece_last_download_time_datastore_key"
         private val DOWNLOAD_TIME_INTERVAL = 1.days
     }
 
@@ -35,7 +35,7 @@ class ArtPieceDownloadMachine(
 
             val lastDownloadTimestamp = dataStoreRepository.readLongValue(LAST_DOWNLOAD_TIME_DATASTORE_KEY) ?: 0L
             Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
-                "Last Download Timestamp: $lastDownloadTimestamp"
+                "Art Piece Last Download Timestamp: $lastDownloadTimestamp"
             }
 
             if (startTime.minus(lastDownloadTimestamp) < DOWNLOAD_TIME_INTERVAL.inWholeMilliseconds) {

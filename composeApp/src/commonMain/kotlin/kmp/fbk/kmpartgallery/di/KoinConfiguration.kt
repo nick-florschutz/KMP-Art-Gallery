@@ -20,7 +20,7 @@ fun appModules(): List<Module> = listOf(
     daoModule,
     module {
         single { DataStoreRepository(dataStore = get()) }
-        factory { DepartmentsDownloadMachine(departmentDao = get()) }
+        factory { DepartmentsDownloadMachine(departmentDao = get(), dataStoreRepository = get()) }
         factory { ArtPieceDownloadMachine(artPieceDao = get(), dataStoreRepository = get()) }
         factory { ListScreenRepository(departmentDao = get(), artPieceDao = get()) }
     }

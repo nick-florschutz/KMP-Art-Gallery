@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -30,10 +31,12 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +44,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.SelectableChipColors
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -86,6 +91,7 @@ fun ListScreen(navController: NavController) {
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val featuredImages by viewModel.featuredImagesList.collectAsStateWithLifecycle()
+    val departments by viewModel.departmentsList.collectAsStateWithLifecycle()
     val artPieces by viewModel.artPieceResponseList.collectAsStateWithLifecycle()
 
     val pagerState = rememberPagerState {
@@ -308,14 +314,37 @@ fun ListScreen(navController: NavController) {
                 horizontalArrangement = Arrangement.spacedBy(smallPadding),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                items(7) { item ->
+                item {
                     FilterChip(
-                        selected = false,
+                        selected = true,
                         onClick = { /*TODO*/ },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = MaterialTheme.colorScheme.onSurface,
+                            selectedLabelColor = MaterialTheme.colorScheme.surface,
+                        ),
+                        shape = RoundedCornerShape(4.dp),
                         label = {
-                            Text(text = "Chip $item")
+                            Text(text = "All")
                         }
                     )
+                }
+
+                items(departments) { department ->
+                    department.displayName?.let { departmentName ->
+                        FilterChip(
+                            selected = false,
+                            onClick = { /*TODO*/ },
+                            colors = FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                selectedLabelColor = MaterialTheme.colorScheme.surface,
+                            ),
+                            shape = RoundedCornerShape(4.dp),
+                            label = {
+                                Text(text = departmentName)
+                            }
+                        )
+                    }
+
                 }
             }
 

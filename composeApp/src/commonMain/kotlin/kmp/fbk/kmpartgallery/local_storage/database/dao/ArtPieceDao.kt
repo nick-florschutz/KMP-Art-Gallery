@@ -26,8 +26,18 @@ interface ArtPieceDao {
         SELECT ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} FROM ${ArtPieceEntity.TABLE_NAME}
          WHERE ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} IS NOT NULL AND 
          ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != "" AND
-         ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != '' ORDER BY RANDOM() LIMIT 5
+         ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != '' AND
+         ${ArtPieceEntity.Companion.Column.IS_HIGHLIGHT} = 1 ORDER BY RANDOM() LIMIT 5
     """)
     suspend fun getFiveArtPiecePrimaryImages(): List<String>
+
+    @Query("""
+        SELECT ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} FROM ${ArtPieceEntity.TABLE_NAME}
+         WHERE ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} IS NOT NULL AND 
+         ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != "" AND
+         ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != '' AND
+         ${ArtPieceEntity.Companion.Column.IS_HIGHLIGHT} = 1 ORDER BY RANDOM() LIMIT 5
+    """)
+    fun getFiveArtPiecePrimaryImagesFlow(): Flow<List<String>>
 
 }
