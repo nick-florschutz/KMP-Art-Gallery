@@ -59,6 +59,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import kmp.fbk.kmpartgallery.extraSmallPadding
+import kmp.fbk.kmpartgallery.mediumLargePadding
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.networking.download.ArtPieceDownloadMachine
 import kmp.fbk.kmpartgallery.networking.download.DepartmentsDownloadMachine
@@ -116,11 +117,11 @@ fun ListScreen(navController: NavController) {
                     Icon(
                         painter = painterResource(Res.drawable.the_metropolitan_museum_of_art_logo),
                         contentDescription = null,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(26.dp)
                     )
 
                   Row(
-                      horizontalArrangement = Arrangement.spacedBy(mediumPadding),
+                      horizontalArrangement = Arrangement.spacedBy(mediumLargePadding),
                       verticalAlignment = Alignment.CenterVertically,
                       modifier = Modifier
                   ) {
@@ -130,13 +131,13 @@ fun ListScreen(navController: NavController) {
                           viewModel = viewModel,
                           modifier = Modifier
                               .fillMaxWidth(0.65f)
-                              .wrapContentHeight()
+//                              .wrapContentHeight()
                       )
 
                       Icon(
                           imageVector = Icons.Default.Menu,
                           contentDescription = null,
-                          modifier = Modifier.size(24.dp)
+                          modifier = Modifier.size(30.dp)
                       )
                   }
                 }

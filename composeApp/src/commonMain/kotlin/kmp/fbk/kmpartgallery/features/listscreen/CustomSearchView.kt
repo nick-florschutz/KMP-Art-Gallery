@@ -41,6 +41,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kmp.fbk.kmpartgallery.extraSmallPadding
 import kmp.fbk.kmpartgallery.smallPadding
 import kmpartgallery.composeapp.generated.resources.Res
 import kmpartgallery.composeapp.generated.resources.search
@@ -85,12 +86,12 @@ fun CustomSearchView(
                     horizontalArrangement = Arrangement.spacedBy(smallPadding),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp)
-                        .padding(vertical = 4.dp)
+//                        .height(56.dp)
                         .background(
                             Color.LightGray.copy(alpha = 0.25f),
                             RoundedCornerShape(12.dp)
                         )
+                        .padding(vertical = extraSmallPadding)
                 ) {
                     AnimatedContent(
                         targetState = searchText.isNotEmpty(),
