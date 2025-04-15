@@ -86,7 +86,6 @@ fun CustomSearchView(
                     horizontalArrangement = Arrangement.spacedBy(smallPadding),
                     modifier = Modifier
                         .fillMaxWidth()
-//                        .height(56.dp)
                         .background(
                             Color.LightGray.copy(alpha = 0.25f),
                             RoundedCornerShape(12.dp)
