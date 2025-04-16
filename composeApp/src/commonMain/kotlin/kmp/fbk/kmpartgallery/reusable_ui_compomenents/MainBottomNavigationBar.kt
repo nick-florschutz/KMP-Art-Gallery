@@ -1,4 +1,4 @@
-package kmp.fbk.kmpartgallery.navigation
+package kmp.fbk.kmpartgallery.reusable_ui_compomenents
 
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import kmp.fbk.kmpartgallery.navigation.NavigationDestination
 
 @Composable
 fun MainBottomNavigationBar(

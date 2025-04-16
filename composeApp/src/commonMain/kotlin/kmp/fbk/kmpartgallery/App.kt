@@ -4,18 +4,7 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CollectionsBookmark
-import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,8 +21,7 @@ import coil3.network.ktor3.KtorNetworkFetcherFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
 import io.github.aakira.napier.Napier
-import kmp.fbk.kmpartgallery.navigation.MainBottomNavigationBar
-import kmp.fbk.kmpartgallery.navigation.NavigationDestination
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.MainBottomNavigationBar
 import kmp.fbk.kmpartgallery.navigation.NavigationHost
 import kmp.fbk.kmpartgallery.navigation.getCurrentDestination
 import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerBarHost
@@ -73,7 +61,7 @@ fun App() {
          currentDestination?.getTopBarContent()
       },
       bottomBar = {
-         if (currentDestination?.showBottonNavigator == true) {
+         if (currentDestination?.showBottomNavigator == true) {
             MainBottomNavigationBar(currentDestination, navController)
          }
       },

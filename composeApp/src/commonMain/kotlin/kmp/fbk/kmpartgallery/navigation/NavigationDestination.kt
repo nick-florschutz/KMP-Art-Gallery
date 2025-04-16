@@ -1,6 +1,7 @@
 package kmp.fbk.kmpartgallery.navigation
 
 import androidx.compose.runtime.Composable
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.SimpleTopAppBar
 import kotlinx.serialization.Serializable
 
 sealed class NavigationDestination {
@@ -22,18 +23,24 @@ sealed class NavigationDestination {
     abstract val screenLabel: String
 
     @Composable
-    open fun getTopBarContent(): Unit = Unit
+    open fun getTopBarContent(): Unit = SimpleTopAppBar()
 
     /**
      * Allows the contents of the screen to expand to the top edge of the screen.
      */
     open val expandToEdgeOfScreen: Boolean = false
 
-    open val showBottonNavigator: Boolean = true
+    /**
+     * Determines whether or not the screen shows the [kmp.fbk.kmpartgallery.reusable_ui_compomenents.MainBottomNavigationBarKt.MainBottomNavigationBar].
+     */
+    open val showBottomNavigator: Boolean = true
 
     @Serializable
     data object Home : NavigationDestination() {
         val navigationKey = this::class.simpleName
+
+        @Composable
+        override fun getTopBarContent() = Unit
 
         override val screenLabel: String
             get() = "Home"
@@ -66,7 +73,7 @@ sealed class NavigationDestination {
             val navigationKey = this::class.simpleName
         }
 
-        override val showBottonNavigator = false
+        override val showBottomNavigator = false
 
         override val screenLabel: String
             get() = "Detail View"
