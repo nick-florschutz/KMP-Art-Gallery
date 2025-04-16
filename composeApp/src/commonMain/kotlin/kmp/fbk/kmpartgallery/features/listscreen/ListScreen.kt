@@ -47,6 +47,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
@@ -102,109 +103,13 @@ fun ListScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .wrapContentHeight()
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(mediumPadding)
-                ) {
-
-                    Icon(
-                        painter = painterResource(Res.drawable.the_metropolitan_museum_of_art_logo),
-                        contentDescription = null,
-                        modifier = Modifier.size(26.dp)
-                    )
-
-                  Row(
-                      horizontalArrangement = Arrangement.spacedBy(mediumLargePadding),
-                      verticalAlignment = Alignment.CenterVertically,
-                      modifier = Modifier
-                  ) {
-                      CustomSearchView(
-                          searchText = searchQuery,
-                          focusManager = focusManager,
-                          viewModel = viewModel,
-                          modifier = Modifier
-                              .fillMaxWidth(0.65f)
-//                              .wrapContentHeight()
-                      )
-
-                      Icon(
-                          imageVector = Icons.Default.Menu,
-                          contentDescription = null,
-                          modifier = Modifier.size(30.dp)
-                      )
-                  }
-                }
-            }
+            ListScreenTopBar(
+                searchQuery = searchQuery,
+                focusManager = focusManager,
+                viewModel = viewModel
+            )
         },
-        bottomBar = {
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.wrapContentHeight()
-            ) {
-                NavigationBarItem(
-                    selected = true, // TODO: Replace with actual selected state
-                    onClick = { /* DO NOTHING */ },
-                    icon = {
-                        Icon(imageVector = Icons.Default.Home, contentDescription = null)
-                    },
-                    label = {
-                        Text(text = "Home")
-                    },
-                )
-
-                NavigationBarItem(
-                    selected = false, // TODO: Replace with actual selected state
-                    onClick = {
-                        navController.navigate(NavigationDestination.Explore)
-                    },
-                    icon = {
-                        Icon(imageVector = Icons.Default.Explore, contentDescription = null)
-                    },
-                    label = {
-                        Text(text = "Explore")
-                    },
-                )
-
-                NavigationBarItem(
-                    selected = false, // TODO: Replace with actual selected state
-                    onClick = {
-                        navController.navigate(NavigationDestination.Collections)
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.CollectionsBookmark,
-                            contentDescription = null
-                        )
-                    },
-                    label = {
-                        Text(text = "Collections")
-                    },
-                )
-
-                NavigationBarItem(
-                    selected = false, // TODO: Replace with actual selected state
-                    onClick = {
-                        navController.navigate(NavigationDestination.Artists)
-                    },
-                    icon = {
-                        Icon(imageVector = Icons.Default.Person, contentDescription = null)
-                    },
-                    label = {
-                        Text(text = "Artists")
-                    },
-                )
-
-            }
-        },
+        bottomBar = {},
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -227,7 +132,6 @@ fun ListScreen(navController: NavController) {
             .clickable(interactionSource = null, indication = null) {
                 focusManager.clearFocus(force = true)
             }
-            .systemBarsPadding(),
     ) { paddingValues ->
 
         if (uiState is ViewModelState.Loading) {
@@ -351,6 +255,54 @@ fun ListScreen(navController: NavController) {
 
             ArtPieceStaggeredGrid(artPieces = artPieces, mainScreenScrollState = scrollState)
 
+        }
+    }
+}
+
+@Composable
+fun ListScreenTopBar(
+    searchQuery: String,
+    focusManager: FocusManager,
+    viewModel: ListScreenViewModel
+) {
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .wrapContentHeight()
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(mediumPadding)
+        ) {
+
+            Icon(
+                painter = painterResource(Res.drawable.the_metropolitan_museum_of_art_logo),
+                contentDescription = null,
+                modifier = Modifier.size(26.dp)
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(mediumLargePadding),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+            ) {
+                CustomSearchView(
+                    searchText = searchQuery,
+                    focusManager = focusManager,
+                    viewModel = viewModel,
+                    modifier = Modifier
+                        .fillMaxWidth(0.65f)
+                )
+
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp)
+                )
+            }
         }
     }
 }

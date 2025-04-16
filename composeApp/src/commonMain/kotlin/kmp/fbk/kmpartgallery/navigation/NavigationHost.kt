@@ -13,11 +13,11 @@ import androidx.navigation.toRoute
 import kmp.fbk.kmpartgallery.features.listscreen.ListScreen
 
 @Composable
-fun NavigationHost(navController: NavHostController) {
+fun NavigationHost(navController: NavHostController, modifier: Modifier) {
     NavHost(
         navController = navController,
         startDestination = NavigationDestination.Home,
-        modifier = Modifier,
+        modifier = modifier,
     ) {
         composable<NavigationDestination.Home> {
             val args = it.toRoute<NavigationDestination.Home>()
@@ -53,5 +53,16 @@ fun NavigationHost(navController: NavHostController) {
                 )
             }
         }
+
+        composable<NavigationDestination.DetailView> {
+            val args = it.toRoute<NavigationDestination.DetailView>()
+            Box(Modifier.fillMaxSize()) {
+                Text(
+                    text = args.screenLabel,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+
     }
 }
