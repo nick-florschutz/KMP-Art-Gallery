@@ -61,6 +61,7 @@ import coil3.request.ImageRequest
 import kmp.fbk.kmpartgallery.extraSmallPadding
 import kmp.fbk.kmpartgallery.mediumLargePadding
 import kmp.fbk.kmpartgallery.mediumPadding
+import kmp.fbk.kmpartgallery.navigation.NavigationDestination
 import kmp.fbk.kmpartgallery.networking.download.ArtPieceDownloadMachine
 import kmp.fbk.kmpartgallery.networking.download.DepartmentsDownloadMachine
 import kmp.fbk.kmpartgallery.smallPadding
@@ -151,10 +152,7 @@ fun ListScreen(navController: NavController) {
             ) {
                 NavigationBarItem(
                     selected = true, // TODO: Replace with actual selected state
-                    onClick = {
-                        // TODO
-
-                    },
+                    onClick = { /* DO NOTHING */ },
                     icon = {
                         Icon(imageVector = Icons.Default.Home, contentDescription = null)
                     },
@@ -166,7 +164,7 @@ fun ListScreen(navController: NavController) {
                 NavigationBarItem(
                     selected = false, // TODO: Replace with actual selected state
                     onClick = {
-                        // TODO
+                        navController.navigate(NavigationDestination.Explore)
                     },
                     icon = {
                         Icon(imageVector = Icons.Default.Explore, contentDescription = null)
@@ -179,7 +177,7 @@ fun ListScreen(navController: NavController) {
                 NavigationBarItem(
                     selected = false, // TODO: Replace with actual selected state
                     onClick = {
-                        // TODO
+                        navController.navigate(NavigationDestination.Collections)
                     },
                     icon = {
                         Icon(
@@ -195,7 +193,7 @@ fun ListScreen(navController: NavController) {
                 NavigationBarItem(
                     selected = false, // TODO: Replace with actual selected state
                     onClick = {
-                        // TODO
+                        navController.navigate(NavigationDestination.Artists)
                     },
                     icon = {
                         Icon(imageVector = Icons.Default.Person, contentDescription = null)

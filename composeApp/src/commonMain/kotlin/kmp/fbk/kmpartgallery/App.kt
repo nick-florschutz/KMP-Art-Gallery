@@ -32,7 +32,9 @@ fun App() {
       snackbarHost = {
          AppSnackBarBannerBarHost(AppSnackBarBannerHostState)
       },
-      topBar = {},
+      topBar = {
+
+      },
       bottomBar = {},
       content = {
          NavigationHost(navController)
