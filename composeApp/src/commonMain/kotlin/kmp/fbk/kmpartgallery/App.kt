@@ -13,6 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
 import coil3.PlatformContext
@@ -27,6 +29,7 @@ import kmp.fbk.kmpartgallery.navigation.getCurrentDestination
 import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerBarHost
 import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerHostState
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.mp.KoinPlatform
 
 @Composable
 @Preview
@@ -36,20 +39,23 @@ fun App() {
       getAsyncImageLoader(context)
    }
 
+   LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
+      val appInitializer = KoinPlatform.getKoin().get<AppInitializer>()
+      appInitializer.runInitJobs()
+   }
+
    val layoutDirection = LocalLayoutDirection.current
 
-   val navController = rememberNavController().apply {
-      addOnDestinationChangedListener { controller, _, _ ->
-         Napier.i(tag = "NavigationHost", message = "Current Destination: ${this.getCurrentDestination()?.screenLabel}")
-      }
-   }
+   val navController = rememberNavController()
 
    var currentDestination by remember {
       mutableStateOf(navController.getCurrentDestination())
    }
    LaunchedEffect(Unit) {
       navController.addOnDestinationChangedListener { controller, _, _ ->
-         currentDestination = navController.getCurrentDestination()
+         currentDestination = navController.getCurrentDestination()?.also {
+            Napier.i(tag = "NavigationHost", message = "Current Destination: ${it.screenLabel}")
+         }
       }
    }
 

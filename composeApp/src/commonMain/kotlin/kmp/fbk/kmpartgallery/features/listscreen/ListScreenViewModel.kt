@@ -15,12 +15,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class ListScreenViewModel(
     private val listScreenRepository: ListScreenRepository,
-    private val departmentsDownloadMachine: DepartmentsDownloadMachine,
-    private val artPieceDownloadMachine: ArtPieceDownloadMachine,
 ): ViewModel(), ISearchViewModel {
 
     private val _state = MutableStateFlow<ViewModelState>(ViewModelState.Loading)
@@ -42,11 +41,9 @@ class ListScreenViewModel(
     val searchQuery = _searchQuery.asStateFlow()
 
     init {
-        artPieceDownloadMachine.downloadArtPieces()
         collectOnArtPieces()
         getFeaturedImages()
         collectOnLoadingState()
-        downloadDepartments()
         collectOnDepartments()
     }
 
@@ -74,19 +71,23 @@ class ListScreenViewModel(
 
     private fun getFeaturedImages() {
         viewModelScope.launch(Dispatchers.Default) {
-            listScreenRepository.getFiveArtPiecePrimaryImagesFlow().collectLatest { featuredImages ->
-                if (featuredImages.isNotEmpty()) {
-                    _featuredImagesListState.emit(FeaturedImagesListState.Success(featuredImages))
-                } else {
-                    delay(3500)
-                    _featuredImagesListState.emit(FeaturedImagesListState.Error)
-                }
-            }
-        }
-    }
+//            listScreenRepository.getFiveArtPiecePrimaryImagesFlow().collectLatest { featuredImages ->
+//                if (featuredImages.isNotEmpty()) {
+//                    _featuredImagesListState.emit(FeaturedImagesListState.Success(featuredImages))
+//                } else {
+//                    delay(3500)
+//                    _featuredImagesListState.emit(FeaturedImagesListState.Error)
+//                }
+//            }
 
-    private fun downloadDepartments() {
-        departmentsDownloadMachine.downloadDepartments()
+            val featuredImages = listScreenRepository.getFiveArtPiecePrimaryImagesFlow().first()
+            if (featuredImages.isNotEmpty()) {
+                _featuredImagesListState.emit(FeaturedImagesListState.Success(featuredImages))
+            } else {
+                _featuredImagesListState.emit(FeaturedImagesListState.Error)
+            }
+
+        }
     }
 
     private fun collectOnDepartments() {

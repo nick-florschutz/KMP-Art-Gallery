@@ -1,5 +1,6 @@
 package kmp.fbk.kmpartgallery.di
 
+import kmp.fbk.kmpartgallery.AppInitializer
 import kmp.fbk.kmpartgallery.features.listscreen.ListScreenRepository
 import kmp.fbk.kmpartgallery.local_storage.database.ArtGalleryDatabase
 import kmp.fbk.kmpartgallery.local_storage.database.dao.ArtPieceDao
@@ -16,12 +17,17 @@ val daoModule = module {
     single<ArtPieceDao> { get<ArtGalleryDatabase>().artPieceDao() }
 }
 
+val appInitializerModule = module {
+    single { DataStoreRepository(dataStore = get()) }
+    single { DepartmentsDownloadMachine(departmentDao = get(), dataStoreRepository = get()) }
+    single { ArtPieceDownloadMachine(artPieceDao = get(), dataStoreRepository = get()) }
+    single { AppInitializer(get(), get()) }
+}
+
 fun appModules(): List<Module> = listOf(
     daoModule,
+    appInitializerModule,
     module {
-        single { DataStoreRepository(dataStore = get()) }
-        factory { DepartmentsDownloadMachine(departmentDao = get(), dataStoreRepository = get()) }
-        factory { ArtPieceDownloadMachine(artPieceDao = get(), dataStoreRepository = get()) }
         factory { ListScreenRepository(departmentDao = get(), artPieceDao = get()) }
     }
 )

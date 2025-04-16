@@ -75,13 +75,9 @@ import org.koin.mp.KoinPlatform
 @Composable
 fun ListScreen(navController: NavController) {
     val listScreenRepository = KoinPlatform.getKoin().get<ListScreenRepository>()
-    val departmentsDownloadMachine = KoinPlatform.getKoin().get<DepartmentsDownloadMachine>()
-    val artPieceDownloadMachine = KoinPlatform.getKoin().get<ArtPieceDownloadMachine>()
     val viewModel = viewModel {
         ListScreenViewModel(
             listScreenRepository = listScreenRepository,
-            departmentsDownloadMachine = departmentsDownloadMachine,
-            artPieceDownloadMachine = artPieceDownloadMachine,
         )
     }
 
