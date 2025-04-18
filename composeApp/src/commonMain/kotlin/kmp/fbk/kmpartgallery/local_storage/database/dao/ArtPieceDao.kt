@@ -26,7 +26,11 @@ interface ArtPieceDao {
     @Query("SELECT ${ArtPieceEntity.Companion.Column.OBJECT_ID} FROM ${ArtPieceEntity.TABLE_NAME}")
     suspend fun getAllArtPieceObjectIds(): List<Int?>
 
-    @Query("SELECT * FROM ${ArtPieceEntity.TABLE_NAME}")
+    @Query("""
+        SELECT * FROM ${ArtPieceEntity.TABLE_NAME}
+        ORDER BY (${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != "" AND
+        ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != null) ASC  
+    """)
     fun getAllArtPiecesFlow(): Flow<List<ArtPieceEntity>>
 
     @Query("""
