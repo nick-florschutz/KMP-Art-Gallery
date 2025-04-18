@@ -6,11 +6,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil3.PlatformContext
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
@@ -35,7 +41,10 @@ import kmp.fbk.kmpartgallery.smallPadding
 import org.koin.mp.KoinPlatform
 
 @Composable
-fun DetailViewScreen(artPieceLocalId: Long) {
+fun DetailViewScreen(
+    artPieceLocalId: Long,
+    navController: NavController,
+) {
     val viewModel = viewModel {
         val detailViewScreenRepository = KoinPlatform.getKoin().get<DetailViewScreenRepository>()
         DetailViewScreenViewModel(
@@ -73,6 +82,7 @@ fun DetailViewScreen(artPieceLocalId: Long) {
                 artPiece = artPieceValue,
                 viewModel = viewModel,
                 platformContext = platformContext,
+                navController = navController,
             )
         }
     }
@@ -83,6 +93,7 @@ private fun DetailViewScreenContent(
     artPiece: ArtPiece,
     viewModel: DetailViewScreenViewModel,
     platformContext: PlatformContext,
+    navController: NavController,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -98,6 +109,24 @@ private fun DetailViewScreenContent(
             contentScale = ContentScale.Fit,
             modifier = Modifier.fillMaxSize()
         )
+
+        IconButton(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .systemBarsPadding()
+                .padding(start = smallPadding)
+                .background(
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f),
+                    shape = RoundedCornerShape(4.dp)
+                )
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+            )
+        }
 
         Column(
             verticalArrangement = Arrangement.spacedBy(extraSmallPadding),

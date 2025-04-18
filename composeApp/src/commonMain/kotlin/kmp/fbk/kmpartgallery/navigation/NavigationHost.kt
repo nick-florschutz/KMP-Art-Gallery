@@ -62,6 +62,7 @@ fun NavigationHost(navController: NavHostController, modifier: Modifier) {
             )
             DetailViewScreen(
                 artPieceLocalId = artPieceLocalId,
+                navController = navController,
             )
         }
 
