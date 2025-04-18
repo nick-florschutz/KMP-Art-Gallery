@@ -132,6 +132,7 @@ private fun DetailViewScreenContent(
             verticalArrangement = Arrangement.spacedBy(extraSmallPadding),
             modifier = Modifier
                 .align(Alignment.BottomStart)
+                .systemBarsPadding()
                 .padding(horizontal = smallPadding, vertical = mediumPadding)
         ) {
             Text(
