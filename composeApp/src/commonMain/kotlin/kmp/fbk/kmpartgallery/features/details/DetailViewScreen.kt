@@ -107,7 +107,7 @@ private fun DetailViewScreenContent(
         ) {
             Text(
                 text = artPiece.title ?: "No Art Piece Found",
-                color = MaterialTheme.colorScheme.inverseOnSurface,
+                color = Color.White,
                 modifier = Modifier
                     .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
                     .padding(vertical = extraSmallPadding, horizontal = smallPadding)
@@ -115,7 +115,7 @@ private fun DetailViewScreenContent(
             if (artPiece.artistDisplayName?.isNotBlank() == true) {
                 Text(
                     text = artPiece.artistDisplayName,
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                    color = Color.White,
                     modifier = Modifier
                         .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
                         .padding(vertical = extraSmallPadding, horizontal = smallPadding)

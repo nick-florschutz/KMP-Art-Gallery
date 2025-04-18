@@ -35,6 +35,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -53,6 +55,7 @@ import kmp.fbk.kmpartgallery.ViewModelState
 import kmp.fbk.kmpartgallery.extraSmallPadding
 import kmp.fbk.kmpartgallery.mediumLargePadding
 import kmp.fbk.kmpartgallery.mediumPadding
+import kmp.fbk.kmpartgallery.navigation.NavigationDestination
 import kmp.fbk.kmpartgallery.smallPadding
 import kmpartgallery.composeapp.generated.resources.Res
 import kmpartgallery.composeapp.generated.resources.sort_down
@@ -163,9 +166,12 @@ fun ListScreen(navController: NavController) {
                         HorizontalPager(
                             state = pagerState,
                             pageContent = { page ->
+                                val featuredImagesList by remember((featuredImagesListState as FeaturedImagesListState.Success).featuredImages) {
+                                    mutableStateOf((featuredImagesListState as FeaturedImagesListState.Success).featuredImages)
+                                }
                                 AsyncImage(
                                     model = ImageRequest.Builder(platformContext)
-                                        .data((featuredImagesListState as FeaturedImagesListState.Success).featuredImages[page])
+                                        .data(featuredImagesList[page].image)
                                         .build(),
                                     contentDescription = null,
                                     placeholder = rememberVectorPainter(Icons.Default.FileDownload),
@@ -174,6 +180,13 @@ fun ListScreen(navController: NavController) {
                                     contentScale = ContentScale.Fit,
                                     modifier = Modifier
                                         .fillMaxSize()
+                                        .clickable {
+                                            navController.navigate(
+                                                NavigationDestination.DetailView(
+                                                    artPieceLocalId = featuredImagesList[page].localId
+                                                )
+                                            )
+                                        }
                                 )
                             }
                         )

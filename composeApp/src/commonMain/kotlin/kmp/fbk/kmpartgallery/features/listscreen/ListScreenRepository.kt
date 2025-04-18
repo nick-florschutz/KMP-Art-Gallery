@@ -44,6 +44,8 @@ class ListScreenRepository(
 
     fun getFiveArtPiecePrimaryImagesFlow() = artPieceDao.getFiveArtPiecePrimaryImagesFlow()
 
+    fun getFiveArtPiecesFlow() = artPieceDao.getFiveArtPiecesFlow()
+
     suspend fun fetchAllObjectIdsCall() {
         metArtApi.getAllArtPiecesIdsCall().onExecute(
             callBack = object: Callback<ArtObjectCountAndIds> {

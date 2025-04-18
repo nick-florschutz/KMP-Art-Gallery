@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kmp.fbk.kmpartgallery.features.listscreen.ArtPieceLocalIdAndImage
 import kmp.fbk.kmpartgallery.local_storage.database.entities.ArtPieceEntity
 import kmp.fbk.kmpartgallery.local_storage.database.entities.IEntity
 import kotlinx.coroutines.flow.Flow
@@ -43,5 +44,13 @@ interface ArtPieceDao {
          ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != '' ORDER BY RANDOM() LIMIT 5
     """)
     fun getFiveArtPiecePrimaryImagesFlow(): Flow<List<String>>
+
+    @Query("""
+        SELECT * FROM ${ArtPieceEntity.TABLE_NAME}
+         WHERE ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} IS NOT NULL AND 
+         ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != "" AND
+         ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != '' ORDER BY RANDOM() LIMIT 5
+    """)
+    fun getFiveArtPiecesFlow(): Flow<List<ArtPieceEntity>>
 
 }

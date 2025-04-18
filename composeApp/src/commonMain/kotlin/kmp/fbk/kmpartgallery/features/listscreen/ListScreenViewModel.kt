@@ -72,7 +72,23 @@ class ListScreenViewModel(
 //                }
 //            }
 
-            val featuredImages = listScreenRepository.getFiveArtPiecePrimaryImagesFlow().first()
+//            val featuredImages = listScreenRepository.getFiveArtPiecePrimaryImagesFlow().first().map { IdsAndImagesFlow ->
+//                IdsAndImagesFlow.entries.map { mapOfIdAndImage ->
+//                    ArtPieceLocalIdAndImage(
+//                        localId = mapOfIdAndImage.key,
+//                        image = mapOfIdAndImage.value,
+//                    )
+//                }
+//            }
+
+            val featuredImages = listScreenRepository.getFiveArtPiecesFlow().first().map {
+                // The DAO query specifies that these two values will NOT be null
+                ArtPieceLocalIdAndImage(
+                    localId = it.localId!!,
+                    image = it.primaryImage!!,
+                )
+            }
+
             if (featuredImages.isNotEmpty()) {
                 _featuredImagesListState.emit(FeaturedImagesListState.Success(featuredImages))
             } else {
