@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import kmp.fbk.kmpartgallery.features.details.DetailViewScreen
 import kmp.fbk.kmpartgallery.features.listscreen.ListScreen
 
 @Composable
@@ -56,12 +57,12 @@ fun NavigationHost(navController: NavHostController, modifier: Modifier) {
 
         composable<NavigationDestination.DetailView> {
             val args = it.toRoute<NavigationDestination.DetailView>()
-            Box(Modifier.fillMaxSize()) {
-                Text(
-                    text = args.screenLabel,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+            val artPieceLocalId = args.artPieceLocalId ?: throw IllegalStateException(
+                "artPieceLocalId is required. artPieceLocalId: ${args.artPieceLocalId}"
+            )
+            DetailViewScreen(
+                artPieceLocalId = artPieceLocalId,
+            )
         }
 
     }

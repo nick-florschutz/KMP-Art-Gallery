@@ -26,8 +26,8 @@ import io.github.aakira.napier.Napier
 import kmp.fbk.kmpartgallery.reusable_ui_compomenents.MainBottomNavigationBar
 import kmp.fbk.kmpartgallery.navigation.NavigationHost
 import kmp.fbk.kmpartgallery.navigation.getCurrentDestination
-import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerBarHost
-import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerHostState
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.AppSnackBarBannerBarHost
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.AppSnackBarBannerHostState
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.mp.KoinPlatform
 

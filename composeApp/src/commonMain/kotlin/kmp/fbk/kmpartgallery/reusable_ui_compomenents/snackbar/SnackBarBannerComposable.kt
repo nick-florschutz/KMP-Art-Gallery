@@ -1,4 +1,4 @@
-package kmp.fbk.kmpartgallery.snackbar
+package kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerHostState
-import kmp.fbk.kmpartgallery.snackbar.ISnackBarBannerData
-import kmp.fbk.kmpartgallery.snackbar.SnackBarBanner
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.AppSnackBarBannerHostState
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.ISnackBarBannerData
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.SnackBarBanner
 import kotlin.jvm.JvmName
 
 @Composable

@@ -1,4 +1,4 @@
-package kmp.fbk.kmpartgallery.snackbar
+package kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar
 
 import androidx.compose.runtime.Stable
 

@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kmp.fbk.kmpartgallery.local_storage.database.entities.ArtPieceEntity
+import kmp.fbk.kmpartgallery.local_storage.database.entities.IEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -15,6 +16,11 @@ interface ArtPieceDao {
 
     @Query("SELECT * FROM ${ArtPieceEntity.TABLE_NAME}")
     suspend fun getAllArtPieces(): List<ArtPieceEntity>
+
+    @Query("""
+        SELECT * FROM ${ArtPieceEntity.TABLE_NAME} WHERE ${IEntity.Companion.Column.LOCAL_ID} = :artPieceId
+    """)
+    fun getArtPieceByIdFlow(artPieceId: Long): Flow<ArtPieceEntity?>
 
     @Query("SELECT ${ArtPieceEntity.Companion.Column.OBJECT_ID} FROM ${ArtPieceEntity.TABLE_NAME}")
     suspend fun getAllArtPieceObjectIds(): List<Int?>

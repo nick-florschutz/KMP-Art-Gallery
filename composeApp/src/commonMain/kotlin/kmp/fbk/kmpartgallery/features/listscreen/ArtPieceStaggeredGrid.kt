@@ -44,16 +44,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import kmp.fbk.kmpartgallery.domain_models.ArtPiece
 import kmp.fbk.kmpartgallery.getScreenHeight
 import kmp.fbk.kmpartgallery.mediumPadding
+import kmp.fbk.kmpartgallery.navigation.NavigationDestination
 import kmp.fbk.kmpartgallery.smallMediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
-import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerHostState
-import kmp.fbk.kmpartgallery.snackbar.BannerInformation
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.AppSnackBarBannerHostState
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.BannerInformation
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonNull.content
 import kotlin.random.Random
@@ -62,9 +64,9 @@ import kotlin.random.Random
 fun ArtPieceStaggeredGrid(
     artPieces: List<ArtPiece>,
     mainScreenScrollState: ScrollState,
+    navController: NavController,
     modifier: Modifier = Modifier,
 ) {
-
     val screenHeight = getScreenHeight()
 
     val coroutineScope = rememberCoroutineScope()
@@ -102,12 +104,18 @@ fun ArtPieceStaggeredGrid(
                             RoundedCornerShape(smallMediumPadding)
                         )
                         .clickable {
-                            coroutineScope.launch {
-                                AppSnackBarBannerHostState.showSnackBar(
-                                    BannerInformation.Information(
-                                        message = artPiece.title ?: "--"
-                                    )
+                            artPiece.localId?.let { artPieceId ->
+                                navController.navigate(
+                                    NavigationDestination.DetailView(artPieceLocalId = artPieceId)
                                 )
+                            } ?: run {
+                                coroutineScope.launch {
+                                    AppSnackBarBannerHostState.showSnackBar(
+                                        BannerInformation.Information(
+                                            message = artPiece.title ?: "--"
+                                        )
+                                    )
+                                }
                             }
                         }
                 ) {

@@ -25,7 +25,7 @@ import androidx.compose.ui.util.fastFilterNotNull
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
 import androidx.compose.ui.util.fastMapTo
-import kmp.fbk.kmpartgallery.snackbar.ISnackBarBannerData
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.ISnackBarBannerData
 
 internal fun SnackbarDuration.toMillis(
     hasAction: Boolean,
