@@ -1,5 +1,9 @@
 package kmp.fbk.kmpartgallery.features.details
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +26,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FileDownload
@@ -31,15 +36,18 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -65,6 +73,8 @@ import kmp.fbk.kmpartgallery.getScreenHeight
 import kmp.fbk.kmpartgallery.largePadding
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.koin.mp.KoinPlatform
 
 private const val DETAIL_CHIP_CHAR_LIMIT = 50
@@ -87,6 +97,11 @@ fun DetailViewScreen(
 
     val platformContext = LocalPlatformContext.current
 
+    val coroutineScope = rememberCoroutineScope()
+
+    val scrollState = rememberScrollState()
+    val showScrollToTopButton by remember { derivedStateOf { scrollState.value > 3 } }
+
     when (uiState) {
         is ViewModelState.Error -> {
             Box(
@@ -107,12 +122,40 @@ fun DetailViewScreen(
         }
         is ViewModelState.Success -> {
             val artPieceValue = artPiece ?: return
-            DetailViewScreenContent(
-                artPiece = artPieceValue,
-                viewModel = viewModel,
-                platformContext = platformContext,
-                navController = navController,
-            )
+           Box(Modifier.fillMaxSize()) {
+               DetailViewScreenContent(
+                   artPiece = artPieceValue,
+                   viewModel = viewModel,
+                   platformContext = platformContext,
+                   navController = navController,
+                   scrollState = scrollState,
+               )
+
+               AnimatedVisibility(
+                   visible = showScrollToTopButton,
+                   enter = slideInVertically(initialOffsetY = {it}),
+                   exit = slideOutVertically(targetOffsetY = {it}),
+                   modifier = Modifier
+                       .align(Alignment.BottomStart)
+                       .then(
+                           if (showScrollToTopButton) Modifier.systemBarsPadding() else Modifier
+                       )
+                       .padding(horizontal = mediumPadding, vertical = 0.dp)
+               ) {
+                   FloatingActionButton(
+                       onClick = {
+                           coroutineScope.launch {
+                               scrollState.animateScrollTo(0)
+                           }
+                       },
+                   ) {
+                       Icon(
+                           imageVector = Icons.Default.ArrowUpward,
+                           contentDescription = null,
+                       )
+                   }
+               }
+           }
         }
     }
 }
@@ -124,6 +167,7 @@ private fun DetailViewScreenContent(
     viewModel: DetailViewScreenViewModel,
     platformContext: PlatformContext,
     navController: NavController,
+    scrollState: ScrollState,
 ) {
     val screenHeight = getScreenHeight()
     val imageHeight = remember {
@@ -138,7 +182,7 @@ private fun DetailViewScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
     ) {
         Box(
             modifier = Modifier.height(imageHeight)
