@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,15 +28,20 @@ import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,6 +62,7 @@ import kmp.fbk.kmpartgallery.ViewModelState
 import kmp.fbk.kmpartgallery.domain_models.ArtPiece
 import kmp.fbk.kmpartgallery.extraSmallPadding
 import kmp.fbk.kmpartgallery.getScreenHeight
+import kmp.fbk.kmpartgallery.largePadding
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
 import org.koin.mp.KoinPlatform
@@ -123,6 +130,11 @@ private fun DetailViewScreenContent(
         screenHeight / 1.7f
     }
 
+    var isDetailsSectionExpanded by rememberSaveable { mutableStateOf(false) }
+    var isHistoricalSectionExpanded by rememberSaveable { mutableStateOf(false) }
+    var isArtistsSectionExpanded by rememberSaveable { mutableStateOf(false) }
+    var isTechnicalInformationSectionExpanded by rememberSaveable { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -165,24 +177,23 @@ private fun DetailViewScreenContent(
 
         Column(
             verticalArrangement = Arrangement.spacedBy(smallPadding),
-            modifier = Modifier.padding(mediumPadding)
         ) {
             Text(
                 text = artPiece.title ?: "No Art Piece Found",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier
+                modifier = Modifier.padding(start = mediumPadding, top = mediumPadding, end = mediumPadding)
             )
 
            Row(
                horizontalArrangement = Arrangement.spacedBy(smallPadding),
                verticalAlignment = Alignment.CenterVertically,
+               modifier = Modifier.padding(start = mediumPadding, top = smallPadding)
            ) {
                Text(
                    text = artPiece.artistDisplayName?.takeIf { it.isNotBlank() }  ?: "Unknown",
                    fontSize = 16.sp,
                    color = if (artPiece.artistDisplayName.isNullOrBlank()) Color.Gray else Color.Blue,
-                   modifier = Modifier
                )
 
                Icon(
@@ -201,7 +212,8 @@ private fun DetailViewScreenContent(
 
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(smallPadding),
-                verticalArrangement = Arrangement.SpaceAround
+                verticalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier.padding(mediumPadding)
             ) {
                 if (!artPiece.objectName.isNullOrBlank()) {
                     DetailViewScreenInfoChip(label = artPiece.objectName)
@@ -224,42 +236,121 @@ private fun DetailViewScreenContent(
                 }
             }
 
-            Spacer(Modifier.height(smallPadding))
-
             if (!artPiece.creditLine.isNullOrBlank()) {
                 Text(
                     text = artPiece.creditLine,
                     fontSize = 16.sp,
+                    modifier = Modifier.padding(horizontal = mediumPadding)
                 )
             }
+
+            Spacer(Modifier.height(smallPadding))
+
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = smallPadding,
+                color = DividerDefaults.color.copy(alpha = 0.3f),
+            )
+
+            Spacer(Modifier.height(smallPadding))
+
+            DetailViewCollapsibleInfoSection(
+                label = "Description",
+                expanded = isDetailsSectionExpanded,
+                onExpandedChange = { isDetailsSectionExpanded = it },
+                content = {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(smallPadding),
+                        modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
+                    ) {
+                        Text(
+                            text = artPiece.department.takeUnless { it.isNullOrBlank() } ?: "No Department Found",
+                            fontSize = 16.sp,
+                        )
+
+                        Text(
+                            text = artPiece.constituentResponses?.firstOrNull()?.name ?: "No Constituent Found",
+                            fontSize = 16.sp,
+                        )
+                    }
+                }
+            )
+
+            DetailViewCollapsibleInfoSection(
+                label = "Historical Context",
+                expanded = isHistoricalSectionExpanded,
+                onExpandedChange = { isHistoricalSectionExpanded = it },
+                content = {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(smallPadding),
+                        modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
+                    ) {
+                        Text(
+                            text = artPiece.period.takeUnless { it.isNullOrBlank() } ?: "No Period Found",
+                            fontSize = 16.sp,
+                        )
+
+                        Text(
+                            text = artPiece.dynasty.takeUnless { it.isNullOrBlank() } ?: "No Dynasty Found",
+                            fontSize = 16.sp,
+                        )
+                    }
+                }
+            )
+
+            DetailViewCollapsibleInfoSection(
+                label = "Artist",
+                expanded = isArtistsSectionExpanded,
+                onExpandedChange = { isArtistsSectionExpanded = it },
+                content = {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(smallPadding),
+                        modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
+                    ) {
+                        Text(
+                            text = artPiece.artistDisplayName.takeUnless { it.isNullOrBlank() } ?: "No Artist Found",
+                            fontSize = 16.sp,
+                        )
+
+                        Text(
+                            text = artPiece.artistNationality.takeUnless { it.isNullOrBlank() } ?: "No Artist Nationality Found",
+                            fontSize = 16.sp,
+                        )
+                    }
+                }
+            )
+
+            DetailViewCollapsibleInfoSection(
+                label = "Technical Information",
+                expanded = isTechnicalInformationSectionExpanded,
+                onExpandedChange = { isTechnicalInformationSectionExpanded = it },
+                content = {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(smallPadding),
+                        modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
+                    ) {
+                        Text(
+                            text = artPiece.objectBeginDate?.toString() ?: "No Begin Date Found",
+                            fontSize = 16.sp,
+                        )
+
+                        Text(
+                            text = artPiece.objectEndDate?.toString() ?: "No End Date Found",
+                            fontSize = 16.sp,
+                        )
+                    }
+                }
+            )
+
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = smallPadding,
+                color = DividerDefaults.color.copy(alpha = 0.3f),
+            )
+
+            Spacer(Modifier.height(largePadding))
 
             // TODO: Add more content here
         }
     }
-}
-
-@Composable
-private fun DetailViewScreenInfoChip(
-    label: String,
-) {
-    AssistChip(
-        enabled = false,
-        onClick = {},
-        colors = AssistChipDefaults.assistChipColors(
-            disabledContainerColor = Color.LightGray.copy(alpha = 0.5f),
-            disabledLabelColor = MaterialTheme.colorScheme.onSurface,
-        ),
-        shape = RoundedCornerShape(50),
-        border = null,
-        label = {
-            Text(
-                text = label,
-                modifier = Modifier
-                    .padding(
-                        vertical = extraSmallPadding,
-                        horizontal = smallPadding,
-                    )
-            )
-        },
-    )
 }
