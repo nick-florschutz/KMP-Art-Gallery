@@ -1,5 +1,8 @@
 package kmp.fbk.kmpartgallery
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
@@ -67,7 +70,11 @@ fun App() {
          currentDestination?.getTopBarContent()
       },
       bottomBar = {
-         if (currentDestination?.showBottomNavigator == true) {
+         AnimatedVisibility(
+            visible = currentDestination?.showBottomNavigator == true,
+            enter = slideInVertically(initialOffsetY = {it}),
+            exit = slideOutVertically(targetOffsetY = {it}),
+         ) {
             MainBottomNavigationBar(currentDestination, navController)
          }
       },
