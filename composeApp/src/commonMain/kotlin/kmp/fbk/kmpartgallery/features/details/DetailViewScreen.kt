@@ -71,6 +71,7 @@ import kmp.fbk.kmpartgallery.domain_models.ArtPiece
 import kmp.fbk.kmpartgallery.extraSmallPadding
 import kmp.fbk.kmpartgallery.getScreenHeight
 import kmp.fbk.kmpartgallery.largePadding
+import kmp.fbk.kmpartgallery.mediumFontSize
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
 import kotlinx.coroutines.coroutineScope
@@ -140,7 +141,7 @@ fun DetailViewScreen(
                        .then(
                            if (showScrollToTopButton) Modifier.systemBarsPadding() else Modifier
                        )
-                       .padding(horizontal = mediumPadding, vertical = 0.dp)
+                       .padding(horizontal = mediumPadding)
                ) {
                    FloatingActionButton(
                        onClick = {
@@ -236,7 +237,7 @@ private fun DetailViewScreenContent(
            ) {
                Text(
                    text = artPiece.artistDisplayName?.takeIf { it.isNotBlank() }  ?: "Unknown",
-                   fontSize = 16.sp,
+                   fontSize = mediumFontSize,
                    color = if (artPiece.artistDisplayName.isNullOrBlank()) Color.Gray else Color.Blue,
                )
 
@@ -249,7 +250,7 @@ private fun DetailViewScreenContent(
 
                Text(
                    text = artPiece.objectDate?.takeIf { it.isNotBlank() } ?: "Unknown",
-                   fontSize = 16.sp,
+                   fontSize = mediumFontSize,
                    modifier = Modifier
                )
            }
@@ -283,7 +284,7 @@ private fun DetailViewScreenContent(
             if (!artPiece.creditLine.isNullOrBlank()) {
                 Text(
                     text = artPiece.creditLine,
-                    fontSize = 16.sp,
+                    fontSize = mediumFontSize,
                     modifier = Modifier.padding(horizontal = mediumPadding)
                 )
             }
@@ -309,12 +310,12 @@ private fun DetailViewScreenContent(
                     ) {
                         Text(
                             text = artPiece.department.takeUnless { it.isNullOrBlank() } ?: "No Department Found",
-                            fontSize = 16.sp,
+                            fontSize = mediumFontSize,
                         )
 
                         Text(
                             text = artPiece.constituentResponses?.firstOrNull()?.name ?: "No Constituent Found",
-                            fontSize = 16.sp,
+                            fontSize = mediumFontSize,
                         )
                     }
                 }
@@ -331,12 +332,12 @@ private fun DetailViewScreenContent(
                     ) {
                         Text(
                             text = artPiece.period.takeUnless { it.isNullOrBlank() } ?: "No Period Found",
-                            fontSize = 16.sp,
+                            fontSize = mediumFontSize,
                         )
 
                         Text(
                             text = artPiece.dynasty.takeUnless { it.isNullOrBlank() } ?: "No Dynasty Found",
-                            fontSize = 16.sp,
+                            fontSize = mediumFontSize,
                         )
                     }
                 }
@@ -353,12 +354,12 @@ private fun DetailViewScreenContent(
                     ) {
                         Text(
                             text = artPiece.artistDisplayName.takeUnless { it.isNullOrBlank() } ?: "No Artist Found",
-                            fontSize = 16.sp,
+                            fontSize = mediumFontSize,
                         )
 
                         Text(
                             text = artPiece.artistNationality.takeUnless { it.isNullOrBlank() } ?: "No Artist Nationality Found",
-                            fontSize = 16.sp,
+                            fontSize = mediumFontSize,
                         )
                     }
                 }
@@ -375,12 +376,12 @@ private fun DetailViewScreenContent(
                     ) {
                         Text(
                             text = artPiece.objectBeginDate?.toString() ?: "No Begin Date Found",
-                            fontSize = 16.sp,
+                            fontSize = mediumFontSize,
                         )
 
                         Text(
                             text = artPiece.objectEndDate?.toString() ?: "No End Date Found",
-                            fontSize = 16.sp,
+                            fontSize = mediumFontSize,
                         )
                     }
                 }
@@ -392,6 +393,7 @@ private fun DetailViewScreenContent(
                 color = DividerDefaults.color.copy(alpha = 0.3f),
             )
 
+            Spacer(Modifier.height(largePadding))
             Spacer(Modifier.height(largePadding))
 
             // TODO: Add more content here
