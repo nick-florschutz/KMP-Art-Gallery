@@ -1,10 +1,15 @@
 package kmp.fbk.kmpartgallery.features.details
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,7 +24,11 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -50,6 +59,8 @@ import kmp.fbk.kmpartgallery.getScreenHeight
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
 import org.koin.mp.KoinPlatform
+
+private const val DETAIL_CHIP_CHAR_LIMIT = 50
 
 @Composable
 fun DetailViewScreen(
@@ -99,6 +110,7 @@ fun DetailViewScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun DetailViewScreenContent(
     artPiece: ArtPiece,
@@ -152,6 +164,7 @@ private fun DetailViewScreenContent(
         }
 
         Column(
+            verticalArrangement = Arrangement.spacedBy(smallPadding),
             modifier = Modifier.padding(mediumPadding)
         ) {
             Text(
@@ -162,12 +175,12 @@ private fun DetailViewScreenContent(
             )
 
            Row(
-               horizontalArrangement = Arrangement.spacedBy(extraSmallPadding),
+               horizontalArrangement = Arrangement.spacedBy(smallPadding),
                verticalAlignment = Alignment.CenterVertically,
            ) {
                Text(
                    text = artPiece.artistDisplayName?.takeIf { it.isNotBlank() }  ?: "Unknown",
-                   fontSize = 18.sp,
+                   fontSize = 16.sp,
                    color = if (artPiece.artistDisplayName.isNullOrBlank()) Color.Gray else Color.Blue,
                    modifier = Modifier
                )
@@ -176,15 +189,77 @@ private fun DetailViewScreenContent(
                    imageVector = Icons.Default.Circle,
                    tint = Color.Gray,
                    contentDescription = null,
-                   modifier = Modifier.size(8.dp)
+                   modifier = Modifier.size(6.dp)
                )
 
                Text(
                    text = artPiece.objectDate?.takeIf { it.isNotBlank() } ?: "Unknown",
-                   fontSize = 18.sp,
+                   fontSize = 16.sp,
                    modifier = Modifier
                )
            }
+
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(smallPadding),
+                verticalArrangement = Arrangement.SpaceAround
+            ) {
+                if (!artPiece.objectName.isNullOrBlank()) {
+                    DetailViewScreenInfoChip(label = artPiece.objectName)
+                }
+
+                if (!artPiece.medium.isNullOrBlank() && artPiece.medium.length < DETAIL_CHIP_CHAR_LIMIT) {
+                    DetailViewScreenInfoChip(label = artPiece.medium)
+                }
+
+                if (!artPiece.culture.isNullOrBlank()) {
+                    DetailViewScreenInfoChip(label = artPiece.culture)
+                }
+
+                if (!artPiece.period.isNullOrBlank()) {
+                    DetailViewScreenInfoChip(label = artPiece.period)
+                }
+
+                if (!artPiece.dimensions.isNullOrBlank() && artPiece.dimensions.length < DETAIL_CHIP_CHAR_LIMIT) {
+                    DetailViewScreenInfoChip(label = artPiece.dimensions)
+                }
+            }
+
+            Spacer(Modifier.height(smallPadding))
+
+            if (!artPiece.creditLine.isNullOrBlank()) {
+                Text(
+                    text = artPiece.creditLine,
+                    fontSize = 16.sp,
+                )
+            }
+
+            // TODO: Add more content here
         }
     }
+}
+
+@Composable
+private fun DetailViewScreenInfoChip(
+    label: String,
+) {
+    AssistChip(
+        enabled = false,
+        onClick = {},
+        colors = AssistChipDefaults.assistChipColors(
+            disabledContainerColor = Color.LightGray.copy(alpha = 0.5f),
+            disabledLabelColor = MaterialTheme.colorScheme.onSurface,
+        ),
+        shape = RoundedCornerShape(50),
+        border = null,
+        label = {
+            Text(
+                text = label,
+                modifier = Modifier
+                    .padding(
+                        vertical = extraSmallPadding,
+                        horizontal = smallPadding,
+                    )
+            )
+        },
+    )
 }
