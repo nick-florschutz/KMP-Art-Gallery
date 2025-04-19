@@ -56,6 +56,7 @@ import kmp.fbk.kmpartgallery.extraSmallPadding
 import kmp.fbk.kmpartgallery.mediumLargePadding
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.navigation.NavigationDestination
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.search.CustomSearchView
 import kmp.fbk.kmpartgallery.smallPadding
 import kmpartgallery.composeapp.generated.resources.Res
 import kmpartgallery.composeapp.generated.resources.sort_down

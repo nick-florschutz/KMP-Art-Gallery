@@ -6,6 +6,7 @@ import kmp.fbk.kmpartgallery.ViewModelState
 import kmp.fbk.kmpartgallery.domain_models.ArtPiece
 import kmp.fbk.kmpartgallery.domain_models.Department
 import kmp.fbk.kmpartgallery.local_storage.database.mappers.toArtPieceList
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.search.ISearchViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
