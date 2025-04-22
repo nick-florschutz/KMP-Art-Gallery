@@ -5,13 +5,11 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,22 +18,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FileDownload
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DividerDefaults
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -55,7 +49,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,13 +61,11 @@ import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import kmp.fbk.kmpartgallery.ViewModelState
 import kmp.fbk.kmpartgallery.domain_models.ArtPiece
-import kmp.fbk.kmpartgallery.extraSmallPadding
 import kmp.fbk.kmpartgallery.getScreenHeight
 import kmp.fbk.kmpartgallery.largePadding
 import kmp.fbk.kmpartgallery.mediumFontSize
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.mp.KoinPlatform
 
@@ -239,6 +230,7 @@ private fun DetailViewScreenContent(
                    text = artPiece.artistDisplayName?.takeIf { it.isNotBlank() }  ?: "Unknown",
                    fontSize = mediumFontSize,
                    color = if (artPiece.artistDisplayName.isNullOrBlank()) Color.Gray else Color.Blue,
+                   modifier = Modifier.weight(weight = 0.4f, fill = false)
                )
 
                Icon(
@@ -246,12 +238,13 @@ private fun DetailViewScreenContent(
                    tint = Color.Gray,
                    contentDescription = null,
                    modifier = Modifier.size(6.dp)
+                       .weight(0.1f, fill = false)
                )
 
                Text(
                    text = artPiece.objectDate?.takeIf { it.isNotBlank() } ?: "Unknown",
                    fontSize = mediumFontSize,
-                   modifier = Modifier
+                   modifier = Modifier.weight(0.4f)
                )
            }
 
@@ -308,8 +301,23 @@ private fun DetailViewScreenContent(
                         verticalArrangement = Arrangement.spacedBy(smallPadding),
                         modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
                     ) {
+
+                        if (!artPiece.title.isNullOrBlank()) {
+                            val introduction = "${artPiece.title} - ${artPiece.artistPrefix.orEmpty()} ${artPiece.artistDisplayName?.ifBlank { "Unknown" }}"
+                            Text(
+                                text = introduction,
+                                fontSize = mediumFontSize,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        }
+
                         Text(
-                            text = artPiece.department.takeUnless { it.isNullOrBlank() } ?: "No Department Found",
+                            text = artPiece.medium.takeUnless { it.isNullOrBlank() } ?: "No Medium Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = ("Department: ${artPiece.department.takeUnless { it.isNullOrBlank() } ?: "No Department Found"}"),
                             fontSize = mediumFontSize,
                         )
 
@@ -317,6 +325,20 @@ private fun DetailViewScreenContent(
                             text = artPiece.constituentResponses?.firstOrNull()?.name ?: "No Constituent Found",
                             fontSize = mediumFontSize,
                         )
+
+
+                        Text(
+                            text = artPiece.classification.takeUnless { it.isNullOrBlank() } ?: "No Classification Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.repository.takeUnless { it.isNullOrBlank() } ?: "No Repository Found",
+                            fontSize = mediumFontSize,
+                        )
+
+
+
                     }
                 }
             )
@@ -336,7 +358,22 @@ private fun DetailViewScreenContent(
                         )
 
                         Text(
+                            text = artPiece.reign.takeUnless { it.isNullOrBlank() } ?: "No Reign Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
                             text = artPiece.dynasty.takeUnless { it.isNullOrBlank() } ?: "No Dynasty Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.objectBeginDate?.toString() ?: "No Begin Date Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.objectEndDate?.toString() ?: "No End Date Found",
                             fontSize = mediumFontSize,
                         )
                     }
@@ -374,15 +411,23 @@ private fun DetailViewScreenContent(
                         verticalArrangement = Arrangement.spacedBy(smallPadding),
                         modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
                     ) {
+
+
                         Text(
-                            text = artPiece.objectBeginDate?.toString() ?: "No Begin Date Found",
+                            text = artPiece.medium.takeUnless { it.isNullOrBlank() } ?: "No Medium Found",
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.objectEndDate?.toString() ?: "No End Date Found",
+                            text = artPiece.dimensions.takeUnless { it.isNullOrBlank() } ?: "No Dimensions Found",
                             fontSize = mediumFontSize,
                         )
+
+                        Text(
+                            text = artPiece.measurements?.firstOrNull().toString(),
+                            fontSize = mediumFontSize,
+                        )
+
                     }
                 }
             )
