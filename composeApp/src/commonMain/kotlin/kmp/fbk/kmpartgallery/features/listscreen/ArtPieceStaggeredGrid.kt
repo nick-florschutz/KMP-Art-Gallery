@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -53,6 +54,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ArtPieceStaggeredGrid(
     artPieces: List<ArtPiece>,
+    lazyStaggeredGridState: LazyStaggeredGridState,
     mainScreenScrollState: ScrollState,
     navController: NavController,
     modifier: Modifier = Modifier,
@@ -71,6 +73,7 @@ fun ArtPieceStaggeredGrid(
     }
 
     LazyVerticalStaggeredGrid(
+        state = lazyStaggeredGridState,
         columns = StaggeredGridCells.Adaptive(152.dp),
         verticalItemSpacing = smallPadding,
         userScrollEnabled = isScrollEnabled,

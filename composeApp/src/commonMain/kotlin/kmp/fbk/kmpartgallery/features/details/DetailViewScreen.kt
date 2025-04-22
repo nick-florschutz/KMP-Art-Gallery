@@ -197,7 +197,7 @@ private fun DetailViewScreenContent(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .systemBarsPadding()
-                    .padding(start = smallPadding)
+                    .padding(start = mediumPadding)
                     .background(
                         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
                         shape = RoundedCornerShape(4.dp)
@@ -368,14 +368,51 @@ private fun DetailViewScreenContent(
                         )
 
                         Text(
-                            text = artPiece.objectBeginDate?.toString() ?: "No Begin Date Found",
+                            text = "Begin Date: ${artPiece.objectBeginDate?.toString() ?: "No Begin Date Found"}",
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.objectEndDate?.toString() ?: "No End Date Found",
+                            text = "End Date: ${artPiece.objectEndDate?.toString() ?: "No End Date Found"}",
                             fontSize = mediumFontSize,
                         )
+
+                        val locationDescription = "${artPiece.geographyType} ${artPiece.county} [${artPiece.city} ${artPiece.state}, ${artPiece.country}]"
+                        Text(
+                            text = locationDescription,
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.region.takeUnless { it.isNullOrBlank() } ?: "No Region Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.subregion.takeUnless { it.isNullOrBlank() } ?: "No SubRegion Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.locale.takeUnless { it.isNullOrBlank() } ?: "No Locale Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.locus.takeUnless { it.isNullOrBlank() } ?: "No Locus Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.excavation.takeUnless { it.isNullOrBlank() } ?: "No Excavation Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.river.takeUnless { it.isNullOrBlank() } ?: "No River Found",
+                            fontSize = mediumFontSize,
+                        )
+
                     }
                 }
             )
@@ -395,9 +432,40 @@ private fun DetailViewScreenContent(
                         )
 
                         Text(
+                            text = artPiece.artistDisplayBio.takeUnless { it.isNullOrBlank() } ?: "No Artist Display bio Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
                             text = artPiece.artistNationality.takeUnless { it.isNullOrBlank() } ?: "No Artist Nationality Found",
                             fontSize = mediumFontSize,
                         )
+
+                        Text(
+                            text = artPiece.artistBeginDate.takeUnless { it.isNullOrBlank() } ?: "No Artist Begin Date Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.artistEndDate.takeUnless { it.isNullOrBlank() } ?: "No Artist End Date Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.artistGender.takeUnless { it.isNullOrBlank() } ?: "No Artist Gender Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.artistWikidataURL.takeUnless { it.isNullOrBlank() } ?: "No Artist Wikidata URL Found",
+                            fontSize = mediumFontSize,
+                        )
+
+                        Text(
+                            text = artPiece.artistULANURL.takeUnless { it.isNullOrBlank() } ?: "No Artist Wikidata URL Found",
+                            fontSize = mediumFontSize,
+                        )
+
                     }
                 }
             )
@@ -440,8 +508,6 @@ private fun DetailViewScreenContent(
 
             Spacer(Modifier.height(largePadding))
             Spacer(Modifier.height(largePadding))
-
-            // TODO: Add more content here
         }
     }
 }
