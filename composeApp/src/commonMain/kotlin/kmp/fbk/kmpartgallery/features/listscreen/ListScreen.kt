@@ -3,6 +3,8 @@ package kmp.fbk.kmpartgallery.features.listscreen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,8 +18,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -73,6 +78,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListScreen(navController: NavController) {
     val listScreenRepository = KoinPlatform.getKoin().get<ListScreenRepository>()
@@ -95,8 +101,9 @@ fun ListScreen(navController: NavController) {
     }
 
     val scrollState = rememberScrollState()
+    val mainListState = rememberLazyListState()
     val lazyStaggeredGridState = rememberLazyStaggeredGridState()
-    val showScrollToTopButton by remember { derivedStateOf { scrollState.value > 3 } }
+    val showScrollToTopButton by remember { derivedStateOf { mainListState.firstVisibleItemIndex > 0 } }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -151,79 +158,82 @@ fun ListScreen(navController: NavController) {
              .fillMaxSize()
              .padding(paddingValues)
      ) {
-         Column(
+         LazyColumn(
+             state = mainListState,
              modifier = Modifier
                  .fillMaxSize()
-                 .verticalScroll(scrollState)
+//                 .verticalScroll(scrollState)
          ) {
-             when (featuredImagesListState) {
-                 FeaturedImagesListState.Loading -> {
-                     Box(
-                         contentAlignment = Alignment.Center,
-                         modifier = Modifier
-                             .fillMaxWidth()
-                             .height(250.dp)
-                     ) {
-                         CircularProgressIndicator()
-                     }
-                 }
-                 is FeaturedImagesListState.Error -> {
-                     Box(
-                         contentAlignment = Alignment.Center,
-                         modifier = Modifier
-                             .fillMaxWidth()
-                             .height(250.dp)
-                     ) {
-                         Text(text = "No Featured Images Available.")
-                     }
-                 }
-                 is FeaturedImagesListState.Success -> {
-                     Box(
-                         modifier = Modifier
-                             .fillMaxWidth()
-                             .height(300.dp)
-                     ) {
-                         HorizontalPager(
-                             state = pagerState,
-                             pageContent = { page ->
-                                 val featuredImagesList by remember((featuredImagesListState as FeaturedImagesListState.Success).featuredImages) {
-                                     mutableStateOf((featuredImagesListState as FeaturedImagesListState.Success).featuredImages)
-                                 }
-                                 AsyncImage(
-                                     model = ImageRequest.Builder(platformContext)
-                                         .data(featuredImagesList[page].image)
-                                         .build(),
-                                     contentDescription = null,
-                                     placeholder = rememberVectorPainter(Icons.Default.FileDownload),
-                                     fallback = rememberVectorPainter(Icons.Default.Error),
-                                     error = rememberVectorPainter(Icons.Default.Error),
-                                     contentScale = ContentScale.Fit,
-                                     modifier = Modifier
-                                         .fillMaxSize()
-                                         .clickable {
-                                             navController.navigate(
-                                                 NavigationDestination.DetailView(
-                                                     artPieceLocalId = featuredImagesList[page].localId
-                                                 )
-                                             )
-                                         }
-                                 )
-                             }
-                         )
-
-                         Row(
-                             horizontalArrangement = Arrangement.spacedBy(extraSmallPadding),
+             item {
+                 when (featuredImagesListState) {
+                     FeaturedImagesListState.Loading -> {
+                         Box(
+                             contentAlignment = Alignment.Center,
                              modifier = Modifier
-                                 .align(Alignment.BottomCenter)
-                                 .padding(bottom = smallPadding)
+                                 .fillMaxWidth()
+                                 .height(250.dp)
                          ) {
-                             repeat(pagerState.pageCount) {
-                                 Icon(
-                                     imageVector = Icons.Default.Circle,
-                                     tint = if (pagerState.currentPage == it) Color.White else Color.LightGray,
-                                     contentDescription = null,
-                                     modifier = Modifier.size(12.dp)
-                                 )
+                             CircularProgressIndicator()
+                         }
+                     }
+                     is FeaturedImagesListState.Error -> {
+                         Box(
+                             contentAlignment = Alignment.Center,
+                             modifier = Modifier
+                                 .fillMaxWidth()
+                                 .height(250.dp)
+                         ) {
+                             Text(text = "No Featured Images Available.")
+                         }
+                     }
+                     is FeaturedImagesListState.Success -> {
+                         Box(
+                             modifier = Modifier
+                                 .fillMaxWidth()
+                                 .height(300.dp)
+                         ) {
+                             HorizontalPager(
+                                 state = pagerState,
+                                 pageContent = { page ->
+                                     val featuredImagesList by remember((featuredImagesListState as FeaturedImagesListState.Success).featuredImages) {
+                                         mutableStateOf((featuredImagesListState as FeaturedImagesListState.Success).featuredImages)
+                                     }
+                                     AsyncImage(
+                                         model = ImageRequest.Builder(platformContext)
+                                             .data(featuredImagesList[page].image)
+                                             .build(),
+                                         contentDescription = null,
+                                         placeholder = rememberVectorPainter(Icons.Default.FileDownload),
+                                         fallback = rememberVectorPainter(Icons.Default.Error),
+                                         error = rememberVectorPainter(Icons.Default.Error),
+                                         contentScale = ContentScale.Fit,
+                                         modifier = Modifier
+                                             .fillMaxSize()
+                                             .clickable {
+                                                 navController.navigate(
+                                                     NavigationDestination.DetailView(
+                                                         artPieceLocalId = featuredImagesList[page].localId
+                                                     )
+                                                 )
+                                             }
+                                     )
+                                 }
+                             )
+
+                             Row(
+                                 horizontalArrangement = Arrangement.spacedBy(extraSmallPadding),
+                                 modifier = Modifier
+                                     .align(Alignment.BottomCenter)
+                                     .padding(bottom = smallPadding)
+                             ) {
+                                 repeat(pagerState.pageCount) {
+                                     Icon(
+                                         imageVector = Icons.Default.Circle,
+                                         tint = if (pagerState.currentPage == it) Color.White else Color.LightGray,
+                                         contentDescription = null,
+                                         modifier = Modifier.size(12.dp)
+                                     )
+                                 }
                              }
                          }
                      }
@@ -231,51 +241,58 @@ fun ListScreen(navController: NavController) {
              }
 
 
-             LazyRow(
-                 contentPadding = PaddingValues(horizontal = mediumPadding),
-                 horizontalArrangement = Arrangement.spacedBy(smallPadding),
-                 verticalAlignment = Alignment.CenterVertically,
-             ) {
-                 item {
-                     FilterChip(
-                         selected = true,
-                         onClick = { /*TODO*/ },
-                         colors = FilterChipDefaults.filterChipColors(
-                             selectedContainerColor = MaterialTheme.colorScheme.onSurface,
-                             selectedLabelColor = MaterialTheme.colorScheme.surface,
-                         ),
-                         shape = RoundedCornerShape(4.dp),
-                         label = {
-                             Text(text = "All")
-                         }
-                     )
-                 }
+            stickyHeader {
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = mediumPadding),
+                    horizontalArrangement = Arrangement.spacedBy(smallPadding),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.wrapContentSize()
+                        .background(MaterialTheme.colorScheme.surface)
+                ) {
+                    item {
+                        FilterChip(
+                            selected = true,
+                            onClick = { /*TODO*/ },
+                            colors = FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                selectedLabelColor = MaterialTheme.colorScheme.surface,
+                            ),
+                            shape = RoundedCornerShape(4.dp),
+                            label = {
+                                Text(text = "All")
+                            }
+                        )
+                    }
 
-                 items(departments) { department ->
-                     department.displayName?.let { departmentName ->
-                         FilterChip(
-                             selected = false,
-                             onClick = { /*TODO*/ },
-                             colors = FilterChipDefaults.filterChipColors(
-                                 selectedContainerColor = MaterialTheme.colorScheme.onSurface,
-                                 selectedLabelColor = MaterialTheme.colorScheme.surface,
-                             ),
-                             shape = RoundedCornerShape(4.dp),
-                             label = {
-                                 Text(text = departmentName)
-                             }
-                         )
-                     }
+                    items(departments) { department ->
+                        department.displayName?.let { departmentName ->
+                            FilterChip(
+                                selected = false,
+                                onClick = { /*TODO*/ },
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                    selectedLabelColor = MaterialTheme.colorScheme.surface,
+                                ),
+                                shape = RoundedCornerShape(4.dp),
+                                label = {
+                                    Text(text = departmentName)
+                                }
+                            )
+                        }
 
-                 }
+                    }
+                }
+            }
+
+             item {
+                 ArtPieceStaggeredGrid(
+                     artPieces = artPieces,
+                     lazyStaggeredGridState = lazyStaggeredGridState,
+                     mainScreenScrollState = scrollState,
+                     navController = navController,
+                     mainListState = mainListState,
+                 )
              }
-
-             ArtPieceStaggeredGrid(
-                 artPieces = artPieces,
-                 lazyStaggeredGridState = lazyStaggeredGridState,
-                 mainScreenScrollState = scrollState,
-                 navController = navController,
-             )
 
          }
 
@@ -294,7 +311,8 @@ fun ListScreen(navController: NavController) {
                  onClick = {
                      coroutineScope.launch {
                          lazyStaggeredGridState.animateScrollToItem(0)
-                         scrollState.animateScrollTo(0)
+//                         scrollState.animateScrollTo(0)
+                         mainListState.animateScrollToItem(0)
                      }
                  },
              ) {

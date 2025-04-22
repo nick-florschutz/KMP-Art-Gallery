@@ -1,8 +1,13 @@
 package kmp.fbk.kmpartgallery.features.listscreen
 
+import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.animateDecay
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.FlingBehavior
+import androidx.compose.foundation.gestures.ScrollScope
+import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +16,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -50,12 +57,15 @@ import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.BannerInformation
 import kmp.fbk.kmpartgallery.smallMediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.math.abs
 
 @Composable
 fun ArtPieceStaggeredGrid(
     artPieces: List<ArtPiece>,
     lazyStaggeredGridState: LazyStaggeredGridState,
     mainScreenScrollState: ScrollState,
+    mainListState: LazyListState,
     navController: NavController,
     modifier: Modifier = Modifier,
 ) {
@@ -68,7 +78,8 @@ fun ArtPieceStaggeredGrid(
 
     val isScrollEnabled by remember {
         derivedStateOf {
-            mainScreenScrollState.value > screenHeight.value.times(1.25f)
+            mainListState.firstVisibleItemIndex >= 1
+                    || mainListState.firstVisibleItemScrollOffset > screenHeight.value
         }
     }
 
