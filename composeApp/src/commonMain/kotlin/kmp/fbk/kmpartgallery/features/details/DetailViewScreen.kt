@@ -179,6 +179,24 @@ fun DetailViewScreen(
                     .fillMaxSize()
                     .align(Alignment.Center)
             )
+
+            IconButton(
+                onClick = { isFullscreenImageOpen = false },
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .systemBarsPadding()
+                    .padding(start = mediumPadding)
+                    .background(
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
+                        shape = RoundedCornerShape(4.dp)
+                    )
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            }
         }
     }
 }
