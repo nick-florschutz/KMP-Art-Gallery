@@ -5,6 +5,8 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -94,6 +96,8 @@ fun DetailViewScreen(
     val scrollState = rememberScrollState()
     val showScrollToTopButton by remember { derivedStateOf { scrollState.value > 3 } }
 
+    var isFullscreenImageOpen by rememberSaveable { mutableStateOf(false) }
+
     when (uiState) {
         is ViewModelState.Error -> {
             Box(
@@ -121,6 +125,7 @@ fun DetailViewScreen(
                    platformContext = platformContext,
                    navController = navController,
                    scrollState = scrollState,
+                   onImageTapped = { isFullscreenImageOpen = true },
                )
 
                AnimatedVisibility(
@@ -150,6 +155,32 @@ fun DetailViewScreen(
            }
         }
     }
+
+    AnimatedVisibility(
+        visible = isFullscreenImageOpen,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .clickable(interactionSource = MutableInteractionSource(), indication = null) {}
+        ) {
+            AsyncImage(
+                model = ImageRequest.Builder(platformContext)
+                    .data(viewModel.determineWhichImageToUse())
+                    .build(),
+                contentDescription = null,
+                placeholder = rememberVectorPainter(Icons.Default.FileDownload),
+                fallback = rememberVectorPainter(Icons.Default.Error),
+                error = rememberVectorPainter(Icons.Default.Error),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .align(Alignment.Center)
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -160,6 +191,7 @@ private fun DetailViewScreenContent(
     platformContext: PlatformContext,
     navController: NavController,
     scrollState: ScrollState,
+    onImageTapped: () -> Unit,
 ) {
     val screenHeight = getScreenHeight()
     val imageHeight = remember {
@@ -190,6 +222,9 @@ private fun DetailViewScreenContent(
                 error = rememberVectorPainter(Icons.Default.Error),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize()
+                    .clickable {
+                        onImageTapped()
+                    }
             )
 
             IconButton(
