@@ -36,7 +36,7 @@ fun ImageViewer(
     var offsetY by remember { mutableStateOf(0f) }
 
     val minScale = 1f
-    val maxScale = 4f
+    val maxScale = 5f
 
     // Remember the initial offset
     var initialOffset by remember { mutableStateOf(Offset(0f, 0f)) }
