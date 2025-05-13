@@ -34,6 +34,13 @@ interface ArtPieceDao {
     fun getAllArtPiecesFlow(): Flow<List<ArtPieceEntity>>
 
     @Query("""
+        SELECT * FROM ${ArtPieceEntity.TABLE_NAME} WHERE ${ArtPieceEntity.Companion.Column.DEPARTMENT} = :department
+        ORDER BY (${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != "" AND
+        ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != null) ASC  
+    """)
+    fun getAllArtPiecesByDepartmentFlow(department: String): Flow<List<ArtPieceEntity>>
+
+    @Query("""
         SELECT ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} FROM ${ArtPieceEntity.TABLE_NAME}
          WHERE ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} IS NOT NULL AND 
          ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != "" AND

@@ -69,8 +69,6 @@ fun ArtPieceStaggeredGrid(
     navController: NavController,
     modifier: Modifier = Modifier,
 ) {
-
-
     val screenHeight = getScreenHeight()
 
     val coroutineScope = rememberCoroutineScope()

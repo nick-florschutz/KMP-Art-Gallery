@@ -8,6 +8,7 @@ import kmp.fbk.kmpartgallery.domain_models.Department
 import kmp.fbk.kmpartgallery.local_storage.database.mappers.toArtPieceList
 import kmp.fbk.kmpartgallery.reusable_ui_compomenents.search.ISearchViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -33,6 +34,9 @@ class ListScreenViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
+    private val _selectedDepartment = MutableStateFlow<String?>(null)
+    val selectedDepartment = _selectedDepartment.asStateFlow()
+
     init {
         collectOnArtPieces()
         getFeaturedImages()
@@ -44,10 +48,32 @@ class ListScreenViewModel(
         _searchQuery.tryEmit(query)
     }
 
+    fun onAllDepartmentsSelected() {
+        viewModelScope.launch {
+            _state.emit(ViewModelState.Loading)
+            _selectedDepartment.emit(null)
+            collectOnArtPieces().also {
+                _state.emit(ViewModelState.Success(Unit))
+            }
+        }
+    }
+
+    fun getArtPiecesByDepartment(department: String) {
+        viewModelScope.launch {
+            _selectedDepartment.emit(department)
+            _state.emit(ViewModelState.Loading)
+            listScreenRepository.getAllArtPiecesByDepartmentFromDbFlow(department).collectLatest {
+                _artPieceResponseList.emit(it).also {
+                    _state.emit(ViewModelState.Success(Unit))
+                }
+            }
+        }
+    }
+
     private fun collectOnArtPieces() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             listScreenRepository.getAllArtPiecesFromDbFlow().collectLatest {
-                _artPieceResponseList.emit(it.toArtPieceList())
+                _artPieceResponseList.emit(it)
             }
         }
     }
