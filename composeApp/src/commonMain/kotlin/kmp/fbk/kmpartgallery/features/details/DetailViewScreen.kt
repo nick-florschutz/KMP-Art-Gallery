@@ -47,7 +47,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
@@ -74,6 +76,7 @@ import org.koin.mp.KoinPlatform
 
 private const val DETAIL_CHIP_CHAR_LIMIT = 50
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DetailViewScreen(
     artPieceLocalId: Long,
@@ -98,6 +101,14 @@ fun DetailViewScreen(
     val showScrollToTopButton by remember { derivedStateOf { scrollState.value > 3 } }
 
     var isFullscreenImageOpen by rememberSaveable { mutableStateOf(false) }
+
+    BackHandler {
+        if (isFullscreenImageOpen) {
+            isFullscreenImageOpen = false
+            return@BackHandler
+        }
+        navController.popBackStack()
+    }
 
     when (uiState) {
         is ViewModelState.Error -> {

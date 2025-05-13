@@ -47,6 +47,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(compose.runtime)
+            implementation(compose.material3AdaptiveNavigationSuite)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
@@ -55,6 +56,8 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            implementation("org.jetbrains.compose.ui:ui-backhandler:1.8.0-alpha03")
 
             // Navigation
             implementation(libs.navigation.compose)
