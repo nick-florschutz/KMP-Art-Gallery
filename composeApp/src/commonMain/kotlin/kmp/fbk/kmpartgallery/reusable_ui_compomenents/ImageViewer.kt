@@ -21,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
+import coil3.size.Scale
 
 @Composable
 fun ImageViewer(
@@ -104,13 +105,14 @@ fun ImageViewer(
         // Image to be displayed with pinch-to-zoom functionality
         AsyncImage(
             model = ImageRequest.Builder(platformContext)
+                .scale(Scale.FIT)
                 .data(image)
                 .build(),
             contentDescription = null,
             placeholder = rememberVectorPainter(Icons.Default.FileDownload),
             fallback = rememberVectorPainter(Icons.Default.Error),
             error = rememberVectorPainter(Icons.Default.Error),
-            contentScale = ContentScale.FillWidth,
+            contentScale = ContentScale.Fit,
             modifier = Modifier.fillMaxSize()
         )
     }

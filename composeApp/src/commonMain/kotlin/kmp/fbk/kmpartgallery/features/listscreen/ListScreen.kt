@@ -6,11 +6,13 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,6 +52,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -105,6 +109,8 @@ fun ListScreen(navController: NavController) {
     val lazyStaggeredGridState = rememberLazyStaggeredGridState()
     val showScrollToTopButton by remember { derivedStateOf { mainListState.firstVisibleItemIndex > 0 } }
 
+    var isSortFilterMenuOpen by rememberSaveable { mutableStateOf(false) }
+
     val coroutineScope = rememberCoroutineScope()
 
     val platformContext = LocalPlatformContext.current
@@ -120,21 +126,49 @@ fun ListScreen(navController: NavController) {
         },
         bottomBar = {},
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    // TODO
-                },
-                shape = CircleShape,
-                containerColor = MaterialTheme.colorScheme.onSurface,
-                contentColor = MaterialTheme.colorScheme.surface,
-                content = {
-                    Icon(
-                        painter = painterResource(Res.drawable.sort_down),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            )
+
+          Column(
+              verticalArrangement = Arrangement.spacedBy(smallPadding),
+          ) {
+              AnimatedVisibility(
+                  visible = isSortFilterMenuOpen,
+                  modifier = Modifier
+                      .fillMaxWidth(0.9f)
+                      .fillMaxHeight(0.75f)
+                      .align(Alignment.Start)
+              ) {
+                  Column(
+                      modifier = Modifier
+                          .fillMaxSize()
+                          .background(
+                              color = MaterialTheme.colorScheme.surfaceVariant,
+                              shape = RoundedCornerShape(smallPadding),
+                          )
+                          .padding(smallPadding)
+                  ) {
+                      Text("Sort & Filter")
+                  }
+              }
+
+              FloatingActionButton(
+                  onClick = {
+                      isSortFilterMenuOpen = !isSortFilterMenuOpen
+                  },
+                  shape = CircleShape,
+                  containerColor = MaterialTheme.colorScheme.onSurface,
+                  contentColor = MaterialTheme.colorScheme.surface,
+                  content = {
+                      Icon(
+                          painter = painterResource(Res.drawable.sort_down),
+                          contentDescription = null,
+                          modifier = Modifier.size(24.dp)
+                      )
+                  },
+                  modifier = Modifier.align(Alignment.End)
+              )
+          }
+
+
         },
         modifier = Modifier
             .fillMaxSize()
@@ -162,7 +196,6 @@ fun ListScreen(navController: NavController) {
              state = mainListState,
              modifier = Modifier
                  .fillMaxSize()
-//                 .verticalScroll(scrollState)
          ) {
              item {
                  when (featuredImagesListState) {
@@ -323,6 +356,17 @@ fun ListScreen(navController: NavController) {
              }
          }
      }
+
+        if (isSortFilterMenuOpen) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f))
+                    .clickable(interactionSource = MutableInteractionSource(), indication = null) {
+                        isSortFilterMenuOpen = false
+                    }
+            )
+        }
 
     }
 }
