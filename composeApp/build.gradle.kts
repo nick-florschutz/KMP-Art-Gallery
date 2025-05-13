@@ -57,6 +57,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
+            // Needed for multiplatform Backhandler support
             implementation("org.jetbrains.compose.ui:ui-backhandler:1.8.0-alpha03")
 
             // Navigation
