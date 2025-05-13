@@ -67,6 +67,7 @@ import kmp.fbk.kmpartgallery.getScreenHeight
 import kmp.fbk.kmpartgallery.largePadding
 import kmp.fbk.kmpartgallery.mediumFontSize
 import kmp.fbk.kmpartgallery.mediumPadding
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.ImageViewer
 import kmp.fbk.kmpartgallery.smallPadding
 import kotlinx.coroutines.launch
 import org.koin.mp.KoinPlatform
@@ -166,18 +167,9 @@ fun DetailViewScreen(
                 .background(Color.Black)
                 .clickable(interactionSource = MutableInteractionSource(), indication = null) {}
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(platformContext)
-                    .data(viewModel.determineWhichImageToUse())
-                    .build(),
-                contentDescription = null,
-                placeholder = rememberVectorPainter(Icons.Default.FileDownload),
-                fallback = rememberVectorPainter(Icons.Default.Error),
-                error = rememberVectorPainter(Icons.Default.Error),
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .align(Alignment.Center)
+            ImageViewer(
+                modifier = Modifier.fillMaxSize(),
+                image = viewModel.determineWhichImageToUse().orEmpty(),
             )
 
             IconButton(
