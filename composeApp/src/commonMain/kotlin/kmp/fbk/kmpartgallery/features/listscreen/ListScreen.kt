@@ -39,13 +39,18 @@ import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DismissibleNavigationDrawer
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -115,288 +120,317 @@ fun ListScreen(navController: NavController) {
 
     val coroutineScope = rememberCoroutineScope()
 
+    val navigationDrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
     val platformContext = LocalPlatformContext.current
     val focusManager = LocalFocusManager.current
 
-    Scaffold(
-        topBar = {
-            ListScreenTopBar(
-                searchQuery = searchQuery,
-                focusManager = focusManager,
-                viewModel = viewModel
-            )
-        },
-        bottomBar = {},
-        floatingActionButton = {
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(smallPadding),
+    ModalNavigationDrawer(
+        drawerState = navigationDrawerState,
+        drawerContent = {
+            Surface(
+                Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(0.8f)
             ) {
-                AnimatedVisibility(
-                    visible = isSortFilterMenuOpen,
-                    modifier = Modifier
-                        .fillMaxWidth(0.9f)
-                        .fillMaxHeight(0.75f)
-                        .align(Alignment.Start)
+                Column(Modifier.padding(mediumPadding)) {
+                    Text("HELLO WORLD")
+                }
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Scaffold(
+            topBar = {
+                ListScreenTopBar(
+                    searchQuery = searchQuery,
+                    focusManager = focusManager,
+                    viewModel = viewModel,
+                    onMenuButtonClick = {
+                        coroutineScope.launch {
+                            navigationDrawerState.open()
+                        }
+                    },
+                    onStartIconClick = {},
+                )
+            },
+            bottomBar = {},
+            floatingActionButton = {
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(smallPadding),
                 ) {
-                    Column(
+                    AnimatedVisibility(
+                        visible = isSortFilterMenuOpen,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceVariant,
-                                shape = RoundedCornerShape(smallPadding),
-                            )
-                            .padding(smallPadding)
+                            .fillMaxWidth(0.9f)
+                            .fillMaxHeight(0.75f)
+                            .align(Alignment.Start)
                     ) {
-                        Text("Sort & Filter")
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                    shape = RoundedCornerShape(smallPadding),
+                                )
+                                .padding(smallPadding)
+                        ) {
+                            Text("Sort & Filter")
+                        }
                     }
+
+                    FloatingActionButton(
+                        onClick = {
+                            isSortFilterMenuOpen = !isSortFilterMenuOpen
+                        },
+                        shape = CircleShape,
+                        containerColor = MaterialTheme.colorScheme.onSurface,
+                        contentColor = MaterialTheme.colorScheme.surface,
+                        content = {
+                            Icon(
+                                painter = painterResource(Res.drawable.sort_down),
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        },
+                        modifier = Modifier.align(Alignment.End)
+                    )
                 }
 
-                FloatingActionButton(
-                    onClick = {
-                        isSortFilterMenuOpen = !isSortFilterMenuOpen
-                    },
-                    shape = CircleShape,
-                    containerColor = MaterialTheme.colorScheme.onSurface,
-                    contentColor = MaterialTheme.colorScheme.surface,
-                    content = {
-                        Icon(
-                            painter = painterResource(Res.drawable.sort_down),
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    },
-                    modifier = Modifier.align(Alignment.End)
-                )
-            }
 
-
-        },
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(interactionSource = null, indication = null) {
-                focusManager.clearFocus(force = true)
-            }
-    ) { paddingValues ->
-        Box(
+            },
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            LazyColumn(
-                state = mainListState,
-                modifier = Modifier
-                    .fillMaxSize()
+                .clickable(interactionSource = null, indication = null) {
+                    focusManager.clearFocus(force = true)
+                }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .padding(paddingValues)
             ) {
-                item {
-                    when (featuredImagesListState) {
-                        FeaturedImagesListState.Loading -> {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(250.dp)
-                            ) {
-                                CircularProgressIndicator()
-                            }
-                        }
-
-                        is FeaturedImagesListState.Error -> {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(250.dp)
-                            ) {
-                                Text(text = "No Featured Images Available.")
-                            }
-                        }
-
-                        is FeaturedImagesListState.Success -> {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(300.dp)
-                            ) {
-                                HorizontalPager(
-                                    state = pagerState,
-                                    pageContent = { page ->
-                                        val featuredImagesList by remember((featuredImagesListState as FeaturedImagesListState.Success).featuredImages) {
-                                            mutableStateOf((featuredImagesListState as FeaturedImagesListState.Success).featuredImages)
-                                        }
-                                        AsyncImage(
-                                            model = ImageRequest.Builder(platformContext)
-                                                .data(featuredImagesList[page].image)
-                                                .build(),
-                                            contentDescription = null,
-                                            placeholder = rememberVectorPainter(Icons.Default.FileDownload),
-                                            fallback = rememberVectorPainter(Icons.Default.Error),
-                                            error = rememberVectorPainter(Icons.Default.Error),
-                                            contentScale = ContentScale.Fit,
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .clickable {
-                                                    navController.navigate(
-                                                        NavigationDestination.DetailView(
-                                                            artPieceLocalId = featuredImagesList[page].localId
-                                                        )
-                                                    )
-                                                }
-                                        )
-                                    }
-                                )
-
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(extraSmallPadding),
+                LazyColumn(
+                    state = mainListState,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    item {
+                        when (featuredImagesListState) {
+                            FeaturedImagesListState.Loading -> {
+                                Box(
+                                    contentAlignment = Alignment.Center,
                                     modifier = Modifier
-                                        .align(Alignment.BottomCenter)
-                                        .padding(bottom = smallPadding)
+                                        .fillMaxWidth()
+                                        .height(250.dp)
                                 ) {
-                                    repeat(pagerState.pageCount) {
-                                        Icon(
-                                            imageVector = Icons.Default.Circle,
-                                            tint = if (pagerState.currentPage == it) Color.White else Color.LightGray,
-                                            contentDescription = null,
-                                            modifier = Modifier.size(12.dp)
-                                        )
+                                    CircularProgressIndicator()
+                                }
+                            }
+
+                            is FeaturedImagesListState.Error -> {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(250.dp)
+                                ) {
+                                    Text(text = "No Featured Images Available.")
+                                }
+                            }
+
+                            is FeaturedImagesListState.Success -> {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(300.dp)
+                                ) {
+                                    HorizontalPager(
+                                        state = pagerState,
+                                        pageContent = { page ->
+                                            val featuredImagesList by remember((featuredImagesListState as FeaturedImagesListState.Success).featuredImages) {
+                                                mutableStateOf((featuredImagesListState as FeaturedImagesListState.Success).featuredImages)
+                                            }
+                                            AsyncImage(
+                                                model = ImageRequest.Builder(platformContext)
+                                                    .data(featuredImagesList[page].image)
+                                                    .build(),
+                                                contentDescription = null,
+                                                placeholder = rememberVectorPainter(Icons.Default.FileDownload),
+                                                fallback = rememberVectorPainter(Icons.Default.Error),
+                                                error = rememberVectorPainter(Icons.Default.Error),
+                                                contentScale = ContentScale.Fit,
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .clickable {
+                                                        navController.navigate(
+                                                            NavigationDestination.DetailView(
+                                                                artPieceLocalId = featuredImagesList[page].localId
+                                                            )
+                                                        )
+                                                    }
+                                            )
+                                        }
+                                    )
+
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(
+                                            extraSmallPadding
+                                        ),
+                                        modifier = Modifier
+                                            .align(Alignment.BottomCenter)
+                                            .padding(bottom = smallPadding)
+                                    ) {
+                                        repeat(pagerState.pageCount) {
+                                            Icon(
+                                                imageVector = Icons.Default.Circle,
+                                                tint = if (pagerState.currentPage == it) Color.White else Color.LightGray,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(12.dp)
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
 
 
-                stickyHeader {
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = mediumPadding),
-                        horizontalArrangement = Arrangement.spacedBy(smallPadding),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .background(MaterialTheme.colorScheme.surface)
-                    ) {
-                        item {
-                            FilterChip(
-                                selected = selectedDepartment == null,
-                                onClick = {
-                                    coroutineScope.launch {
-                                        lazyStaggeredGridState.scrollToItem(0)
-                                    }
-                                    viewModel.onAllDepartmentsSelected()
-                                },
-                                colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = MaterialTheme.colorScheme.onSurface,
-                                    selectedLabelColor = MaterialTheme.colorScheme.surface,
-                                ),
-                                shape = RoundedCornerShape(4.dp),
-                                label = { Text(text = "All") },
-                            )
-                        }
-
-                        items(departments) { department ->
-                            department.displayName?.let { departmentName ->
+                    stickyHeader {
+                        LazyRow(
+                            contentPadding = PaddingValues(horizontal = mediumPadding),
+                            horizontalArrangement = Arrangement.spacedBy(smallPadding),
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .background(MaterialTheme.colorScheme.surface)
+                        ) {
+                            item {
                                 FilterChip(
-                                    selected = selectedDepartment == departmentName,
+                                    selected = selectedDepartment == null,
                                     onClick = {
                                         coroutineScope.launch {
                                             lazyStaggeredGridState.scrollToItem(0)
                                         }
-                                        viewModel.getArtPiecesByDepartment(departmentName)
+                                        viewModel.onAllDepartmentsSelected()
                                     },
                                     colors = FilterChipDefaults.filterChipColors(
                                         selectedContainerColor = MaterialTheme.colorScheme.onSurface,
                                         selectedLabelColor = MaterialTheme.colorScheme.surface,
                                     ),
                                     shape = RoundedCornerShape(4.dp),
-                                    label = { Text(text = departmentName) },
+                                    label = { Text(text = "All") },
                                 )
                             }
 
+                            items(departments) { department ->
+                                department.displayName?.let { departmentName ->
+                                    FilterChip(
+                                        selected = selectedDepartment == departmentName,
+                                        onClick = {
+                                            coroutineScope.launch {
+                                                lazyStaggeredGridState.scrollToItem(0)
+                                            }
+                                            viewModel.getArtPiecesByDepartment(departmentName)
+                                        },
+                                        colors = FilterChipDefaults.filterChipColors(
+                                            selectedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                            selectedLabelColor = MaterialTheme.colorScheme.surface,
+                                        ),
+                                        shape = RoundedCornerShape(4.dp),
+                                        label = { Text(text = departmentName) },
+                                    )
+                                }
+
+                            }
                         }
                     }
+
+                    item {
+                        if (artPieces.isEmpty() && uiState !is ViewModelState.Loading) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp)
+                            ) {
+                                Text("No Art Pieces Available")
+                            }
+                        } else {
+                            ArtPieceStaggeredGrid(
+                                artPieces = artPieces,
+                                lazyStaggeredGridState = lazyStaggeredGridState,
+                                mainScreenScrollState = scrollState,
+                                navController = navController,
+                                mainListState = mainListState,
+                            )
+                        }
+                    }
+
                 }
 
-                item {
-                    if (artPieces.isEmpty() && uiState !is ViewModelState.Loading) {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                        ) {
-                            Text("No Art Pieces Available")
-                        }
-                    } else {
-                        ArtPieceStaggeredGrid(
-                            artPieces = artPieces,
-                            lazyStaggeredGridState = lazyStaggeredGridState,
-                            mainScreenScrollState = scrollState,
-                            navController = navController,
-                            mainListState = mainListState,
+                AnimatedVisibility(
+                    visible = showScrollToTopButton,
+                    enter = slideInVertically(initialOffsetY = { it }),
+                    exit = slideOutVertically(targetOffsetY = { it }),
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .then(
+                            if (showScrollToTopButton) Modifier.systemBarsPadding() else Modifier
+                        )
+                        .padding(mediumPadding)
+                ) {
+                    FloatingActionButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                lazyStaggeredGridState.animateScrollToItem(0)
+//                         scrollState.animateScrollTo(0)
+                                mainListState.animateScrollToItem(0)
+                            }
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowUpward,
+                            contentDescription = null,
                         )
                     }
                 }
-
             }
 
-            AnimatedVisibility(
-                visible = showScrollToTopButton,
-                enter = slideInVertically(initialOffsetY = { it }),
-                exit = slideOutVertically(targetOffsetY = { it }),
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .then(
-                        if (showScrollToTopButton) Modifier.systemBarsPadding() else Modifier
-                    )
-                    .padding(mediumPadding)
-            ) {
-                FloatingActionButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            lazyStaggeredGridState.animateScrollToItem(0)
-//                         scrollState.animateScrollTo(0)
-                            mainListState.animateScrollToItem(0)
-                        }
-                    },
+            if (uiState is ViewModelState.Loading) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                        .padding(paddingValues)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowUpward,
-                        contentDescription = null,
-                    )
+                    CircularProgressIndicator()
                 }
             }
-        }
 
-        if (uiState is ViewModelState.Loading) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                CircularProgressIndicator()
+            if (isSortFilterMenuOpen) {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.3f))
+                        .clickable(
+                            interactionSource = MutableInteractionSource(),
+                            indication = null
+                        ) {
+                            isSortFilterMenuOpen = false
+                        }
+                )
             }
-        }
 
-        if (isSortFilterMenuOpen) {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.3f))
-                    .clickable(interactionSource = MutableInteractionSource(), indication = null) {
-                        isSortFilterMenuOpen = false
-                    }
-            )
-        }
-
-    }
+        } /* End of LazyColumn */
+    } /* End of ModalNavigationDrawer */
 }
 
 @Composable
 fun ListScreenTopBar(
     searchQuery: String,
     focusManager: FocusManager,
-    viewModel: ListScreenViewModel
+    viewModel: ListScreenViewModel,
+    onMenuButtonClick: () -> Unit,
+    onStartIconClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxWidth()
@@ -415,6 +449,7 @@ fun ListScreenTopBar(
                 painter = painterResource(Res.drawable.the_metropolitan_museum_of_art_logo),
                 contentDescription = null,
                 modifier = Modifier.size(26.dp)
+                    .clickable { onStartIconClick() }
             )
 
             Row(
@@ -434,6 +469,7 @@ fun ListScreenTopBar(
                     imageVector = Icons.Default.Menu,
                     contentDescription = null,
                     modifier = Modifier.size(30.dp)
+                        .clickable { onMenuButtonClick() }
                 )
             }
         }
