@@ -134,7 +134,7 @@ fun ListScreen(navController: NavController) {
                     .fillMaxWidth(0.8f)
             ) {
                 Column(Modifier.padding(mediumPadding)) {
-                    Text("HELLO WORLD")
+                    Text("HELLO!")
                 }
             }
         },
