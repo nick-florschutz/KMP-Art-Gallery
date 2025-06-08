@@ -49,6 +49,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import kmp.fbk.kmpartgallery.domain_models.ArtPiece
+import kmp.fbk.kmpartgallery.extraSmallPadding
 import kmp.fbk.kmpartgallery.getScreenHeight
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.navigation.NavigationDestination
@@ -159,7 +160,7 @@ fun ArtPieceStaggeredGrid(
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.surfaceVariant)
                             .weight(0.3f)
-                            .padding(smallPadding)
+                            .padding(extraSmallPadding)
                     ) {
                         Text(
                             text = artPiece.title ?: "--",
