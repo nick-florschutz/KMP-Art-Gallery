@@ -53,7 +53,10 @@ import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -70,6 +73,7 @@ import kmp.fbk.kmpartgallery.largePadding
 import kmp.fbk.kmpartgallery.mediumFontSize
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.reusable_ui_compomenents.ImageViewer
+import kmp.fbk.kmpartgallery.smallMediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
 import kotlinx.coroutines.launch
 import org.koin.mp.KoinPlatform
@@ -304,6 +308,7 @@ private fun DetailViewScreenContent(
                )
            }
 
+            // Quick info chip group
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(smallPadding),
                 verticalArrangement = Arrangement.SpaceAround,
@@ -354,7 +359,7 @@ private fun DetailViewScreenContent(
                 onExpandedChange = { isDetailsSectionExpanded = it },
                 content = {
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(smallPadding),
+                        verticalArrangement = Arrangement.spacedBy(smallMediumPadding),
                         modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
                     ) {
 
@@ -365,31 +370,67 @@ private fun DetailViewScreenContent(
                                 fontSize = mediumFontSize,
                                 fontWeight = FontWeight.SemiBold,
                             )
+                            Spacer(Modifier.height(smallPadding))
                         }
 
                         Text(
-                            text = artPiece.medium.takeUnless { it.isNullOrBlank() } ?: "No Medium Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Medium: ")
+                                }
+                                append(
+                                    artPiece.medium.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = ("Department: ${artPiece.department.takeUnless { it.isNullOrBlank() } ?: "No Department Found"}"),
+                            buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Department: ")
+                                }
+                                append(
+                                    artPiece.department.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.constituentResponses?.firstOrNull()?.name ?: "No Constituent Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Constituent: ")
+                                }
+                                append(
+                                    artPiece.constituentResponses?.firstOrNull()?.name ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
 
                         Text(
-                            text = artPiece.classification.takeUnless { it.isNullOrBlank() } ?: "No Classification Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Classification: ")
+                                }
+                                append(
+                                    artPiece.classification.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.repository.takeUnless { it.isNullOrBlank() } ?: "No Repository Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Repository: ")
+                                }
+                                append(
+                                    artPiece.repository.takeUnless { it.isNullOrBlank() } ?: "Unknown"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
