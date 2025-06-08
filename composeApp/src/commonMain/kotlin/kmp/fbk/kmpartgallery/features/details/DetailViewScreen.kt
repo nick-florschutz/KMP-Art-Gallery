@@ -360,7 +360,9 @@ private fun DetailViewScreenContent(
                 content = {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(smallMediumPadding),
-                        modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
+                        modifier = Modifier
+                            .background(DividerDefaults.color.copy(alpha = 0.2f))
+                            .padding(horizontal = mediumPadding, vertical = smallPadding)
                     ) {
 
                         if (!artPiece.title.isNullOrBlank()) {
@@ -447,66 +449,150 @@ private fun DetailViewScreenContent(
                 content = {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(smallPadding),
-                        modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
+                        modifier = Modifier
+                            .background(DividerDefaults.color.copy(alpha = 0.2f))
+                            .padding(horizontal = mediumPadding, vertical = smallPadding)
                     ) {
                         Text(
-                            text = artPiece.period.takeUnless { it.isNullOrBlank() } ?: "No Period Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Period: ")
+                                }
+                                append(
+                                    artPiece.period.takeUnless { it.isNullOrBlank() } ?: "Unknown"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.reign.takeUnless { it.isNullOrBlank() } ?: "No Reign Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Reign: ")
+                                }
+                                append(
+                                    artPiece.reign.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.dynasty.takeUnless { it.isNullOrBlank() } ?: "No Dynasty Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Dynasty: ")
+                                }
+                                append(
+                                    artPiece.dynasty.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = "Begin Date: ${artPiece.objectBeginDate?.toString() ?: "No Begin Date Found"}",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Begin Date: ")
+                                }
+                                append(
+                                    artPiece.objectBeginDate?.toString() ?: "Unknown"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = "End Date: ${artPiece.objectEndDate?.toString() ?: "No End Date Found"}",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("End Date: ")
+                                }
+                                append(
+                                    artPiece.objectEndDate?.toString() ?: "Unknown"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         val locationDescription = "${artPiece.geographyType} ${artPiece.county} [${artPiece.city} ${artPiece.state}, ${artPiece.country}]"
                         Text(
-                            text = locationDescription,
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Location: ")
+                                }
+                                append(locationDescription)
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.region.takeUnless { it.isNullOrBlank() } ?: "No Region Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Region: ")
+                                }
+                                append(
+                                    artPiece.region.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.subregion.takeUnless { it.isNullOrBlank() } ?: "No SubRegion Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Subregion: ")
+                                }
+                                append(
+                                    artPiece.subregion.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.locale.takeUnless { it.isNullOrBlank() } ?: "No Locale Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Locale: ")
+                                }
+                                append(
+                                    artPiece.locale.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.locus.takeUnless { it.isNullOrBlank() } ?: "No Locus Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Locus: ")
+                                }
+                                append(
+                                    artPiece.locus.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.excavation.takeUnless { it.isNullOrBlank() } ?: "No Excavation Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Excavation: ")
+                                }
+                                append(
+                                    artPiece.excavation.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.river.takeUnless { it.isNullOrBlank() } ?: "No River Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("River: ")
+                                }
+                                append(
+                                    artPiece.river.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
@@ -521,45 +607,103 @@ private fun DetailViewScreenContent(
                 content = {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(smallPadding),
-                        modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
+                        modifier = Modifier
+                            .background(DividerDefaults.color.copy(alpha = 0.2f))
+                            .padding(horizontal = mediumPadding, vertical = smallPadding)
                     ) {
                         Text(
-                            text = artPiece.artistDisplayName.takeUnless { it.isNullOrBlank() } ?: "No Artist Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Artist: ")
+                                }
+                                append(
+                                    artPiece.artistDisplayName.takeUnless { it.isNullOrBlank() } ?: "Unknown"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.artistDisplayBio.takeUnless { it.isNullOrBlank() } ?: "No Artist Display bio Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Artist Display Bio: ")
+                                }
+                                append(
+                                    artPiece.artistDisplayBio.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.artistNationality.takeUnless { it.isNullOrBlank() } ?: "No Artist Nationality Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Artist Nationality: ")
+                                }
+                                append(
+                                    artPiece.artistNationality.takeUnless { it.isNullOrBlank() } ?: "Unknown"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.artistBeginDate.takeUnless { it.isNullOrBlank() } ?: "No Artist Begin Date Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Artist Begin Date: ")
+                                }
+                                append(
+                                    artPiece.artistBeginDate.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.artistEndDate.takeUnless { it.isNullOrBlank() } ?: "No Artist End Date Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Artist End Date: ")
+                                }
+                                append(
+                                    artPiece.artistEndDate.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.artistGender.takeUnless { it.isNullOrBlank() } ?: "No Artist Gender Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Artist Gender: ")
+                                }
+                                append(
+                                    artPiece.artistGender.takeUnless { it.isNullOrBlank() } ?: "Unknown"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.artistWikidataURL.takeUnless { it.isNullOrBlank() } ?: "No Artist Wikidata URL Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Artist Wikidata URL: ")
+                                }
+                                append(
+                                    artPiece.artistWikidataURL.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.artistULANURL.takeUnless { it.isNullOrBlank() } ?: "No Artist Wikidata URL Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Artist URL: ")
+                                }
+                                append(
+                                    artPiece.artistULANURL.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
@@ -574,22 +718,45 @@ private fun DetailViewScreenContent(
                 content = {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(smallPadding),
-                        modifier = Modifier.padding(horizontal = mediumPadding, vertical = smallPadding)
+                        modifier = Modifier
+                            .background(DividerDefaults.color.copy(alpha = 0.2f))
+                            .padding(horizontal = mediumPadding, vertical = smallPadding)
                     ) {
 
 
                         Text(
-                            text = artPiece.medium.takeUnless { it.isNullOrBlank() } ?: "No Medium Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Medium: ")
+                                }
+                                append(
+                                    artPiece.medium.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.dimensions.takeUnless { it.isNullOrBlank() } ?: "No Dimensions Found",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Dimensions: ")
+                                }
+                                append(
+                                    artPiece.dimensions.takeUnless { it.isNullOrBlank() } ?: "--"
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
                         Text(
-                            text = artPiece.measurements?.firstOrNull().toString(),
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                                    append("Measurements: ")
+                                }
+                                append(
+                                    artPiece.measurements?.firstOrNull().toString()
+                                )
+                            },
                             fontSize = mediumFontSize,
                         )
 
