@@ -61,7 +61,6 @@ class ListScreenViewModel(
     fun getArtPiecesByDepartment(department: String) {
         viewModelScope.launch {
             _selectedDepartment.emit(department)
-            _state.emit(ViewModelState.Loading)
             listScreenRepository.getAllArtPiecesByDepartmentFromDbFlow(department).collectLatest {
                 _artPieceResponseList.emit(it).also {
                     _state.emit(ViewModelState.Success(Unit))
