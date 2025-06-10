@@ -1,6 +1,7 @@
 package kmp.fbk.kmpartgallery.di
 
 import kmp.fbk.kmpartgallery.AppInitializer
+import kmp.fbk.kmpartgallery.features.artists.ArtistsScreenRepository
 import kmp.fbk.kmpartgallery.features.details.DetailViewScreenRepository
 import kmp.fbk.kmpartgallery.features.listscreen.ListScreenRepository
 import kmp.fbk.kmpartgallery.local_storage.database.ArtGalleryDatabase
@@ -33,9 +34,14 @@ val detailViewScreenModule = module {
     factory { DetailViewScreenRepository(artPieceDao = get()) }
 }
 
+val artistsScreenModule = module {
+    factory { ArtistsScreenRepository(artPieceDao = get()) }
+}
+
 fun appModules(): List<Module> = listOf(
     daoModule,
     appInitializerModule,
     listScreenModule,
     detailViewScreenModule,
+    artistsScreenModule,
 )

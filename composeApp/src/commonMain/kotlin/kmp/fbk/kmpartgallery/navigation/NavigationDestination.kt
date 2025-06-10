@@ -63,6 +63,10 @@ sealed class NavigationDestination {
     @Serializable
     data object Artists : NavigationDestination() {
         val navigationKey = this::class.simpleName
+
+        @Composable
+        override fun getTopBarContent() = Unit
+
         override val screenLabel: String
             get() = "Artists"
     }

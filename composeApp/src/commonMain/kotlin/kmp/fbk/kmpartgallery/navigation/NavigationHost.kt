@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import kmp.fbk.kmpartgallery.features.artists.ArtistsScreen
 import kmp.fbk.kmpartgallery.features.details.DetailViewScreen
 import kmp.fbk.kmpartgallery.features.listscreen.ListScreen
 
@@ -47,12 +48,7 @@ fun NavigationHost(navController: NavHostController, modifier: Modifier) {
 
         composable<NavigationDestination.Artists> {
             val args = it.toRoute<NavigationDestination.Artists>()
-            Box(Modifier.fillMaxSize()) {
-                Text(
-                    text = args.screenLabel,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+            ArtistsScreen(navController = navController)
         }
 
         composable<NavigationDestination.DetailView> {

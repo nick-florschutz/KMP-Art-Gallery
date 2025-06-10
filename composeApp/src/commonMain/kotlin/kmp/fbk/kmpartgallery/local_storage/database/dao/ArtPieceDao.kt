@@ -49,6 +49,11 @@ interface ArtPieceDao {
     suspend fun getFiveArtPiecePrimaryImages(): List<String>
 
     @Query("""
+        SELECT DISTINCT(${ArtPieceEntity.Companion.Column.ARTIST_DISPLAY_NAME}) FROM ${ArtPieceEntity.TABLE_NAME}
+    """)
+    suspend fun getAllArtists(): List<String>
+
+    @Query("""
         SELECT ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} FROM ${ArtPieceEntity.TABLE_NAME}
          WHERE ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} IS NOT NULL AND 
          ${ArtPieceEntity.Companion.Column.PRIMARY_IMAGE} != "" AND

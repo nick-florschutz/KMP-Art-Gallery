@@ -38,6 +38,6 @@
     <string name="technical_information">Technical Information</string>
     <string name="dimensions">Dimensions</string>
     <string name="measurements">Measurements</string>
-
+    <string name="error_loading_artists">Error Loading Artists</string>
 
 </resources>
