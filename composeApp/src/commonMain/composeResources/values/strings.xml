@@ -5,4 +5,39 @@
     <string name="dismiss">Dismiss</string>
     <string name="search">Search</string>
 
+    <string name="error_loading_art_piece">Error Loading Art Piece</string>
+    <string name="no_results_found">No Results Found</string>
+    <string name="unknown">Unknown</string>
+    <string name="description">Description</string>
+    <string name="medium">Medium</string>
+    <string name="department">Department</string>
+    <string name="constituent">Constituent</string>
+    <string name="classification">Classification</string>
+    <string name="repository">Repository</string>
+    <string name="historical_context">Historical Context</string>
+    <string name="period">Period</string>
+    <string name="reign">Reign</string>
+    <string name="dynasty">Dynasty</string>
+    <string name="begin_date">Begin Date</string>
+    <string name="end_date">End Date</string>
+    <string name="location">Location</string>
+    <string name="region">Region</string>
+    <string name="subregion">Subregion</string>
+    <string name="locale">Locale</string>
+    <string name="locus">Locus</string>
+    <string name="excavation">Excavation</string>
+    <string name="river">River</string>
+    <string name="artist">Artist</string>
+    <string name="artist_display_bio">Artist Display Bio</string>
+    <string name="artist_nationality">Artist Nationality</string>
+    <string name="artist_begin_date">Artist Begin Date</string>
+    <string name="artist_end_date">Artist End Date</string>
+    <string name="artist_gender">Artist Gender</string>
+    <string name="artist_wikidata_url">Artist Wikidata URL</string>
+    <string name="artist_url">Artist URL</string>
+    <string name="technical_information">Technical Information</string>
+    <string name="dimensions">Dimensions</string>
+    <string name="measurements">Measurements</string>
+
+
 </resources>

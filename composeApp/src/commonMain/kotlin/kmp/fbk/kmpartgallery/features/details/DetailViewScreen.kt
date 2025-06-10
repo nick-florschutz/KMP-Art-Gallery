@@ -75,7 +75,42 @@ import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.reusable_ui_compomenents.ImageViewer
 import kmp.fbk.kmpartgallery.smallMediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
+import kmpartgallery.composeapp.generated.resources.Res
+import kmpartgallery.composeapp.generated.resources.artist
+import kmpartgallery.composeapp.generated.resources.artist_begin_date
+import kmpartgallery.composeapp.generated.resources.artist_display_bio
+import kmpartgallery.composeapp.generated.resources.artist_end_date
+import kmpartgallery.composeapp.generated.resources.artist_gender
+import kmpartgallery.composeapp.generated.resources.artist_nationality
+import kmpartgallery.composeapp.generated.resources.artist_url
+import kmpartgallery.composeapp.generated.resources.artist_wikidata_url
+import kmpartgallery.composeapp.generated.resources.begin_date
+import kmpartgallery.composeapp.generated.resources.classification
+import kmpartgallery.composeapp.generated.resources.constituent
+import kmpartgallery.composeapp.generated.resources.department
+import kmpartgallery.composeapp.generated.resources.description
+import kmpartgallery.composeapp.generated.resources.dimensions
+import kmpartgallery.composeapp.generated.resources.dynasty
+import kmpartgallery.composeapp.generated.resources.end_date
+import kmpartgallery.composeapp.generated.resources.error_loading_art_piece
+import kmpartgallery.composeapp.generated.resources.excavation
+import kmpartgallery.composeapp.generated.resources.historical_context
+import kmpartgallery.composeapp.generated.resources.locale
+import kmpartgallery.composeapp.generated.resources.location
+import kmpartgallery.composeapp.generated.resources.locus
+import kmpartgallery.composeapp.generated.resources.measurements
+import kmpartgallery.composeapp.generated.resources.medium
+import kmpartgallery.composeapp.generated.resources.no_results_found
+import kmpartgallery.composeapp.generated.resources.period
+import kmpartgallery.composeapp.generated.resources.region
+import kmpartgallery.composeapp.generated.resources.reign
+import kmpartgallery.composeapp.generated.resources.repository
+import kmpartgallery.composeapp.generated.resources.river
+import kmpartgallery.composeapp.generated.resources.subregion
+import kmpartgallery.composeapp.generated.resources.technical_information
+import kmpartgallery.composeapp.generated.resources.unknown
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.mp.KoinPlatform
 
 private const val DETAIL_CHIP_CHAR_LIMIT = 50
@@ -120,8 +155,7 @@ fun DetailViewScreen(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = "Error Loading Art Piece")
-                // TODO: Handle Error
+                Text(text = stringResource(Res.string.error_loading_art_piece))
             }
         }
         ViewModelState.Loading -> {
@@ -275,7 +309,7 @@ private fun DetailViewScreenContent(
             verticalArrangement = Arrangement.spacedBy(smallPadding),
         ) {
             Text(
-                text = artPiece.title ?: "No Art Piece Found",
+                text = artPiece.title ?: stringResource(Res.string.no_results_found),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(start = mediumPadding, top = mediumPadding, end = mediumPadding)
@@ -287,7 +321,7 @@ private fun DetailViewScreenContent(
                modifier = Modifier.padding(start = mediumPadding, top = smallPadding)
            ) {
                Text(
-                   text = artPiece.artistDisplayName?.takeIf { it.isNotBlank() }  ?: "Unknown",
+                   text = artPiece.artistDisplayName?.takeIf { it.isNotBlank() }  ?: stringResource(Res.string.unknown),
                    fontSize = mediumFontSize,
                    color = if (artPiece.artistDisplayName.isNullOrBlank()) Color.Gray else Color.Blue,
                    modifier = Modifier.weight(weight = 0.4f, fill = false)
@@ -302,7 +336,7 @@ private fun DetailViewScreenContent(
                )
 
                Text(
-                   text = artPiece.objectDate?.takeIf { it.isNotBlank() } ?: "Unknown",
+                   text = artPiece.objectDate?.takeIf { it.isNotBlank() } ?: stringResource(Res.string.unknown),
                    fontSize = mediumFontSize,
                    modifier = Modifier.weight(0.4f)
                )
@@ -354,7 +388,7 @@ private fun DetailViewScreenContent(
             Spacer(Modifier.height(smallPadding))
 
             DetailViewCollapsibleInfoSection(
-                label = "Description",
+                label = stringResource(Res.string.description),
                 expanded = isDetailsSectionExpanded,
                 onExpandedChange = { isDetailsSectionExpanded = it },
                 content = {
@@ -375,36 +409,36 @@ private fun DetailViewScreenContent(
                         }
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Medium",
+                            labelText = stringResource(Res.string.medium),
                             valueText = artPiece.medium.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Department",
+                            labelText = stringResource(Res.string.department),
                             valueText = artPiece.department.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Constituent",
+                            labelText = stringResource(Res.string.constituent),
                             valueText = artPiece.constituentResponses?.firstOrNull()?.name.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Classification",
+                            labelText = stringResource(Res.string.classification),
                             valueText = artPiece.classification.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Repository",
+                            labelText = stringResource(Res.string.repository),
                             valueText = artPiece.repository.orEmpty(),
-                            defaultEmptyText = "Unknown",
+                            defaultEmptyText = stringResource(Res.string.unknown),
                         )
                     }
                 }
             )
 
             DetailViewCollapsibleInfoSection(
-                label = "Historical Context",
+                label = stringResource(Res.string.historical_context),
                 expanded = isHistoricalSectionExpanded,
                 onExpandedChange = { isHistoricalSectionExpanded = it },
                 content = {
@@ -415,66 +449,66 @@ private fun DetailViewScreenContent(
                             .padding(horizontal = mediumPadding, vertical = smallPadding)
                     ) {
                         DetailedSectionTextWithLabel(
-                            labelText = "Period",
+                            labelText = stringResource(Res.string.period),
                             valueText = artPiece.period.orEmpty(),
-                            defaultEmptyText = "Unknown",
+                            defaultEmptyText = stringResource(Res.string.unknown),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Reign",
+                            labelText = stringResource(Res.string.reign),
                             valueText = artPiece.reign.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Dynasty",
+                            labelText = stringResource(Res.string.dynasty),
                             valueText = artPiece.dynasty.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Begin Date",
+                            labelText = stringResource(Res.string.begin_date),
                             valueText = artPiece.objectBeginDate?.toString().orEmpty(),
-                            defaultEmptyText = "Unknown",
+                            defaultEmptyText = stringResource(Res.string.unknown),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "End Date",
+                            labelText = stringResource(Res.string.end_date),
                             valueText = artPiece.objectEndDate?.toString().orEmpty(),
-                            defaultEmptyText = "Unknown",
+                            defaultEmptyText = stringResource(Res.string.unknown),
                         )
 
                         val locationDescription = "${artPiece.geographyType} ${artPiece.county} [${artPiece.city} ${artPiece.state}, ${artPiece.country}]"
                         DetailedSectionTextWithLabel(
-                            labelText = "Location",
+                            labelText = stringResource(Res.string.location),
                             valueText = locationDescription,
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Region",
+                            labelText = stringResource(Res.string.region),
                             valueText = artPiece.region.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Subregion",
+                            labelText = stringResource(Res.string.subregion),
                             valueText = artPiece.subregion.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Locale",
+                            labelText = stringResource(Res.string.locale),
                             valueText = artPiece.locale.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Locus",
+                            labelText = stringResource(Res.string.locus),
                             valueText = artPiece.locus.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Excavation",
+                            labelText = stringResource(Res.string.excavation),
                             valueText = artPiece.excavation.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "River",
+                            labelText = stringResource(Res.string.river),
                             valueText = artPiece.river.orEmpty(),
                         )
                     }
@@ -482,7 +516,7 @@ private fun DetailViewScreenContent(
             )
 
             DetailViewCollapsibleInfoSection(
-                label = "Artist",
+                label = stringResource(Res.string.artist),
                 expanded = isArtistsSectionExpanded,
                 onExpandedChange = { isArtistsSectionExpanded = it },
                 content = {
@@ -493,44 +527,44 @@ private fun DetailViewScreenContent(
                             .padding(horizontal = mediumPadding, vertical = smallPadding)
                     ) {
                         DetailedSectionTextWithLabel(
-                            labelText = "Artist",
+                            labelText = stringResource(Res.string.artist),
                             valueText = artPiece.artistDisplayName.orEmpty(),
-                            defaultEmptyText = "Unknown"
+                            defaultEmptyText = stringResource(Res.string.unknown),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Artist Display Bio",
+                            labelText = stringResource(Res.string.artist_display_bio),
                             valueText = artPiece.artistDisplayBio.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Artist Nationality",
+                            labelText = stringResource(Res.string.artist_nationality),
                             valueText = artPiece.artistNationality.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Artist Begin Date",
+                            labelText = stringResource(Res.string.artist_begin_date),
                             valueText = artPiece.artistBeginDate.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Artist End Date",
+                            labelText = stringResource(Res.string.artist_end_date),
                             valueText = artPiece.artistEndDate.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Artist Gender",
+                            labelText = stringResource(Res.string.artist_gender),
                             valueText = artPiece.artistGender.orEmpty(),
-                            defaultEmptyText = "Unknown",
+                            defaultEmptyText = stringResource(Res.string.unknown),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Artist Wikidata URL",
+                            labelText = stringResource(Res.string.artist_wikidata_url),
                             valueText = artPiece.artistWikidataURL.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Artist URL",
+                            labelText = stringResource(Res.string.artist_url),
                             valueText = artPiece.artistULANURL.orEmpty(),
                         )
                     }
@@ -538,7 +572,7 @@ private fun DetailViewScreenContent(
             )
 
             DetailViewCollapsibleInfoSection(
-                label = "Technical Information",
+                label = stringResource(Res.string.technical_information),
                 expanded = isTechnicalInformationSectionExpanded,
                 onExpandedChange = { isTechnicalInformationSectionExpanded = it },
                 content = {
@@ -549,17 +583,17 @@ private fun DetailViewScreenContent(
                             .padding(horizontal = mediumPadding, vertical = smallPadding)
                     ) {
                         DetailedSectionTextWithLabel(
-                            labelText = "Medium",
+                            stringResource(Res.string.medium),
                             valueText = artPiece.medium.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Dimensions",
+                            labelText = stringResource(Res.string.dimensions),
                             valueText = artPiece.dimensions.orEmpty(),
                         )
 
                         DetailedSectionTextWithLabel(
-                            labelText = "Measurements",
+                            labelText = stringResource(Res.string.measurements),
                             valueText = artPiece.measurements?.firstOrNull()?.printMeasurements().orEmpty(),
                         )
                     }
