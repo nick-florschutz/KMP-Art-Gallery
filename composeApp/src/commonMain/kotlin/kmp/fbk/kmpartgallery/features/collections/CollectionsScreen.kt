@@ -96,14 +96,14 @@ private fun HorizontalArtPieceListWithHeader(
     navController: NavController,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = mediumPadding)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = mediumPadding),
         ) {
             Text(text = department, fontWeight = FontWeight.Medium)
 
