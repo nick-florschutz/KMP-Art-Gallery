@@ -39,5 +39,6 @@
     <string name="dimensions">Dimensions</string>
     <string name="measurements">Measurements</string>
     <string name="error_loading_artists">Error Loading Artists</string>
+    <string name="no_artists_found">No Artists Found</string>
 
 </resources>

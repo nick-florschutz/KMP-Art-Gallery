@@ -27,6 +27,7 @@ import kmp.fbk.kmpartgallery.domain_models.ArtPiece
 import kmp.fbk.kmpartgallery.smallPadding
 import kmpartgallery.composeapp.generated.resources.Res
 import kmpartgallery.composeapp.generated.resources.error_loading_artists
+import kmpartgallery.composeapp.generated.resources.no_artists_found
 import org.jetbrains.compose.resources.stringResource
 import org.koin.mp.KoinPlatform
 
@@ -70,19 +71,28 @@ fun ArtistsScreen(
 
 @Composable
 private fun ArtistsList(artists: List<String>) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(smallPadding),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = smallPadding)
-    ) {
-        items(artists) { artist ->
-            Text(text = artist)
+    if (artists.isEmpty()) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            Text(text = stringResource(Res.string.no_artists_found))
+        }
+    } else {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(smallPadding),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = smallPadding)
+        ) {
+            items(artists) { artist ->
+                Text(text = artist)
 
-            Spacer(modifier = Modifier.height(smallPadding))
+                Spacer(modifier = Modifier.height(smallPadding))
 
-            if (artist != artists.last()) {
-                HorizontalDivider(Modifier.fillMaxWidth())
+                if (artist != artists.last()) {
+                    HorizontalDivider(Modifier.fillMaxWidth())
+                }
             }
         }
     }
