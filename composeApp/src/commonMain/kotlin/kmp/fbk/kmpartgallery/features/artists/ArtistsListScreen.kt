@@ -1,5 +1,6 @@
 package kmp.fbk.kmpartgallery.features.artists
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +14,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -70,12 +75,15 @@ private fun ArtistsList(artists: List<String>) {
     } else {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(smallPadding),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = smallPadding)
+            modifier = Modifier.fillMaxSize()
         ) {
             items(artists) { artist ->
-                Text(text = artist)
+                Text(
+                    text = artist,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = smallPadding)
+                )
 
                 Spacer(modifier = Modifier.height(smallPadding))
 
