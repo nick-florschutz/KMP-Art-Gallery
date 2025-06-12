@@ -72,6 +72,8 @@ import kmp.fbk.kmpartgallery.getScreenHeight
 import kmp.fbk.kmpartgallery.largePadding
 import kmp.fbk.kmpartgallery.mediumFontSize
 import kmp.fbk.kmpartgallery.mediumPadding
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.BasicErrorView
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.BasicLoadingView
 import kmp.fbk.kmpartgallery.reusable_ui_compomenents.ImageViewer
 import kmp.fbk.kmpartgallery.smallMediumPadding
 import kmp.fbk.kmpartgallery.smallPadding
@@ -151,20 +153,13 @@ fun DetailViewScreen(
 
     when (uiState) {
         is ViewModelState.Error -> {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Text(text = stringResource(Res.string.error_loading_art_piece))
-            }
+            BasicErrorView(
+                message = stringResource(Res.string.error_loading_art_piece),
+                onRetry = { /* TODO */ }
+            )
         }
         ViewModelState.Loading -> {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                CircularProgressIndicator()
-            }
+            BasicLoadingView()
         }
         is ViewModelState.Success -> {
             val artPieceValue = artPiece ?: return

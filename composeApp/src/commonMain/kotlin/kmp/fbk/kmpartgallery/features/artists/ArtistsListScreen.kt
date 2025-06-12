@@ -3,13 +3,10 @@ package kmp.fbk.kmpartgallery.features.artists
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,7 +20,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kmp.fbk.kmpartgallery.ViewModelState
-import kmp.fbk.kmpartgallery.domain_models.ArtPiece
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.BasicErrorView
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.BasicLoadingView
 import kmp.fbk.kmpartgallery.smallPadding
 import kmpartgallery.composeapp.generated.resources.Res
 import kmpartgallery.composeapp.generated.resources.error_loading_artists
@@ -45,22 +43,13 @@ fun ArtistsScreen(
     val viewModelState by viewModel.state.collectAsStateWithLifecycle()
 
     when (viewModelState) {
-        is ViewModelState.Loading -> {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                CircularProgressIndicator()
-            }
-        }
+        is ViewModelState.Loading -> BasicLoadingView()
 
         is ViewModelState.Error -> {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                Text(text = stringResource(Res.string.error_loading_artists))
-            }
+            BasicErrorView(
+                message = stringResource(Res.string.error_loading_artists),
+                onRetry = { /* TODO */ }
+            )
         }
 
         is ViewModelState.Success -> {

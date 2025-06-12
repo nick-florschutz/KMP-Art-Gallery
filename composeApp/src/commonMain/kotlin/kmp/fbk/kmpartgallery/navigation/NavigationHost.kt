@@ -11,6 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kmp.fbk.kmpartgallery.features.artists.ArtistsScreen
+import kmp.fbk.kmpartgallery.features.collections.CollectionsByDepartmentScreen
+import kmp.fbk.kmpartgallery.features.collections.CollectionsScreen
 import kmp.fbk.kmpartgallery.features.details.DetailViewScreen
 import kmp.fbk.kmpartgallery.features.listscreen.ListScreen
 
@@ -38,12 +40,18 @@ fun NavigationHost(navController: NavHostController, modifier: Modifier) {
 
         composable<NavigationDestination.Collections> {
             val args = it.toRoute<NavigationDestination.Collections>()
-            Box(Modifier.fillMaxSize()) {
-                Text(
-                    text = args.screenLabel,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+            CollectionsScreen(navController = navController)
+        }
+
+        composable<NavigationDestination.CollectionByDepartment> {
+            val args = it.toRoute<NavigationDestination.CollectionByDepartment>()
+            val department = args.department ?: throw IllegalStateException(
+                "department is required. department: ${args.department}"
+            )
+            CollectionsByDepartmentScreen(
+                department = department,
+                navController = navController,
+            )
         }
 
         composable<NavigationDestination.Artists> {

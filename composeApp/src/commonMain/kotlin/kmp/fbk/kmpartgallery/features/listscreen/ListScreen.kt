@@ -31,7 +31,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Circle
@@ -39,7 +38,6 @@ import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DismissibleNavigationDrawer
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -359,9 +357,8 @@ fun ListScreen(navController: NavController) {
                             ArtPieceStaggeredGrid(
                                 artPieces = artPieces,
                                 lazyStaggeredGridState = lazyStaggeredGridState,
-                                mainScreenScrollState = scrollState,
-                                navController = navController,
                                 mainListState = mainListState,
+                                navController = navController,
                             )
                         }
                     }

@@ -1,5 +1,8 @@
 package kmp.fbk.kmpartgallery.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowLeft
+import androidx.compose.material.icons.filled.ArrowLeft
 import androidx.compose.runtime.Composable
 import kmp.fbk.kmpartgallery.reusable_ui_compomenents.SimpleTopAppBar
 import kotlinx.serialization.Serializable
@@ -13,6 +16,7 @@ sealed class NavigationDestination {
                  Home.navigationKey -> Home
                  Explore.navigationKey -> Explore
                  Collections.navigationKey -> Collections
+                 CollectionByDepartment.navigationKey -> CollectionByDepartment(null)
                  Artists.navigationKey -> Artists
                  DetailView.navigationKey -> DetailView(null)
                  else -> null
@@ -56,8 +60,29 @@ sealed class NavigationDestination {
     @Serializable
     data object Collections : NavigationDestination() {
         val navigationKey = this::class.simpleName
+
+        @Composable
+        override fun getTopBarContent() = Unit
+
         override val screenLabel: String
             get() = "Collections"
+    }
+
+    @Serializable
+    data class CollectionByDepartment(
+        val department: String?,
+    ): NavigationDestination() {
+        companion object {
+            val navigationKey = this::class.simpleName
+        }
+
+        @Composable
+        override fun getTopBarContent() = Unit
+
+        override val showBottomNavigator: Boolean = false
+
+        override val screenLabel: String
+            get() = "Collections By Department"
     }
 
     @Serializable
