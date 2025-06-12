@@ -38,6 +38,11 @@ class ListScreenViewModel(
     private val _selectedDepartment = MutableStateFlow<String?>(null)
     val selectedDepartment = _selectedDepartment.asStateFlow()
 
+    /**
+     * I use the [_artPieceResponseList] for all art pieces and when we do a quick sort by department
+     * using the sticky header in the entries list. Cancelling the jobs prevents flickering in the
+     * entry list when we switch departments and download new art pieces.
+     */
     private var collectOnAllEntriesJob: Job? = null
     private var collectOnEntriesByDepartmentJob: Job? = null
 

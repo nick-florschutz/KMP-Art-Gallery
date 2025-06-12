@@ -97,7 +97,6 @@ fun ListScreen(navController: NavController) {
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val featuredImagesListState by viewModel.featuredImagesListState.collectAsStateWithLifecycle()
-//    val featuredImages by viewModel.featuredImagesList.collectAsStateWithLifecycle()
     val departments by viewModel.departmentsList.collectAsStateWithLifecycle()
     val artPieces by viewModel.artPieceResponseList.collectAsStateWithLifecycle()
 
@@ -379,7 +378,6 @@ fun ListScreen(navController: NavController) {
                         onClick = {
                             coroutineScope.launch {
                                 lazyStaggeredGridState.animateScrollToItem(0)
-//                         scrollState.animateScrollTo(0)
                                 mainListState.animateScrollToItem(0)
                             }
                         },
