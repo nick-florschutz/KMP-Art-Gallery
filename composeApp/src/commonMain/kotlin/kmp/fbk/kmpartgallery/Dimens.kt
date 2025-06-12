@@ -17,3 +17,13 @@ val smallMediumFontSize = 14.sp
 val mediumFontSize = 16.sp
 val mediumLargeFontSize = 20.sp
 val largeFontSize = 24.sp
+
+/* General Size Values */
+val size_1dp = 1.dp
+val size_2dp = 2.dp
+val size_4dp = 4.dp
+val size_8dp = 8.dp
+val size_12dp = 12.dp
+val size_16dp = 16.dp
+val size_24dp = 24.dp
+val size_32dp = 32.dp

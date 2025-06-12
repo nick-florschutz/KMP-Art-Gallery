@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -77,13 +76,24 @@ import kmp.fbk.kmpartgallery.mediumLargePadding
 import kmp.fbk.kmpartgallery.mediumPadding
 import kmp.fbk.kmpartgallery.navigation.NavigationDestination
 import kmp.fbk.kmpartgallery.reusable_ui_compomenents.search.CustomSearchView
+import kmp.fbk.kmpartgallery.size_12dp
+import kmp.fbk.kmpartgallery.size_24dp
+import kmp.fbk.kmpartgallery.size_4dp
 import kmp.fbk.kmpartgallery.smallPadding
 import kmpartgallery.composeapp.generated.resources.Res
+import kmpartgallery.composeapp.generated.resources.all
+import kmpartgallery.composeapp.generated.resources.error_loading_art_piece
+import kmpartgallery.composeapp.generated.resources.no_featured_images_available
 import kmpartgallery.composeapp.generated.resources.sort_down
 import kmpartgallery.composeapp.generated.resources.the_metropolitan_museum_of_art_logo
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.mp.KoinPlatform
+
+private val EMPTY_ART_PIECE_LIST_HEIGHT = 200.dp
+private val FEATURED_IMAGES_HEADER_PLACEHOLDER_HEIGHT = 250.dp
+private val FEATURED_IMAGES_HEADER_HEIGHT = 300.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -152,7 +162,7 @@ fun ListScreen(navController: NavController) {
             },
             bottomBar = {},
             floatingActionButton = {
-
+                // TODO: This feels pretty hacky and should be thought about more!!
                 Column(
                     verticalArrangement = Arrangement.spacedBy(smallPadding),
                 ) {
@@ -187,7 +197,7 @@ fun ListScreen(navController: NavController) {
                             Icon(
                                 painter = painterResource(Res.drawable.sort_down),
                                 contentDescription = null,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(size_24dp)
                             )
                         },
                         modifier = Modifier.align(Alignment.End)
@@ -217,7 +227,7 @@ fun ListScreen(navController: NavController) {
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(250.dp)
+                                        .height(FEATURED_IMAGES_HEADER_PLACEHOLDER_HEIGHT)
                                 ) {
                                     CircularProgressIndicator()
                                 }
@@ -228,9 +238,9 @@ fun ListScreen(navController: NavController) {
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(250.dp)
+                                        .height(FEATURED_IMAGES_HEADER_PLACEHOLDER_HEIGHT)
                                 ) {
-                                    Text(text = "No Featured Images Available.")
+                                    Text(text = stringResource(Res.string.no_featured_images_available))
                                 }
                             }
 
@@ -238,7 +248,7 @@ fun ListScreen(navController: NavController) {
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(300.dp)
+                                        .height(FEATURED_IMAGES_HEADER_HEIGHT)
                                 ) {
                                     HorizontalPager(
                                         state = pagerState,
@@ -281,7 +291,7 @@ fun ListScreen(navController: NavController) {
                                                 imageVector = Icons.Default.Circle,
                                                 tint = if (pagerState.currentPage == it) Color.White else Color.LightGray,
                                                 contentDescription = null,
-                                                modifier = Modifier.size(12.dp)
+                                                modifier = Modifier.size(size_12dp)
                                             )
                                         }
                                     }
@@ -313,8 +323,8 @@ fun ListScreen(navController: NavController) {
                                         selectedContainerColor = MaterialTheme.colorScheme.onSurface,
                                         selectedLabelColor = MaterialTheme.colorScheme.surface,
                                     ),
-                                    shape = RoundedCornerShape(4.dp),
-                                    label = { Text(text = "All") },
+                                    shape = RoundedCornerShape(size_4dp),
+                                    label = { Text(text = stringResource(Res.string.all)) },
                                 )
                             }
 
@@ -332,7 +342,7 @@ fun ListScreen(navController: NavController) {
                                             selectedContainerColor = MaterialTheme.colorScheme.onSurface,
                                             selectedLabelColor = MaterialTheme.colorScheme.surface,
                                         ),
-                                        shape = RoundedCornerShape(4.dp),
+                                        shape = RoundedCornerShape(size_4dp),
                                         label = { Text(text = departmentName) },
                                     )
                                 }
@@ -347,7 +357,7 @@ fun ListScreen(navController: NavController) {
                                 contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(200.dp)
+                                    .height(EMPTY_ART_PIECE_LIST_HEIGHT)
                             ) {
                                 Text("No Art Pieces Available")
                             }
@@ -418,6 +428,9 @@ fun ListScreen(navController: NavController) {
     } /* End of ModalNavigationDrawer */
 }
 
+private val TOP_LOGO_ICON_SIZE = 26.dp
+private val TOP_MENU_ICON_SIZE = 30.dp
+
 @Composable
 fun ListScreenTopBar(
     searchQuery: String,
@@ -442,7 +455,8 @@ fun ListScreenTopBar(
             Icon(
                 painter = painterResource(Res.drawable.the_metropolitan_museum_of_art_logo),
                 contentDescription = null,
-                modifier = Modifier.size(26.dp)
+                modifier = Modifier
+                    .size(TOP_LOGO_ICON_SIZE)
                     .clickable { onStartIconClick() }
             )
 
@@ -462,7 +476,8 @@ fun ListScreenTopBar(
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = null,
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier
+                        .size(TOP_MENU_ICON_SIZE)
                         .clickable { onMenuButtonClick() }
                 )
             }

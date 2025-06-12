@@ -10,14 +10,9 @@ import kotlinx.coroutines.flow.map
 class DetailViewScreenRepository(
     private val artPieceDao: ArtPieceDao
 ) {
-    suspend fun getArtPieceById(artPieceLocalId: Long): ArtPiece? {
-        return artPieceDao.getArtPieceByIdFlow(artPieceLocalId).first()?.toArtPiece()
-    }
-
     fun getArtPieceByIdFlow(artPieceLocalId: Long): Flow<ArtPiece?> {
         return artPieceDao.getArtPieceByIdFlow(artPieceLocalId).map {
             it?.toArtPiece()
         }
     }
-
 }

@@ -41,7 +41,9 @@
     <string name="error_loading_artists">Error Loading Artists</string>
     <string name="no_artists_found">No Artists Found</string>
     <string name="no_image_available">No Image Available</string>
+    <string name="no_featured_images_available">No Featured Images Available.</string>
     <string name="retry">Retry</string>
     <string name="see_all">See All</string>
+    <string name="all">All</string>
 
 </resources>
