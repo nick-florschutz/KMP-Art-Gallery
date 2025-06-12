@@ -97,7 +97,6 @@ fun App() {
          }
       )
    )
-
 }
 
 fun getAsyncImageLoader(context: PlatformContext) =
