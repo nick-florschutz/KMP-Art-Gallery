@@ -8,6 +8,7 @@ import kmp.fbk.kmpartgallery.domain_models.Department
 import kmp.fbk.kmpartgallery.local_storage.database.mappers.toArtPieceList
 import kmp.fbk.kmpartgallery.reusable_ui_compomenents.search.ISearchViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,6 +38,9 @@ class ListScreenViewModel(
     private val _selectedDepartment = MutableStateFlow<String?>(null)
     val selectedDepartment = _selectedDepartment.asStateFlow()
 
+    private var collectOnAllEntriesJob: Job? = null
+    private var collectOnEntriesByDepartmentJob: Job? = null
+
     init {
         collectOnArtPieces()
         getFeaturedImages()
@@ -59,18 +63,22 @@ class ListScreenViewModel(
     }
 
     fun getArtPiecesByDepartment(department: String) {
-        viewModelScope.launch {
+        // Cancel the previous job to avoid flickering in the entry list
+        collectOnAllEntriesJob?.cancel()
+        collectOnEntriesByDepartmentJob?.cancel()
+        collectOnEntriesByDepartmentJob = viewModelScope.launch {
             _selectedDepartment.emit(department)
             listScreenRepository.getAllArtPiecesByDepartmentFromDbFlow(department).collectLatest {
-                _artPieceResponseList.emit(it).also {
-                    _state.emit(ViewModelState.Success(Unit))
-                }
+                _artPieceResponseList.emit(it)
             }
         }
     }
 
     private fun collectOnArtPieces() {
-        viewModelScope.launch {
+        // Cancel the previous job to avoid flickering in the entry list
+        collectOnEntriesByDepartmentJob?.cancel()
+        collectOnAllEntriesJob?.cancel()
+        collectOnAllEntriesJob = viewModelScope.launch {
             listScreenRepository.getAllArtPiecesFromDbFlow().collectLatest {
                 _artPieceResponseList.emit(it)
             }
@@ -82,6 +90,7 @@ class ListScreenViewModel(
             artPieceResponseList.collectLatest {
                 if (it.isNotEmpty()) {
                     _state.emit(ViewModelState.Success(Unit))
+                    return@collectLatest
                 }
             }
         }
@@ -89,24 +98,6 @@ class ListScreenViewModel(
 
     private fun getFeaturedImages() {
         viewModelScope.launch(Dispatchers.Default) {
-//            listScreenRepository.getFiveArtPiecePrimaryImagesFlow().collectLatest { featuredImages ->
-//                if (featuredImages.isNotEmpty()) {
-//                    _featuredImagesListState.emit(FeaturedImagesListState.Success(featuredImages))
-//                } else {
-//                    delay(3500)
-//                    _featuredImagesListState.emit(FeaturedImagesListState.Error)
-//                }
-//            }
-
-//            val featuredImages = listScreenRepository.getFiveArtPiecePrimaryImagesFlow().first().map { IdsAndImagesFlow ->
-//                IdsAndImagesFlow.entries.map { mapOfIdAndImage ->
-//                    ArtPieceLocalIdAndImage(
-//                        localId = mapOfIdAndImage.key,
-//                        image = mapOfIdAndImage.value,
-//                    )
-//                }
-//            }
-
             val featuredImages = listScreenRepository.getFiveArtPiecesFlow().first().map {
                 // The DAO query specifies that these two values will NOT be null
                 ArtPieceLocalIdAndImage(
@@ -120,7 +111,6 @@ class ListScreenViewModel(
             } else {
                 _featuredImagesListState.emit(FeaturedImagesListState.Error)
             }
-
         }
     }
 

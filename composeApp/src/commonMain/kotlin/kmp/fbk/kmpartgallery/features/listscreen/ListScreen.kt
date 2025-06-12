@@ -109,7 +109,6 @@ fun ListScreen(navController: NavController) {
         ((featuredImagesListState as? FeaturedImagesListState.Success)?.featuredImages?.size ?: 0)
     }
 
-    val scrollState = rememberScrollState()
     val mainListState = rememberLazyListState()
     val lazyStaggeredGridState = rememberLazyStaggeredGridState()
     val showScrollToTopButton by remember { derivedStateOf { mainListState.firstVisibleItemIndex > 0 } }
