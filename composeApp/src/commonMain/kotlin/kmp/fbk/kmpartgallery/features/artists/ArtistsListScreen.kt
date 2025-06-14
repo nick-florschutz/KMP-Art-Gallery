@@ -100,7 +100,7 @@ private fun ArtistsList(
                     .fillMaxHeight()
                     .weight(1f)
             ) {
-                artists.keys.forEach { sectionHeader ->
+                artists.forEach { (sectionHeader, artists) ->
                     stickyHeader {
                         Row(
                             modifier = Modifier
@@ -113,18 +113,45 @@ private fun ArtistsList(
                         }
                     }
                     items(
-                        items = artists[sectionHeader].orEmpty(),
+                        items = artists,
                         key = { it },
                     ) { artist ->
                         ArtistListItem(
                             artist = artist,
-                            lastArtist = artists[sectionHeader]!!.last() == artist,
+                            lastArtist = artists.last() == artist,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .animateItem()
                         )
                     }
                 }
+
+
+//                artists.keys.forEach { sectionHeader ->
+//                    stickyHeader {
+//                        Row(
+//                            modifier = Modifier
+//                                .background(MaterialTheme.colorScheme.surfaceVariant)
+//                                .fillMaxWidth()
+//                                .wrapContentHeight()
+//                                .padding(smallPadding)
+//                        ) {
+//                            Text(text = sectionHeader)
+//                        }
+//                    }
+//                    items(
+//                        items = artists[sectionHeader].orEmpty(),
+//                        key = { it },
+//                    ) { artist ->
+//                        ArtistListItem(
+//                            artist = artist,
+//                            lastArtist = artists[sectionHeader]!!.last() == artist,
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .animateItem()
+//                        )
+//                    }
+//                }
             }
 
             Column(
@@ -145,7 +172,8 @@ private fun ArtistsList(
                                     // Calculate number of items before tapped section
                                     artists.keys.forEach {
                                         if (artists.keys.indexOf(it) < indicesBeforeTappedSection) {
-                                            count += artists[it]!!.size
+                                            // Size & +1 to account for header
+                                            count += (artists[it]?.size?.plus(1) ?: 0)
                                         } else {
                                             return@forEach
                                         }
