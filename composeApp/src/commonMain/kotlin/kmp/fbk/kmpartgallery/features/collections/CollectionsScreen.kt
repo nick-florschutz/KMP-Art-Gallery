@@ -139,6 +139,7 @@ private fun HorizontalArtPieceListWithHeader(
                     artPiece = artPiece,
                     navController = navController,
                     itemHeight = 250.dp,
+                    modifier = Modifier.animateItem(),
                 )
             }
         }

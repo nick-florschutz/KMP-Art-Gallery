@@ -58,6 +58,8 @@ fun ArtPieceStaggeredGrid(
                     navController = navController,
                     coroutineScope = coroutineScope,
                     platformContext = platformContext,
+                    modifier = Modifier
+                        .animateItem()
                 )
             }
         },

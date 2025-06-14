@@ -15,13 +15,13 @@ class ArtistsScreenViewModel(
     val state = _state.asStateFlow()
 
     init {
-        loadArtistsList()
+        loadArtistsAndLetterMap()
     }
 
-    private fun loadArtistsList() {
+    private fun loadArtistsAndLetterMap() {
         viewModelScope.launch {
             _state.value = ViewModelState.Loading
-            val artistsList = repository.getAllArtists()
+            val artistsList = repository.getArtistsAndTheFirstLetterHeader()
             _state.value = ViewModelState.Success(artistsList)
         }
     }

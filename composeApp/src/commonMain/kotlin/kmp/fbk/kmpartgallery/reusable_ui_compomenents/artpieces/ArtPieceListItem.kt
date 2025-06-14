@@ -60,10 +60,11 @@ fun ArtPieceListItem(
         mutableStateOf(
             if ((artPiece.objectID ?: 0) % 2 == 0) { 250.dp } else { 300.dp }
         )
-    }.value
+    }.value,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .height(itemHeight)
             .width(150.dp)
             .clip(

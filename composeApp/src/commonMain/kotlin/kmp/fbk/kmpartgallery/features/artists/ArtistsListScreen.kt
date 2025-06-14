@@ -1,24 +1,25 @@
 package kmp.fbk.kmpartgallery.features.artists
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,7 +39,6 @@ import org.koin.mp.KoinPlatform
 fun ArtistsScreen(
     navController: NavController,
 ) {
-
     val viewModel = viewModel {
         val artistsScreenRepository = KoinPlatform.getKoin().get<ArtistsScreenRepository>()
         ArtistsScreenViewModel(
@@ -58,13 +58,17 @@ fun ArtistsScreen(
         }
 
         is ViewModelState.Success -> {
-            ArtistsList((viewModelState as ViewModelState.Success).data as List<String>)
+            ArtistsList((viewModelState as ViewModelState.Success).data as Map<String, List<String>>)
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ArtistsList(artists: List<String>) {
+private fun ArtistsList(
+    artists: Map<String, List<String>>,
+    lazyListState: LazyListState = rememberLazyListState(),
+) {
     if (artists.isEmpty()) {
         Box(
             contentAlignment = Alignment.Center,
@@ -73,24 +77,63 @@ private fun ArtistsList(artists: List<String>) {
             Text(text = stringResource(Res.string.no_artists_found))
         }
     } else {
+
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(smallPadding),
+            state = lazyListState,
             modifier = Modifier.fillMaxSize()
         ) {
-            items(artists) { artist ->
-                Text(
-                    text = artist,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = smallPadding)
-                )
-
-                Spacer(modifier = Modifier.height(smallPadding))
-
-                if (artist != artists.last()) {
-                    HorizontalDivider(Modifier.fillMaxWidth())
+            artists.keys.forEach { sectionHeader ->
+                stickyHeader {
+                    Row(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(smallPadding)
+                    ) {
+                        Text(text = sectionHeader)
+                    }
+                }
+                items(
+                    items = artists[sectionHeader].orEmpty(),
+                    key = { it },
+                ) { artist ->
+                    ArtistListItem(
+                        artist = artist,
+                        lastArtist = artists[sectionHeader]!!.last() == artist,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem()
+                    )
                 }
             }
+        }
+
+
+
+    }
+}
+
+@Composable
+fun ArtistListItem(
+    artist: String,
+    lastArtist: Boolean,
+    modifier: Modifier,
+) {
+    Column(
+        modifier = modifier
+    ) {
+        Spacer(modifier = Modifier.height(smallPadding))
+
+        Text(
+            text = artist,
+            modifier = Modifier.padding(horizontal = smallPadding)
+        )
+
+        Spacer(modifier = Modifier.height(smallPadding))
+
+        if (!lastArtist) {
+            HorizontalDivider(Modifier.fillMaxWidth())
         }
     }
 }

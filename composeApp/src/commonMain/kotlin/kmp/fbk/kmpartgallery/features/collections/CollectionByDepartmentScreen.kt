@@ -108,6 +108,7 @@ fun CollectionsByDepartmentScreen(
                             ArtPieceListItem(
                                 artPiece = artPiece,
                                 navController = navController,
+                                modifier = Modifier.animateItem(),
                             )
                         }
                     },
