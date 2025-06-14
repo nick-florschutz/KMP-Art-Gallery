@@ -151,10 +151,7 @@ private fun ArtistsList(
                                         }
                                     }
 
-                                    lazyListState.scrollToItem(
-                                        index = count,
-                                        scrollOffset = 0,
-                                    )
+                                    lazyListState.scrollToItem(index = count)
                                 }
                             }
                             .padding(extraSmallPadding)
