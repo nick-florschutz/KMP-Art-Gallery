@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -136,7 +137,7 @@ private fun ArtistsList(
                 modifier = Modifier
                     .fillMaxHeight()
                     .wrapContentWidth()
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                    .background(Color.Cyan)
                     .padding(horizontal = smallPadding)
                     .verticalScroll(rememberScrollState())
             ) {
