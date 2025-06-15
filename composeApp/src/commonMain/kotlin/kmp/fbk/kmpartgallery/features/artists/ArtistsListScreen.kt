@@ -104,12 +104,17 @@ private fun ArtistsList(
                     stickyHeader {
                         Row(
                             modifier = Modifier
-                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                                .background(MaterialTheme.colorScheme.surface)
                                 .fillMaxWidth()
                                 .wrapContentHeight()
-                                .padding(smallPadding)
                         ) {
-                            Text(text = sectionHeader)
+                            Text(
+                                text = sectionHeader,
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                                    .fillMaxWidth()
+                                    .padding(smallPadding)
+                            )
                         }
                     }
                     items(
@@ -125,39 +130,13 @@ private fun ArtistsList(
                         )
                     }
                 }
-
-
-//                artists.keys.forEach { sectionHeader ->
-//                    stickyHeader {
-//                        Row(
-//                            modifier = Modifier
-//                                .background(MaterialTheme.colorScheme.surfaceVariant)
-//                                .fillMaxWidth()
-//                                .wrapContentHeight()
-//                                .padding(smallPadding)
-//                        ) {
-//                            Text(text = sectionHeader)
-//                        }
-//                    }
-//                    items(
-//                        items = artists[sectionHeader].orEmpty(),
-//                        key = { it },
-//                    ) { artist ->
-//                        ArtistListItem(
-//                            artist = artist,
-//                            lastArtist = artists[sectionHeader]!!.last() == artist,
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .animateItem()
-//                        )
-//                    }
-//                }
             }
 
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
                     .wrapContentWidth()
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                     .padding(horizontal = smallPadding)
                     .verticalScroll(rememberScrollState())
             ) {
