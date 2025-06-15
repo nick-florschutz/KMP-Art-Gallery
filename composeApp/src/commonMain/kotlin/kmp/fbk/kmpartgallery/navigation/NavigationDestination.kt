@@ -102,6 +102,9 @@ sealed class NavigationDestination {
             val navigationKey = this::class.simpleName
         }
 
+        @Composable
+        override fun getTopBarContent() = Unit
+
         override val showBottomNavigator = false
 
         override val screenLabel: String
