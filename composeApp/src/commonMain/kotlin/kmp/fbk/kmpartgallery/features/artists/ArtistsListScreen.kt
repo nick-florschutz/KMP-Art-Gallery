@@ -137,7 +137,7 @@ private fun ArtistsList(
                 modifier = Modifier
                     .fillMaxHeight()
                     .wrapContentWidth()
-                    .background(Color.Cyan)
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                     .padding(horizontal = smallPadding)
                     .verticalScroll(rememberScrollState())
             ) {
