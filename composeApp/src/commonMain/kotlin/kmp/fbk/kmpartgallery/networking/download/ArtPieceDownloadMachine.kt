@@ -85,12 +85,19 @@ class ArtPieceDownloadMachine(
             objectIds.chunked(50).forEach { chunk ->
                 chunk.forEach { objectId ->
                     if (objectId != null) {
-                        val artPiece = metArtApi.getArtPieceById(objectId)
-                            .toArtPiece()
-                        // Prevent inserting bad data into the database
-                        if (artPiece.objectID != null && !storedArtPieceObjectIds.contains(artPiece.objectID)) {
-                            artPieceDao.insert(artPiece.toArtPieceEntity())
-                        }
+                       try {
+                           val artPiece = metArtApi.getArtPieceById(objectId)
+                               .toArtPiece()
+                           // Prevent inserting bad data into the database
+                           if (artPiece.objectID != null && !storedArtPieceObjectIds.contains(artPiece.objectID)) {
+                               artPieceDao.insert(artPiece.toArtPieceEntity())
+                           }
+                       } catch (e: Exception) {
+                           e.printStackTrace()
+                           Napier.e(tag = this@ArtPieceDownloadMachine::class.simpleName, throwable = e) {
+                               "Error Downloading Art Piece: $objectId"
+                           }
+                       }
                     }
                 }
                 Napier.i(tag = this@ArtPieceDownloadMachine::class.simpleName) {
