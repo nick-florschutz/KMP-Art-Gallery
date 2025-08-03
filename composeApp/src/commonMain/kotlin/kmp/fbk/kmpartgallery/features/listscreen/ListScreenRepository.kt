@@ -6,6 +6,7 @@ import io.ktor.client.statement.HttpResponse
 import kmp.fbk.kmpartgallery.local_storage.database.dao.ArtPieceDao
 import kmp.fbk.kmpartgallery.local_storage.database.dao.DepartmentDao
 import kmp.fbk.kmpartgallery.domain_models.Department
+import kmp.fbk.kmpartgallery.local_storage.database.mappers.toArtPieceList
 import kmp.fbk.kmpartgallery.local_storage.database.mappers.toDepartmentEntity
 import kmp.fbk.kmpartgallery.local_storage.database.mappers.toDepartmentsList
 import kmp.fbk.kmpartgallery.networking.MetArtApi
@@ -39,10 +40,16 @@ class ListScreenRepository(
     suspend fun getAllArtPiecesFromDb() = artPieceDao.getAllArtPieces()
 
     fun getAllArtPiecesFromDbFlow() = artPieceDao.getAllArtPiecesFlow()
+        .map { it.toArtPieceList() }
+
+    fun getAllArtPiecesByDepartmentFromDbFlow(department: String) = artPieceDao.getAllArtPiecesByDepartmentFlow(department)
+        .map { it.toArtPieceList() }
 
     suspend fun getFiveArtPiecePrimaryImages() = artPieceDao.getFiveArtPiecePrimaryImages()
 
     fun getFiveArtPiecePrimaryImagesFlow() = artPieceDao.getFiveArtPiecePrimaryImagesFlow()
+
+    fun getFiveArtPiecesFlow() = artPieceDao.getFiveArtPiecesFlow()
 
     suspend fun fetchAllObjectIdsCall() {
         metArtApi.getAllArtPiecesIdsCall().onExecute(

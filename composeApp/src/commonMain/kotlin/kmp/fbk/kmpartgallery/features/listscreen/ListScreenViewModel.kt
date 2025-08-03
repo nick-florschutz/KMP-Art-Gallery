@@ -2,35 +2,29 @@ package kmp.fbk.kmpartgallery.features.listscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.aakira.napier.Napier
+import kmp.fbk.kmpartgallery.ViewModelState
 import kmp.fbk.kmpartgallery.domain_models.ArtPiece
 import kmp.fbk.kmpartgallery.domain_models.Department
 import kmp.fbk.kmpartgallery.local_storage.database.mappers.toArtPieceList
-import kmp.fbk.kmpartgallery.networking.download.ArtPieceDownloadMachine
-import kmp.fbk.kmpartgallery.networking.download.DepartmentsDownloadMachine
-import kmp.fbk.kmpartgallery.networking.response_data_models.ArtPieceResponse
-import kmp.fbk.kmpartgallery.networking.response_data_models.DepartmentResponse
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.search.ISearchViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class ListScreenViewModel(
     private val listScreenRepository: ListScreenRepository,
-    private val departmentsDownloadMachine: DepartmentsDownloadMachine,
-    private val artPieceDownloadMachine: ArtPieceDownloadMachine,
 ): ViewModel(), ISearchViewModel {
 
     private val _state = MutableStateFlow<ViewModelState>(ViewModelState.Loading)
     val state = _state.asStateFlow()
 
-
     private val _featuredImagesListState = MutableStateFlow<FeaturedImagesListState>(FeaturedImagesListState.Loading)
     val featuredImagesListState = _featuredImagesListState.asStateFlow()
-//    private val _featuredImagesList = MutableStateFlow<List<String>>(emptyList())
-//    val featuredImagesList = _featuredImagesList.asStateFlow()
 
     private val _departmentsList = MutableStateFlow<List<Department>>(emptyList())
     val departmentsList = _departmentsList.asStateFlow()
@@ -41,12 +35,21 @@ class ListScreenViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
+    private val _selectedDepartment = MutableStateFlow<String?>(null)
+    val selectedDepartment = _selectedDepartment.asStateFlow()
+
+    /**
+     * I use the [_artPieceResponseList] for all art pieces and when we do a quick sort by department
+     * using the sticky header in the entries list. Cancelling the jobs prevents flickering in the
+     * entry list when we switch departments and download new art pieces.
+     */
+    private var collectOnAllEntriesJob: Job? = null
+    private var collectOnEntriesByDepartmentJob: Job? = null
+
     init {
-        artPieceDownloadMachine.downloadArtPieces()
         collectOnArtPieces()
         getFeaturedImages()
         collectOnLoadingState()
-        downloadDepartments()
         collectOnDepartments()
     }
 
@@ -54,10 +57,35 @@ class ListScreenViewModel(
         _searchQuery.tryEmit(query)
     }
 
+    fun onAllDepartmentsSelected() {
+        viewModelScope.launch {
+            _state.emit(ViewModelState.Loading)
+            _selectedDepartment.emit(null)
+            collectOnArtPieces().also {
+                _state.emit(ViewModelState.Success(Unit))
+            }
+        }
+    }
+
+    fun getArtPiecesByDepartment(department: String) {
+        // Cancel the previous job to avoid flickering in the entry list
+        collectOnAllEntriesJob?.cancel()
+        collectOnEntriesByDepartmentJob?.cancel()
+        collectOnEntriesByDepartmentJob = viewModelScope.launch {
+            _selectedDepartment.emit(department)
+            listScreenRepository.getAllArtPiecesByDepartmentFromDbFlow(department).collectLatest {
+                _artPieceResponseList.emit(it)
+            }
+        }
+    }
+
     private fun collectOnArtPieces() {
-        viewModelScope.launch(Dispatchers.Default) {
+        // Cancel the previous job to avoid flickering in the entry list
+        collectOnEntriesByDepartmentJob?.cancel()
+        collectOnAllEntriesJob?.cancel()
+        collectOnAllEntriesJob = viewModelScope.launch {
             listScreenRepository.getAllArtPiecesFromDbFlow().collectLatest {
-                _artPieceResponseList.emit(it.toArtPieceList())
+                _artPieceResponseList.emit(it)
             }
         }
     }
@@ -67,6 +95,7 @@ class ListScreenViewModel(
             artPieceResponseList.collectLatest {
                 if (it.isNotEmpty()) {
                     _state.emit(ViewModelState.Success(Unit))
+                    return@collectLatest
                 }
             }
         }
@@ -74,19 +103,20 @@ class ListScreenViewModel(
 
     private fun getFeaturedImages() {
         viewModelScope.launch(Dispatchers.Default) {
-            listScreenRepository.getFiveArtPiecePrimaryImagesFlow().collectLatest { featuredImages ->
-                if (featuredImages.isNotEmpty()) {
-                    _featuredImagesListState.emit(FeaturedImagesListState.Success(featuredImages))
-                } else {
-                    delay(3500)
-                    _featuredImagesListState.emit(FeaturedImagesListState.Error)
-                }
+            val featuredImages = listScreenRepository.getFiveArtPiecesFlow().first().map {
+                // The DAO query specifies that these two values will NOT be null
+                ArtPieceLocalIdAndImage(
+                    localId = it.localId!!,
+                    image = it.primaryImage!!,
+                )
+            }
+
+            if (featuredImages.isNotEmpty()) {
+                _featuredImagesListState.emit(FeaturedImagesListState.Success(featuredImages))
+            } else {
+                _featuredImagesListState.emit(FeaturedImagesListState.Error)
             }
         }
-    }
-
-    private fun downloadDepartments() {
-        departmentsDownloadMachine.downloadDepartments()
     }
 
     private fun collectOnDepartments() {

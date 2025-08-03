@@ -1,4 +1,4 @@
-package kmp.fbk.kmpartgallery.features.listscreen
+package kmp.fbk.kmpartgallery
 
 sealed class ViewModelState {
     data object Loading : ViewModelState()

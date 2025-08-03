@@ -8,8 +8,8 @@ import kmp.fbk.kmpartgallery.networking.MetArtApi
 import kmp.fbk.kmpartgallery.networking.NetworkRequestBuilder
 import kmp.fbk.kmpartgallery.networking.createMetArtApi
 import kmp.fbk.kmpartgallery.networking.download.ArtPieceDownloadMachine.Companion
-import kmp.fbk.kmpartgallery.snackbar.AppSnackBarBannerHostState
-import kmp.fbk.kmpartgallery.snackbar.BannerInformation
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.AppSnackBarBannerHostState
+import kmp.fbk.kmpartgallery.reusable_ui_compomenents.snackbar.BannerInformation
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

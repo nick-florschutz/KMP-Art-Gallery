@@ -1,26 +1,74 @@
 package kmp.fbk.kmpartgallery.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import kmp.fbk.kmpartgallery.features.artists.ArtistsScreen
+import kmp.fbk.kmpartgallery.features.collections.CollectionsByDepartmentScreen
+import kmp.fbk.kmpartgallery.features.collections.CollectionsScreen
+import kmp.fbk.kmpartgallery.features.details.DetailViewScreen
 import kmp.fbk.kmpartgallery.features.listscreen.ListScreen
 
 @Composable
-fun NavigationHost(navController: NavHostController) {
-//    val navController = rememberNavController()
-
+fun NavigationHost(navController: NavHostController, modifier: Modifier) {
     NavHost(
         navController = navController,
         startDestination = NavigationDestination.Home,
-        modifier = Modifier,
+        modifier = modifier,
     ) {
         composable<NavigationDestination.Home> {
             val args = it.toRoute<NavigationDestination.Home>()
             ListScreen(navController = navController)
         }
+
+        composable<NavigationDestination.Explore> {
+            val args = it.toRoute<NavigationDestination.Explore>()
+            Box(Modifier.fillMaxSize()) {
+                Text(
+                    text = args.screenLabel,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+
+        composable<NavigationDestination.Collections> {
+            val args = it.toRoute<NavigationDestination.Collections>()
+            CollectionsScreen(navController = navController)
+        }
+
+        composable<NavigationDestination.CollectionByDepartment> {
+            val args = it.toRoute<NavigationDestination.CollectionByDepartment>()
+            val department = args.department ?: throw IllegalStateException(
+                "department is required. department: ${args.department}"
+            )
+            CollectionsByDepartmentScreen(
+                department = department,
+                navController = navController,
+            )
+        }
+
+        composable<NavigationDestination.Artists> {
+            val args = it.toRoute<NavigationDestination.Artists>()
+            ArtistsScreen(navController = navController)
+        }
+
+        composable<NavigationDestination.DetailView> {
+            val args = it.toRoute<NavigationDestination.DetailView>()
+            val artPieceLocalId = args.artPieceLocalId ?: throw IllegalStateException(
+                "artPieceLocalId is required. artPieceLocalId: ${args.artPieceLocalId}"
+            )
+            DetailViewScreen(
+                artPieceLocalId = artPieceLocalId,
+                navController = navController,
+            )
+        }
+
     }
 }
